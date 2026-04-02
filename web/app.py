@@ -65,7 +65,15 @@ def register_get(request: Request):
 def register_post(request: Request, nome: str = Form(...), email: str = Form(...), password: str = Form(...)):
     if get_user_by_email(email):
         return templates.TemplateResponse(request, "register.html", {"error": "Email già registrata."})
+    # L'admin viene approvato automaticamente alla registrazione
     create_user(nome, email, hash_password(password))
+    user = get_user_by_email(email)
+    if email == ADMIN_EMAIL:
+        approve_user(user["id"])
+        token = make_token(user["id"])
+        resp = RedirectResponse("/admin", status_code=303)
+        resp.set_cookie("session", token, httponly=True, samesite="lax")
+        return resp
     return RedirectResponse("/attesa", status_code=303)
 
 @app.get("/attesa", response_class=HTMLResponse)

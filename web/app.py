@@ -35,6 +35,18 @@ bm25 = None
 async def lifespan(app: FastAPI):
     global corpus_chunks, corpus_sources, bm25
     init_db()
+    # Crea admin automaticamente ad ogni avvio se non esiste
+    admin_password = os.environ.get("ADMIN_PASSWORD", "")
+    if ADMIN_EMAIL and admin_password:
+        existing = get_user_by_email(ADMIN_EMAIL)
+        if not existing:
+            create_user("Admin", ADMIN_EMAIL, hash_password(admin_password))
+            user = get_user_by_email(ADMIN_EMAIL)
+            approve_user(user["id"])
+            print(f"Admin creato: {ADMIN_EMAIL}")
+        elif existing["stato"] != "approved":
+            approve_user(existing["id"])
+            print(f"Admin approvato: {ADMIN_EMAIL}")
     corpus_chunks, corpus_sources, n = load_corpus()
     bm25 = build_index(corpus_chunks)
     print(f"Corpus: {n} file, {len(corpus_chunks)} chunk")

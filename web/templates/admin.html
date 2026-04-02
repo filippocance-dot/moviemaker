@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block nav_right %}<a href="/logout" class="nav-link">Esci</a>{% endblock %}
+{% block content %}
+<div style="padding:2rem 1.5rem;">
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:2rem;">
+    Richieste in attesa — {{ users|length }}
+  </div>
+  {% if users %}
+    {% for u in users %}
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-size:0.9rem;font-family:'Times New Roman',serif;font-style:italic;">{{ u.nome }}</div>
+        <div style="font-size:0.7rem;color:var(--label);margin-top:0.2rem;">{{ u.email }} · {{ u.created_at }}</div>
+      </div>
+      <form method="post" action="/admin/approva/{{ u.id }}">
+        <button type="submit" class="btn">Approva →</button>
+      </form>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="subtitle">Nessuna richiesta in attesa.</div>
+  {% endif %}
+</div>
+{% endblock %}

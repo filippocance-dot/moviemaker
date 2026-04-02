@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block nav_right %}<a href="/registrati" class="nav-link">Richiedi accesso</a>{% endblock %}
+{% block content %}
+<div class="page">
+  <div class="title">Accedi.</div>
+  <div class="divider"></div>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  <form method="post" action="/login">
+    <div class="field">
+      <label>Email</label>
+      <input type="email" name="email" required autocomplete="email">
+    </div>
+    <div class="field" style="margin-bottom:2.5rem;">
+      <label>Password</label>
+      <input type="password" name="password" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="btn">Entra →</button>
+  </form>
+</div>
+{% endblock %}

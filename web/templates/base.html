@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieMaker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #1a1610;
+      --text:    #d4c5a9;
+      --border:  #2a2520;
+      --label:   #4a4540;
+      --faint:   #3a3028;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+    .nav {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand {
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-link {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--label);
+      text-decoration: none;
+    }
+    .page { padding: 3rem 2.5rem; max-width: 400px; margin: 0 auto; }
+    .title {
+      font-size: 1.6rem;
+      font-style: italic;
+      font-family: 'Times New Roman', Times, serif;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 0.3rem;
+    }
+    .divider { width: 30px; height: 1px; background: var(--faint); margin: 1.5rem 0 2rem; }
+    .field { margin-bottom: 1.2rem; }
+    .field label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--label);
+      margin-bottom: 0.5rem;
+    }
+    .field input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+    }
+    .field input:focus { border-bottom-color: var(--text); }
+    .field input::placeholder { color: var(--faint); }
+    .btn {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
+    }
+    .btn:hover { opacity: 0.7; }
+    .error { font-size: 0.8rem; color: #c17a5a; margin-bottom: 1rem; }
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--label);
+      line-height: 1.9;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-brand">MovieMaker</a>
+    {% block nav_right %}{% endblock %}
+  </nav>
+  {% block content %}{% endblock %}
+</body>
+</html>

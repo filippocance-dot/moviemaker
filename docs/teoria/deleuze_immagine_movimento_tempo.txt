@@ -1,0 +1,142 @@
+GILLES DELEUZE: IMMAGINE-MOVIMENTO E IMMAGINE-TEMPO
+=====================================================
+Bergsonismo, cinema classico, crisi del sensomotorio
+
+---
+
+1. DELEUZE E IL CINEMA: UN APPROCCIO FILOSOFICO
+
+Gilles Deleuze (1925-1995) pubblica i suoi due volumi sul cinema — "Cinema 1: L'image-mouvement" (1983) e "Cinema 2: L'image-temps" (1985) — quando ha gia elaborato le sue principali categorie filosofiche. I libri sul cinema non sono testi di critica cinematografica: sono filosofia del cinema, ovvero un tentativo di usare i film come casi per pensare il problema della percezione, del movimento, del tempo e del pensiero.
+
+Il punto di partenza teorico e Henri Bergson — in particolare le tesi della "Matiere et memoire" (1896) e de "L'evolution creatrice" (1907). Deleuze rilegge Bergson attraverso il cinema, e il cinema attraverso Bergson, in un rapporto di mutua illuminazione che produce categorie nuove in entrambe le direzioni.
+
+L'approccio deleuziano al cinema e radicalmente anti-semiotico: Deleuze non vuole analizzare il cinema come sistema di segni, come fa Metz. Vuole elaborare una "noologia" del cinema — una tassonomia delle immagini in funzione delle loro relazioni con il movimento e il tempo. I "segni" deleuziani non sono segni nel senso saussuriano: sono "tipi di immagini" che si definiscono per le loro qualita intrinseche di percezione, affetto, azione, tempo.
+
+---
+
+2. LA BASE BERGSONIANA: IL MOVIMENTO E IL TEMPO
+
+Per comprendere la teoria deleuziana del cinema e indispensabile partire da Bergson.
+
+Bergson sostiene che la percezione convenzionale tende a immobilizzare il reale — a tagliarlo in "istanti" discreti e poi a ricomporli artificialmente in movimento. Questo e il paradosso di Zenone riapplicato alla percezione: il movimento non puo essere ricostituito dalla somma di posizioni immobili. Il movimento e una qualita continua del reale che precede qualsiasi scomposizione in istanti.
+
+Il cinema, per Bergson, sarebbe l'esempio emblematico di questo errore: proietta fotogrammi immobili ad alta velocita per ricreare l'illusione del movimento. E il "meccanismo cinematografico del pensiero" — il pensiero che riduce la durata continua a una successione di istanti.
+
+Deleuze ribalta questa critica: il cinema NON e la somma di istanti immobili. Il cinema lavora con "immagini-movimento" — immagini che sono gia, in se stesse, portatrici di movimento. Il fotogramma isolato non e l'unita del cinema: l'unita del cinema e il piano, e il piano e gia-in-movimento. Il cinema quindi non sbaglia il movimento: lo cattura direttamente, nel suo scorrere.
+
+---
+
+3. L'IMMAGINE-MOVIMENTO: IL CINEMA CLASSICO
+
+L'immagine-movimento e la forma dominante del cinema classico — quello che va dalle origini fino all'incirca alla fine della Seconda Guerra Mondiale. Il cinema classico organizza le immagini secondo quello che Deleuze chiama lo "schema sensomotorio": ogni percezione tende verso un'azione, ogni situazione chiama una risposta.
+
+Lo schema sensomotorio e la struttura profonda del cinema narrativo classico hollywoodiano: il personaggio percepisce una situazione (percezione), reagisce emotivamente (affezione) e agisce per modificarla (azione). Il racconto classico non e che la serie di questi cicli sensomotori.
+
+Deleuze distingue tre tipi principali di immagini all'interno dell'immagine-movimento:
+
+3.1 IMMAGINE-PERCEZIONE
+Il primo tipo di immagine-movimento. La macchina da presa come occhio — non un occhio umano, ma un occhio non-umano che percepisce da ogni angolo, da ogni distanza, con ogni velocita. Deleuze distingue tra percezione "solida" (soggettiva: il personaggio che guarda), percezione "liquida" (semi-soggettiva: la macchina che scivola intorno ai personaggi come in certi film di Renoir) e percezione "gassosa" (il cinema di avanguardia, dove la percezione si libera da qualsiasi ancoraggio soggettivo).
+
+Esempio: il cinema di Jean Renoir usa sistematicamente la percezione "liquida" — i movimenti di macchina che seguono i personaggi attraverso gli spazi, che scivolano da un gruppo all'altro, che mantengono sempre una prospettiva plurale e mobile. In "La regle du jeu" (1939), la cinepresa non appartiene a nessun personaggio: appartiene allo spazio stesso della rappresentazione borghese.
+
+3.2 IMMAGINE-AFFEZIONE
+Il secondo tipo. L'affezione e la dimensione del primo piano — il volto come superficie di espressione degli stati interni. Il primo piano non mostra un volto in uno spazio: astrae il volto dallo spazio, lo trasforma in un puro evento affettivo.
+
+Deleuze distingue tra "qualitatif" (le qualita espressive del volto: la paura, il desiderio, la tenerezza — astratte da qualsiasi situazione spaziale) e "puissant" (la potenza del volto come intensita pura, che non si lascia ridurre a una qualita determinata).
+
+Hitchcock e il maestro dell'immagine-affezione: i suoi primissimi piani dei volti (Janet Leigh in "Psycho", 1960; Tippi Hedren ne "Gli uccelli", 1963) producono un'affezione pura — terrore, angoscia — sganciata da qualsiasi spiegazione causale. E l'affezione come "qualita allo stato puro" (Deleuze).
+
+3.3 IMMAGINE-AZIONE
+Il terzo e il piu sviluppato tipo di immagine-movimento. L'immagine-azione e la forma dominante del cinema hollywoodiano classico: la situazione che determina l'azione del personaggio, l'azione che modifica la situazione. E lo schema SAS (Situazione-Azione-Situazione modificata) del cinema classico.
+
+John Ford e il maestro dell'immagine-azione. In "Ombre rosse" (1939), ogni situazione chiama una risposta eroica: il paesaggio del Grand Canyon non e contemplativo, e lo spazio dell'azione. La logica del "western" come genere e la logica dell'immagine-azione portata alle sue conseguenze piu pure.
+
+Howard Hawks, invece, usa un variante particolare che Deleuze chiama la "forma piccola" dell'immagine-azione — ASA (Azione-Situazione-Azione): il personaggio reagisce prima di aver capito la situazione, e dalla reazione emerge la situazione stessa. Il cinema "d'azione" di Hawks (i polizieschi, le commedie) obbedisce a questa logica dello stile rapido e immediato.
+
+---
+
+4. LA CRISI DELLO SCHEMA SENSOMOTORIO E L'IMMAGINE-TEMPO
+
+Il passaggio dal cinema classico al cinema moderno e, per Deleuze, il passaggio dall'immagine-movimento all'immagine-tempo. Questo passaggio non e semplicemente storico: e filosofico. Si tratta della crisi dello schema sensomotorio come forma di organizzazione delle immagini cinematografiche.
+
+Cosa produce questa crisi? Deleuze individua diversi fattori: la Seconda Guerra Mondiale e le sue conseguenze (il mondo non si lascia piu ridurre a situazioni che chiamano risposte eroiche), il neorealismo italiano (che abbandona lo schema azione-reazione per situazioni in cui i personaggi non sanno come agire), e la riflessione dei grandi autori europei degli anni Cinquanta-Sessanta.
+
+Nel cinema moderno (post-neorealista), i personaggi non sanno piu cosa fare davanti alle situazioni che incontrano. Non agiscono: osservano, camminano, aspettano. Il "vagabondaggio" (errance) come forma narrativa — sostituisce la teleologia dell'azione. I film di Antonioni, di Rossellini del periodo maturo, di Godard, di Tati — tutti mostrano personaggi che "videnti" piuttosto che "agenti".
+
+---
+
+5. L'IMMAGINE-TEMPO: I CRISTALLI DI TEMPO
+
+Il concetto filosoficamente piu elaborato di Deleuze e quello di "cristallo di tempo" — la forma in cui il cinema moderno rende visibile il tempo in se stesso, non attraverso le sue conseguenze sul movimento.
+
+Il cristallo di tempo e un'immagine in cui il tempo non e piu mediato dall'azione ma diventa direttamente percepibile: si vede il tempo come tale, nella sua biforcazione tra passato e presente, tra attuale e virtuale.
+
+Deleuze prende da Bergson la distinzione tra "attuale" (il presente percepibile, il momento che sta accadendo) e "virtuale" (il passato che non cessa di essere, che coesiste con il presente senza ridursi ad esso). Ogni momento attuale ha il suo doppio virtuale — il passato di quel momento, che continua a esistere "virtualmente" anche quando il presente e gia passato.
+
+Il cristallo di tempo e un'immagine in cui attuale e virtuale coesistono, in cui non e possibile distinguere nettamente tra cio che e presente e cio che e passato, tra cio che e reale e cio che e immaginario. Il cinema di Alain Resnais — con i suoi raccordi temporali impossibili, i suoi flashback che non si distinguono dal presente, le sue memorie che invadono il momento attuale — e il laboratorio del cristallo di tempo.
+
+In "L'annee derniere a Marienbad" (Resnais, 1961), scritto da Alain Robbe-Grillet, il racconto si svolge in un tempo impossibile: il protagonista insiste che lui e la donna si sono incontrati l'anno scorso, lei nega, e il film non risolve questa contraddizione. Il tempo del film e cristallino — attuale e virtuale si specchiano uno nell'altro senza che si possa stabilire quale sia "reale".
+
+In "Hiroshima mon amour" (Resnais, 1959), i flashback della donna francese (la sua storia durante la guerra a Nevers) non si presentano come memorie convenzionali: irrompono nel presente con la stessa qualita materiale delle immagini di Hiroshima. Il trauma produce cristalli di tempo — momenti in cui passato e presente coesistono come immagini di uguale intensita reale.
+
+---
+
+6. IL FALSO RACCORDO COME SEGNO DEL TEMPO DIRETTO
+
+Nel cinema classico, il raccordo è la congiunzione che garantisce la continuita spazio-temporale: il raccordo di sguardo, il raccordo di movimento, il raccordo sull'asse. Il raccordo classico fa sparire il taglio tra i piani, costruisce la continuita dello spazio e del tempo diegetici.
+
+Nel cinema moderno, il "falso raccordo" (faux raccord) diventa un segno del tempo diretto. Quando Godard in "A bout de souffle" (1960) usa i jump cuts — tagli bruschi all'interno di una stessa scena che violano la continuita spaziale e temporale — non sta sbagliando il raccordo classico: sta usando il falso raccordo come forma espressiva.
+
+Il falso raccordo godardiano non tenta di nascondere il tempo: lo mostra. Il taglio brusco segnala che il tempo e passato — che tra un'inquadratura e l'altra c'e una lacuna temporale reale che il raccordo classico avrebbe nascosto. Il falso raccordo rende visibile il tempo come discontinuita, come taglio, come vuoto.
+
+Deleuze connette il falso raccordo alla "potenza del falso" — uno dei concetti chiave del Cinema 2. Nel cinema moderno, la distinzione tra vero e falso diventa problematica: i raccordi impossibili, le memorie contradditorie, le narrazioni circolari mettono in crisi la pretesa del cinema di rappresentare un tempo "reale" e verificabile. Il cinema diventa capace di "falsificare" il tempo non per ingannare, ma per rivelare che il tempo ha sempre gia la struttura del falso — della coesistenza di contraddittori.
+
+---
+
+7. IL PIANO SEQUENZA COME BLOCCO DI SPAZIO-TEMPO
+
+Il piano sequenza — la tecnica preferita da Bazin per ragioni ontologiche — ha per Deleuze una funzione diversa: e un "blocco di spazio-tempo" che produce un'immagine-tempo.
+
+Il piano sequenza lungo non conserva semplicemente la continuita spaziale e temporale del reale (come vuole Bazin): apre un blocco di durata in cui il tempo diventa percepibile nella sua intensita qualitativa. La lunghezza del piano non e misura di realismo: e misura di durata bergsoniana — di tempo vissuto, di tempo-qualita.
+
+Il cinema di Antonioni usa il piano sequenza in modo esemplare per questo. In "L'eclisse" (1962), la sequenza finale — un montaggio di luoghi e di assenze, di spazi urbani senza personaggi — dura quasi sette minuti e non mostra alcuna azione. E un "blocco di spazio-tempo" puro: il tempo come tale, la durata come sostanza del mondo, dopo che i personaggi (Monica Vitti, Alain Delon) sono spariti dalla scena.
+
+Tati usa il piano sequenza per ragioni diverse ma teoricamente connesse: in "Playtime" (1967), i lunghi piani che mostrano la modernita architettonica parigina producono un'esperienza del tempo come simultaneita di eventi minimi, come dispersione delle gerarchie narrative. Non c'e un'azione principale: c'e uno spazio-tempo in cui tutto accade con eguale intensita.
+
+---
+
+8. GLI AUTORI DEL CINEMA MODERNO IN DELEUZE
+
+Deleuze costruisce una geografia del cinema moderno attraverso l'analisi di autori specifici. Ognuno incarna una forma diversa dell'immagine-tempo.
+
+Antonioni: L'immagine-tempo come vuoto, come assenza. I paesaggi di "Il deserto rosso" (1964) — le fabbriche di Ravenna, la nebbia, i colori artificiosi — non sono sfondi per l'azione: sono il soggetto del film. Giuliana (Monica Vitti) percepisce un mondo in cui il sensomotorio e in crisi — non sa come agire, non sa come rispondere al mondo industriale che la circonda.
+
+Godard: L'immagine-tempo come pensiero. In Godard, il montaggio crea collisioni tra immagini eterogenee — citazioni, found footage, testi, musiche — che non producono una sintesi narrativa ma un pensiero discontinuo, per lampi. "Histoire(s) du cinema" (1988-1998) e la forma piu radicale di questo cinema-pensiero: la storia del cinema come cristallo di tempo totale.
+
+Fellini: L'immagine-tempo come memoria e invenzione. In "8 1/2" (1963), la frontiera tra reale e immaginario, tra presente e passato, tra memoria e desiderio e sistematicamente abolita. Il film e un cristallo di tempo autobiografico: il regista Guido (Marcello Mastroianni) non distingue piu tra cio che ricorda, cio che sogna e cio che sta vivendo.
+
+Resnais: L'immagine-tempo come pura potenza del virtuale. Il cinema di Resnais e il cinema della memoria come forma del tempo stesso — non la memoria psicologica individuale, ma la memoria come struttura ontologica del tempo. "Muriel" (1963), "La guerre est finie" (1966), "Providence" (1977) esplorano la coesistenza di temporalita multiple in un unico presente.
+
+---
+
+9. IL CINEMA COME PENSIERO AUTOMATICO
+
+L'intuizione filosoficamente piu ambiziosa di Deleuze e quella che identifica il cinema con il "pensiero automatico" — una forma di pensiero che non appartiene a nessun soggetto particolare ma emerge dalla struttura stessa delle immagini in movimento.
+
+Il cinema, in questa prospettiva, non e un'arte che esprime i pensieri del regista: e un meccanismo che produce pensieri autonomamente, che "pensa" attraverso le sue immagini senza che nessuno le "pensi". Il montaggio, la sequenza delle immagini, le relazioni temporali tra i piani — tutto questo produce effetti cognitivi e percettivi che eccedono le intenzioni del regista.
+
+"Il cinema ha la capacita di produrre un'automatismo del pensiero, di mobilizzare le connessioni cerebrali."
+
+Questa visione connette Deleuze a Eisenstein (il cinema come macchina per produrre pensiero) ma anche la supera: dove Eisenstein vuole che il pensiero prodotto dal cinema sia ideologicamente determinato (il cinema come propaganda marxista), Deleuze vede nel cinema la possibilita di un pensiero radicalmente aperto, che non appartiene a nessuna ideologia perche emerge dalle immagini stesse nella loro potenza materiale.
+
+---
+
+RIFERIMENTI BIBLIOGRAFICI ESSENZIALI
+
+Deleuze, G. (1983). Cinema 1: L'image-mouvement. Minuit. [Trad. it.: L'immagine-movimento. Ubulibri, 1984]
+Deleuze, G. (1985). Cinema 2: L'image-temps. Minuit. [Trad. it.: L'immagine-tempo. Ubulibri, 1989]
+Bergson, H. (1896). Matiere et memoire. PUF.
+Rodowick, D.N. (1997). Gilles Deleuze's Time Machine. Duke University Press.
+Bogue, R. (2003). Deleuze on Cinema. Routledge.
+Colman, F. (2011). Deleuze and Cinema: The Film Concepts. Berg Publishers.
+Kennedy, B. (2000). Deleuze and Cinema: The Aesthetics of Sensation. Edinburgh University Press.

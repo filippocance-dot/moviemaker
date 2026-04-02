@@ -1,0 +1,40 @@
+<h2>Come costruire CineAuteur Web</h2>
+<p class="subtitle">3 approcci — con pro, contro e costo stimato</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>FastAPI + pagine web semplici <span style="color:#C17A5A;font-size:0.85em;">★ consigliato</span></h3>
+      <p>Backend Python (vicino al codice che hai già), interfaccia web minimale server-rendered. Gestione utenti, approvazioni e mail tutto in Python. Deploy su Railway (~€5/mese).</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pro</h4><ul><li>Riusa il codice esistente</li><li>Un solo linguaggio (Python)</li><li>Semplice da mantenere</li><li>Deploy in poche ore</li></ul></div>
+        <div class="cons"><h4>Contro</h4><ul><li>UI meno interattiva (no streaming live fluido senza JS)</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>FastAPI backend + frontend React</h3>
+      <p>Backend Python separato dal frontend React. UI moderna, streaming fluido, esperienza più vicina a ChatGPT. Deploy separato (Railway + Vercel).</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pro</h4><ul><li>UI più ricca e reattiva</li><li>Streaming perfetto</li><li>Facile aggiungere funzionalità future</li></ul></div>
+        <div class="cons"><h4>Contro</h4><ul><li>Due sistemi da gestire</li><li>Più complesso da costruire</li><li>~€10-15/mese</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Piattaforma no-code (Softr / Bubble)</h3>
+      <p>Costruisci il sito senza scrivere codice. Gestione utenti e approvazioni già integrate. L'AI gira comunque via API. Nessun server da gestire.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pro</h4><ul><li>Nessun codice da scrivere</li><li>Velocissimo da lanciare</li></ul></div>
+        <div class="cons"><h4>Contro</h4><ul><li>Abbonamento mensile (€25-50/mese)</li><li>Poco controllo sull'estetica</li><li>Integrazione AI più complessa</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

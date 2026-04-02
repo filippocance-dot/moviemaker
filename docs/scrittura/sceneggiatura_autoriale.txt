@@ -1,0 +1,171 @@
+LA SCENEGGIATURA NEL CINEMA D'AUTORE
+=====================================
+
+1. DUE MODELLI DI SCENEGGIATURA: IL BLUEPRINT E IL PRE-TESTO
+
+La distinzione tra sceneggiatura commerciale e sceneggiatura autoriale non è una questione di qualità letteraria né di complessità drammaturgica: è una questione ontologica, riguarda cioè la natura stessa del documento e il suo rapporto con il film che produce o prefigura.
+
+La sceneggiatura commerciale — nella sua forma più codificata, quella hollywoodiana — è un blueprint. È uno strumento funzionale alla produzione industriale: descrive azioni, dialoghi e ambienti in modo da permettere a ogni reparto (scenografia, costumi, fotografia, casting) di pianificare il proprio lavoro. La sua forma è standardizzata (Final Draft, font Courier 12pt, una pagina uguale a un minuto di film) perché la standardizzazione serve alla comunicazione efficiente tra i numerosi professionisti che trasformeranno il documento in prodotto audiovisivo. In questo senso, la sceneggiatura commerciale è già obsoleta nel momento in cui il film è finito: è uno strumento di lavoro, non un testo.
+
+La sceneggiatura autoriale ha una natura radicalmente diversa. È un pre-testo: un documento che precede il film non come istruzione tecnica ma come atto di pensiero. Il regista-autore scrive la sceneggiatura per pensare il film, non per descriverlo. La scrittura è il luogo in cui si elaborano le questioni fondamentali del progetto: il ritmo, la distanza emotiva, il rapporto tra corpo e spazio, la funzione del suono, la natura dei personaggi. Non si tratta di tradurre un'idea in parole per poi ritradurre le parole in immagini: si tratta di pensare per iscritto in modo che la scrittura stessa generi forme filmiche ancora non visualizzate.
+
+Robert Bresson scriveva: "Non mostrare tutti i lati delle cose. Un margine d'indeterminazione." Questa frase non è un precetto estetico astratto: è un'istruzione di scrittura. La sceneggiatura autoriale costruisce il suo margine di indeterminazione a livello del testo, non come assenza di scrittura ma come scrittura che non chiude.
+
+
+2. LA SCENEGGIATURA COME ATTO DI PENSIERO
+
+Scrivere una sceneggiatura autoriale è un atto cognitivo, non un atto descrittivo. La differenza è cruciale.
+
+Nell'atto descrittivo si traduce in parole qualcosa che già si conosce: la scena che ho in testa, il personaggio che ho immaginato, la storia che voglio raccontare. Le parole vengono dopo il pensiero, lo riproducono.
+
+Nell'atto cognitivo le parole precedono il pensiero: si scrive per scoprire cosa si vuole fare, non per documentare cosa si sa già. La sceneggiatura come atto di pensiero non descrive il film: lo genera. Spesso il film che viene girato è sorprendente per lo stesso regista-autore che lo ha scritto, perché la scrittura ha aperto possibilità che la visualizzazione mentale non aveva anticipato.
+
+Questo ha conseguenze pratiche immediate. La sceneggiatura autoriale non deve essere "bella" nel senso letterario del termine. Non deve avere prosa elegante né dialoghi brillanti come tali. Deve avere esattezza: ogni parola deve fare un lavoro preciso, aprire uno spazio preciso, resistere a interpretazioni chiuse. Deve essere asciutta, non nel senso minimalista estetico ma nel senso funzionale: nessuna parola che occupi spazio senza aprire possibilità.
+
+Eric Rohmer, la cui scrittura è invece ricca e stratificata, diceva che scriveva le sue sceneggiature come se scrivesse romanzi, perché per lui il film era la realizzazione di un universo letterario. Ma anche in Rohmer la scrittura non prescrive: descrive stati psicologici, atmosfere, posizioni dei corpi nello spazio in modo tale da generare nel lettore (il regista-Rohmer stesso, i suoi attori) un universo sensoriale, non un piano di esecuzione.
+
+
+3. COME DESCRIVERE LE AZIONI SENZA PRESCRIVERE LA REGIA
+
+Il problema tecnico centrale della sceneggiatura autoriale è il seguente: come si descrive un'azione fisica in modo da evocare la sua qualità filmicamente significativa senza prescrivere come la macchina da presa la riprenderà?
+
+La sceneggiatura commerciale evita questo problema ignorandolo: si descrivono le azioni in modo neutro e si lascia al regista (o al direttore della fotografia) il problema delle scelte di messa in scena. La sceneggiatura autoriale non può farlo, perché per un autore la messa in scena non è separabile dal significato.
+
+La soluzione non è scrivere indicazioni tecniche di regia (questo sarebbe un piano di regia, non una sceneggiatura). La soluzione è scrivere in modo che la qualità dell'azione evochi la sua qualità visiva senza determinarla. Alcuni strumenti:
+
+a) La precisione fisica. Invece di "Anna è triste" si scrive "Anna guarda la finestra. Non si muove per un lungo momento." La precisione del gesto fisico porta con sé informazioni sulla qualità dell'immagine (la durata, la direzione dello sguardo, l'immobilità) senza prescrivere il formato dell'inquadratura.
+
+b) La qualità del movimento. Invece di "Robert attraversa la strada" si scrive "Robert attraversa la strada senza guardare il traffico. I suoi passi sono uguali, meccanici." Il ritmo del movimento è scritto nell'azione stessa.
+
+c) L'indicazione temporale integrata. Invece di scrivere "scena lunga" come nota a margine, si costruisce la durata nell'azione: "La pioggia cade sul cortile. Jeanne aspetta. La pioggia continua." La ripetizione della pioggia è una istruzione temporale travestita da descrizione.
+
+d) Il punto di vista implicito. La descrizione può contenere un punto di vista senza prescrivere un'inquadratura: "Tra le mani di Anne, un foglio. Non lo apre." Il dettaglio delle mani suggerisce una prossimità, non la prescrive.
+
+Esempio di pagina di sceneggiatura autoriale con commento:
+
+--- ESEMPIO ---
+EXT. CORTILE DEL MONASTERO - GIORNO
+
+Il cortile è vuoto. Le pietre. La luce piatta di novembre.
+
+MARIE entra dal fondo. Porta qualcosa avvolto in un telo. Lo tiene stretto con entrambe le mani.
+
+Si ferma al centro del cortile. Guarda il pozzo. Non si avvicina.
+
+Un uccello attraversa il cielo sopra di lei.
+
+Marie deposita il telo per terra. Lo guarda per un momento.
+
+Poi se ne va senza riaprirlo.
+--- FINE ESEMPIO ---
+
+Commento: Non c'è alcuna indicazione di inquadratura. Ma la scena contiene indicazioni temporali (la fermata, il lungo momento), direzioni dello sguardo (il pozzo, il telo a terra), un elemento esterno che produce uno stacco sensoriale (l'uccello). La qualità del mistero è costruita nell'azione stessa (cosa c'è nel telo? perché non lo riapre?) senza essere commentata psicologicamente. Il regista che legge questa pagina sa che deve filmare il mistero, non la tristezza o l'ansia: il comportamento fisico è già il significato.
+
+
+4. IL DIALOGO NEL CINEMA D'AUTORE: QUATTRO MODELLI
+
+Il dialogo filmico non è mai dialogo letterario: è sempre mediato dall'immagine, dalla voce, dalla presenza dei corpi nello spazio. Ma nel cinema d'autore questa mediazione è consapevole e costruisce posizioni estetiche ed etiche specifiche.
+
+4.1 Bresson: il tono piatto
+
+Per Bresson il dialogo non deve "esprimere" nulla. I modelli (non attori, nella sua terminologia) devono dire le parole in modo piatto, privo di inflessioni emotive, come se stessero leggendo un elenco del telefono. Questo non è minimalismo ma una scelta filosofica precisa: le parole nel cinema di Bresson non portano il senso emotivo della scena. Il senso emotivo è portato dall'immagine, dal montaggio, dalla musica o dal silenzio. Le parole hanno un'altra funzione: contrastare l'immagine, creare tensione tra ciò che si dice e ciò che si vede, far emergere il non-detto per negazione.
+
+Nella sceneggiatura bressoni ana questo si traduce in dialoghi brevi, lapidari, spesso apparentemente non sequitur. "Ho fame." "Anche io." "Non ho soldi." Il senso della scena non sta nelle parole: sta nel corpo che le dice, nello spazio in cui vengono dette, in quello che succede prima e dopo.
+
+4.2 Cassavetes: l'improvvisazione come verità
+
+John Cassavetes non rifiutava la sceneggiatura ma la usava come punto di partenza per l'improvvisazione. La sceneggiatura indicava situazioni, relazioni, stati emotivi, ma le parole esatte emergevano dalle prove e dal set. In "Faces" (1968) e "A Woman Under the Influence" (1974) il dialogo è cacofonico, sovrapposto, ripetitivo, contraddittorio: riflette il modo in cui le persone parlano davvero quando sono sotto pressione emotiva.
+
+Per Cassavetes l'improvvisazione non era libertà anarchica ma un metodo rigoroso per raggiungere la verità del personaggio. Il personaggio non sa cosa dirà: lo scopre mentre parla. Come nella vita.
+
+La sceneggiatura cassavetiana è quindi un documento ibrido: parte testo, parte descrizione di situazioni, parte istruzione metodologica per gli attori.
+
+4.3 Rohmer: il dialogo come azione
+
+In Rohmer il dialogo è l'azione principale. Nei Contes Moraux e nelle Comédies et Proverbes i personaggi parlano continuamente: spiegano se stessi, giustificano le proprie scelte, filosofeggiano, seduzono, mentono a se stessi. Il dialogo rohmeri ano è barocco nel senso letterale: è stratificato, ricco, apparentemente ridondante. Ma ogni strato aggiunge qualcosa: il personaggio che spiega perché ama una donna sta anche rivelando perché non la ama, sta costruendo una auto-narrazione difensiva, sta facendo della retorica una forma di desiderio.
+
+La sceneggiatura di Rohmer è quasi letteratura: è leggibile come tale, ha una qualità prosastica autonoma. Questo è possibile perché Rohmer considera il film come la realizzazione di un universo già completamente costruito nella scrittura.
+
+4.4 Haneke: il dialogo come difesa
+
+Michael Haneke usa il dialogo come meccanismo di dissimulazione. I suoi personaggi parlano per non dire, usano le parole per costruire distanza, per evitare il conflitto, per mantenere la superficie civile di una relazione che nasconde violenza, indifferenza o segreto. In "Caché" (2005) i dialoghi tra Georges e Anne sembrano razionali e borghesi mentre il film sta sistematicamente demolendo ogni possibilità di comunicazione tra loro.
+
+La sceneggiatura hanekiana è precisa, quasi notarile: riporta esattamente le parole che i personaggi dicono senza alcun commento psicologico. Non c'è mai indicazione di "tono" o "emozione" nelle didascalie. Il dialogo fa tutto il lavoro da solo — ma fa il lavoro di nascondere, non di rivelare.
+
+
+5. STRUTTURA ORGANICA VS FORMULA DEI TRE ATTI
+
+Il modello dei tre atti (origine — complicazione — risoluzione) ha origini aristoteliche ma la sua versione manualistica contemporanea (Syd Field, Robert McKee) è una codificazione industriale nata per garantire la prevedibilità narrativa del prodotto commerciale.
+
+La struttura organica non rifiuta la forma: rifiuta la formula. Ogni film trova la propria struttura nei propri materiali. Alcuni principi alternativi:
+
+La struttura episodica (Bresson, Rossellini): la narrazione procede per episodi relativamente autonomi, senza archi causali stretti. Ogni scena vale per sé. L'accumulo degli episodi produce un senso che non è riducibile a nessuna singola causa-effetto.
+
+La struttura per variazione (Hong Sang-soo): la stessa situazione (un uomo e una donna che si incontrano, bevono, parlano) si ripete con variazioni minime. Il senso emerge dal confronto tra le variazioni, non dalla progressione narrativa.
+
+La struttura saggistica (Marker, Godard): il film si costruisce come un saggio: argomenta, propone ipotesi, contradice se stesso, cita altre fonti visive e sonore. Non racconta una storia ma elabora un pensiero.
+
+
+6. IL TRATTAMENTO VS LA SCENEGGIATURA TECNICA
+
+Il trattamento è un documento intermedio tra l'idea e la sceneggiatura vera e propria. Descrive il film in prosa continua, senza il formato tecnico della sceneggiatura, spesso in modo più evocativo che preciso. Per molti autori il trattamento è il documento più importante: è dove si decide la natura del progetto.
+
+La sceneggiatura tecnica è invece il documento finale, formattato per la produzione, con indicazioni di cast, location, effetti speciali. La maggior parte dei film d'autore non ha mai una vera sceneggiatura tecnica: si gira a partire da un trattamento elaborato o da una sceneggiatura non formattata tecnicamente.
+
+
+7. SCRIVERE I SILENZI E LE PAUSE
+
+Il silenzio nella sceneggiatura autoriale non è l'assenza di dialogo: è un evento narrativo con una durata, una qualità e una funzione precisa.
+
+Come si scrive il silenzio? Non con la nota tecnica "(pausa)" o "(silenzio)" — queste indicazioni sono troppo vaghe e diventano prescrizioni per l'attore. Si scrive attraverso l'azione fisica che riempie il silenzio o attraverso la descrizione del tempo:
+
+"Marie non risponde. Guarda la tazza sul tavolo."
+
+"Nessuno dice nulla. La televisione continua a parlare in un'altra stanza."
+
+"Il silenzio dura abbastanza a lungo da diventare scomodo."
+
+Questa ultima formula è interessante perché scrive la qualità temporale del silenzio senza prescriverne la durata esatta. "Abbastanza a lungo da diventare scomodo" è un'istruzione che il regista, il montatore e gli attori sanno come interpretare.
+
+
+8. COME HANEKE SCRIVE: L'AZIONE COME GESTO, NON COME EMOZIONE
+
+Nelle sceneggiature di Haneke le azioni fisiche sono descritte in modo sistematicamente privo di commento psicologico. I personaggi "entrano", "siedono", "mettono sul tavolo", "escono". Non "entrano nervosamente" o "siedono con stanchezza". Il gesto fisico è registrato nella sua neutralità, come da un osservatore esterno che non ha accesso allo stato interiore dei personaggi.
+
+Questo ha un effetto preciso sulla lettura della sceneggiatura: il lettore (e poi lo spettatore) deve costruire il senso emotivo della scena a partire dal gesto fisico, senza aiuti interpretativi. È una forma di rispetto per l'intelligenza dello spettatore ma anche una posizione etica: Haneke non vuole dire allo spettatore cosa sentire.
+
+
+9. COME TARKOVSKY SCRIVEVA: IL TEMPO COME ISTRUZIONE
+
+Nelle sceneggiature di Tarkovsky (molte delle quali sono state pubblicate) il tempo è spesso esplicitamente tematizzato come istruzione. Non solo "la scena è lunga" ma descrizioni della qualità temporale della scena: la lentezza della luce che cambia, il ritmo della respirazione di un personaggio addormentato, la durata di un suono che si affievolisce.
+
+Tarkovsky considerava il tempo come il materiale fondamentale del cinema — non la storia, non il personaggio, non l'immagine: il tempo. E la sceneggiatura doveva essere il luogo in cui si decideva il ritmo temporale del film, prima ancora che si potesse pensare alle inquadrature.
+
+
+10. COME BRESSON DESCRIVEVA: IL GESTO PURO
+
+Bresson ha scritto estensivamente (nelle Note sul cinematografo) della sua ricerca del "gesto puro": il gesto che non è una dimostrazione di emozione ma un'azione fisica con il suo significato immanente. Un gesto è puro quando non rappresenta qualcosa d'altro — quando è solo se stesso.
+
+Nelle sceneggiature di Bresson questo si traduce in descrizioni di azioni fisiche elementari: una mano che apre una porta, piedi che scendono delle scale, occhi che si chiudono. Nessun gesto è "significativo" nel senso teatrale: ogni gesto è esattamente quello che è, e la somma dei gesti produce un senso che nessun singolo gesto contiene.
+
+
+11. ESERCIZI PRATICI
+
+Esercizio 1 — La scena senza dialogo: scrivere una scena di tre pagine tra due persone che hanno avuto un conflitto senza che il conflitto venga mai nominato. Usare solo azioni fisiche. Evitare qualsiasi commento psicologico nelle didascalie.
+
+Esercizio 2 — Il dialogo bressoni ano: scrivere un dialogo di una pagina tra due personaggi in cui le parole siano sistematicamente in contrasto con la situazione emotiva della scena. Le parole devono essere banali; la situazione deve essere carica.
+
+Esercizio 3 — Il trattamento visivo: scrivere il trattamento di un film di dieci minuti in forma di prosa continua, senza formato tecnico. Il trattamento deve contenere: la qualità della luce, il ritmo del montaggio, il tipo di suono. Non deve contenere: la trama, la psicologia dei personaggi.
+
+Esercizio 4 — Il silenzio come azione: riprendere una scena già scritta e sostituire ogni momento di dialogo con silenzio e azione fisica. Cosa rimane? Cosa va perso? Cosa emerge di nuovo?
+
+Esercizio 5 — Il gesto puro: osservare per dieci minuti un luogo pubblico. Scrivere i gesti che si osservano senza interpretarli. Usare poi questi gesti in una scena in cui i personaggi non si conoscono e non si parleranno mai.
+
+
+12. CONCLUSIONE: LA SCENEGGIATURA COME ATTO AUTONOMO
+
+La sceneggiatura autoriale è un atto autonomo di pensiero cinematografico. Non è un documento di servizio della produzione né una forma letteraria travestita da testo filmico. È un genere proprio, con le sue regole, i suoi strumenti, la sua tradizione.
+
+Studiarla significa comprendere come i grandi autori hanno pensato i loro film prima di girarli: quali problemi si ponevano, quali soluzioni cercavano, come usavano la scrittura per elaborare questioni che riguardano la natura stessa del cinema.
+
+La sceneggiatura autoriale non è il film: è il luogo in cui il film diventa possibile.

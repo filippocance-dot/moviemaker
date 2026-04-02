@@ -1,0 +1,112 @@
+FORMATI DI SCENEGGIATURA NEL CINEMA D'AUTORE
+Oltre il formato Hollywood: come la forma del testo riflette la visione del film
+
+## Il problema del formato standard
+
+La sceneggiatura in formato Hollywood (Final Draft, scuole di cinema convenzionali) è uno strumento industriale: serve a comunicare con produttori, attori, troupe in un sistema di produzione standardizzato. INT./EXT., slug line, action line, dialogue — un protocollo di comunicazione, non una forma espressiva.
+
+Il problema per il cinema d'autore: questo formato porta con sé assunzioni che contraddicono la visione autoriale.
+- L'action line descrive "ciò che vediamo" come se fosse equivalente a qualsiasi altra scena — ma per un film che lavora sulla durata, su cosa si vede in un piano sequenza di 5 minuti non è descrivibile in tre righe.
+- Il dialogo ha una riga separata, formattata diversamente — implica che il dialogo sia il centro della scena. Per Bresson o Akerman è quasi irrilevante.
+- La struttura in atti (implicita nel formato) porta verso la causalità narrativa.
+
+La sceneggiatura autoriale non è il film scritto — è uno strumento di pensiero per il regista, e può avere qualsiasi forma che serva a quel pensiero.
+
+---
+
+## I diversi approcci autoriali
+
+### Jean-Luc Godard — la sceneggiatura come pretesto
+
+Godard ha spesso girato senza sceneggiatura o con testi minimi scritti durante le riprese. "À bout de souffle" era basato su poche pagine di note di François Truffaut. "Pierrot le fou" aveva dialoghi scritti la mattina sul set.
+
+La sua posizione teorica: la sceneggiatura che precede le riprese appartiene alla letteratura, non al cinema. Il film si scrive girando. "Un film dovrebbe avere un inizio, una parte centrale e una fine — ma non necessariamente in quest'ordine."
+
+Implicazione pratica: per un progetto godardiano, la "sceneggiatura" è un documento di ricerca — appunti, citazioni, immagini di riferimento, frammenti di dialogo. Non una struttura predefinita.
+
+### Michael Haneke — la sceneggiatura come partitura comportamentale
+
+Haneke scrive sceneggiature molto dettagliate, ma di un tipo specifico: descrivono le azioni in modo clinico, senza psicologia, senza intenzioni. Il comportamento è descritto dall'esterno, come lo vedrebbe una telecamera di sorveglianza.
+
+Da "Il settimo continente":
+"Georg entra in cucina. Apre il frigorifero. Prende il latte. Lo versa nel bicchiere. Beve. Mette il bicchiere nel lavello. Esce dalla cucina."
+
+Nessuna indicazione su cosa pensa Georg, come si sente, perché lo fa. La psicologia è radicalmente esclusa dal testo. Questo costringe il regista (se stesso) e gli attori a trovare tutto nel gesto fisico, non nell'interpretazione emotiva.
+
+Per un film comportamentale, grottesco, senza psicologia esplicita: questo è il formato più coerente. Le azioni si descrivono dall'esterno con piattezza clinica. Non "terrorizzata, lei prende il coltello" ma "lei prende il coltello."
+
+### Robert Bresson — le note come forma di pensiero
+
+Bresson non pubblicava le sue sceneggiature ma le "Notes sur le cinématographe" sono il documento più vicino al suo metodo. Scriveva i dialoghi come partiture sonore, non come conversazioni — la voce era un elemento del suono, non il portatore del significato.
+
+Le sue sceneggiature erano strumenti privati di ricerca. Ciò che contava era la lista dei "blocchi" — brevi unità di azione, quasi frammenti — che lui poi componeva come un musicista compone note. Non scene nel senso convenzionale, ma unità minimali di gesto e suono.
+
+Implicazione: per un film bressoniamo, la sceneggiatura è una lista di "blocchi" con indicazioni su suono e gesto, non su psicologia o narrativa.
+
+### David Lynch — la sceneggiatura come mappa di un sogno
+
+Lynch scrive sceneggiature convenzionali nel formato ma radicalmente inconvenzionali nel contenuto. Le sue sceneggiature includono sequenze che non seguono causalità logica, personaggi che cambiano identità senza spiegazione, spazi che non corrispondono a logiche fisiche.
+
+"Mulholland Drive" ha sequenze descritte come sogno dentro sogno — scritte con lo stesso registro realistico delle scene "normali", senza indicare al lettore quale sia realtà e quale sogno. L'ambiguità è strutturale nel testo, non solo nell'interpretazione.
+
+La sceneggiatura lynchiana porta il senso del sogno nella sua stessa struttura: puoi leggere le scene nell'ordine giusto e ancora non capire cosa sta succedendo — e questo è il punto.
+
+### Abbas Kiarostami — la sceneggiatura come domanda aperta
+
+Kiarostami spesso arrivava sul set con idee molto vaghe e costruiva il film nell'incontro con il luogo e le persone. "Close-Up" era quasi completamente improvvisato nella struttura, con un documento di partenza minimo.
+
+Il suo approccio: la sceneggiatura dice "cosa cerchiamo", non "cosa faremo". È un documento di intenti e domande, non un piano.
+
+### Chantal Akerman — la sceneggiatura come partitura temporale
+
+Akerman descriveva la durata come elemento compositivo primario. Le sue sceneggiature indicavano esplicitamente i tempi — "questa scena dura 7 minuti" — perché la durata era parte del significato, non un effetto della messa in scena.
+
+"Jeanne Dielman" aveva una sceneggiatura molto precisa sulle azioni domestiche (ogni preparazione del pasto era descritta passo per passo) ma quasi vuota sul piano psicologico. La durata imposta al lettore l'esperienza che la durata impone allo spettatore.
+
+### Bela Tarr — la sceneggiatura come testo letterario
+
+Tarr collaborava con lo scrittore László Krasznahorkai. Le sceneggiature erano testi letterari di qualità autonoma — prosa densa, filosofica, con lunghe descrizioni dell'ambiente e del tempo atmosferico. Non formato Hollywood ma romanzo visivo.
+
+"Sátántangó" era un adattamento del romanzo di Krasznahorkai: il testo era già la visione, il film era la traduzione visiva di un mondo che esisteva già nella scrittura.
+
+---
+
+## Come scegliere il formato giusto per un progetto
+
+La scelta del formato non è estetica — è conseguenza della visione.
+
+**Domande da fare al progetto:**
+
+1. **Quanto conta la psicologia del personaggio nella narrazione?**
+   - Molto → formato più tradizionale, action lines con intenzionalità
+   - Per niente → formato hanekeriano, solo comportamento esterno
+
+2. **Il film è costruito sulla durata o sul montaggio?**
+   - Durata (piano sequenza, slow cinema) → la sceneggiatura deve indicare i tempi, come Akerman
+   - Montaggio → la sceneggiatura può essere più frammentata, quasi una lista di shot
+
+3. **Il film ha una logica causale o associativa?**
+   - Causale (anche minimale) → sequenza di scene con connessione
+   - Associativa/onirica → formato lynchiano, sequenze giustapposte senza spiegazione
+
+4. **La scrittura è anteriore o contemporanea alle riprese?**
+   - Anteriore → qualsiasi formato, ma serve precisione
+   - Contemporanea → documento di ricerca, appunti, non sceneggiatura tradizionale
+
+5. **Chi legge la sceneggiatura?**
+   - Solo il regista (film autoprodotto) → qualsiasi forma funziona
+   - Produttori, attori, co-finanziatori → deve essere leggibile a persone esterne
+
+---
+
+## Come identificare il formato giusto per un progetto specifico
+
+Sulla base della visione descritta (commedia grottesca, comportamento senza psicologia, "MAI FARLA SEMBRARE DEPRESSA"), il formato più coerente è il **formato hanekeriano**:
+
+- Descrizione clinica delle azioni, dall'esterno
+- Nessuna indicazione di stato emotivo interno
+- Durata indicata esplicitamente per le scene-chiave (la scena ChatGPT: 3 minuti)
+- Dialogo minimo, scritto come testo piatto senza indicazioni di tono
+- Nessuna slug line psicologica ("terrorizzata", "felice", "sorpresa")
+
+Il documento potrebbe anche essere strutturato non come sceneggiatura ma come **scaletta commentata**: lista delle scene nell'ordine, con durata, descrizione dell'azione, note sul suono/musica. Più vicino a una partitura che a uno script.

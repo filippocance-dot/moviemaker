@@ -1,0 +1,132 @@
+ANDRE BAZIN E IL REALISMO ONTOLOGICO
+=====================================
+Immagine, tempo, ambiguita del reale
+
+---
+
+1. BAZIN E IL PENSIERO CRITICO DEL DOPOGUERRA
+
+Andre Bazin (1918-1958) e il piu importante critico cinematografico del Novecento. La sua opera — raccolta principalmente in "Qu'est-ce que le cinema?" (4 volumi, 1958-1962) — non e un sistema teorico coerente e chiuso, ma una serie di intuizioni profonde che si sviluppano attraverso la critica militante, l'analisi filmica concreta e una riflessione filosofica sull'essenza del cinema. Bazin non scrive come accademico: scrive come critico che pensa attraverso i film, e questo lo distingue dai teorici sistematici come Eisenstein o Metz.
+
+Il pensiero di Bazin e radicalmente antitetico a quello di Eisenstein. Dove Eisenstein celebra il montaggio come principio costruttivo e ideologico del cinema, Bazin vede nel montaggio una violenza epistemica contro la realta. Dove Eisenstein vuole un cinema che produca idee attraverso la collisione delle immagini, Bazin vuole un cinema che rispetti l'ambiguita, la continuita e la complessita del reale.
+
+---
+
+2. L'ONTOLOGIA DELL'IMMAGINE FOTOGRAFICA: LA MUMMIA DEL CAMBIAMENTO
+
+Il saggio fondativo del pensiero baziniano e "Ontologie de l'image photographique" (1945), in cui Bazin elabora la sua teoria dell'essenza fotografica e cinematografica.
+
+Bazin parte da un'analisi delle arti plastiche e della loro funzione psicologica profonda. L'uomo ha sempre cercato di conservare l'apparenza degli esseri viventi contro la morte e il tempo: l'imbalsamazione egizia, la maschera mortuaria greca, il ritratto rinascimentale rispondono tutti a questo bisogno primitivo di preservare la vita contro il suo stesso scorrere. Bazin chiama questo complesso psicologico il "complesso della mummia": il desiderio di strappare gli esseri amati al flusso del tempo, di cristallizzare la loro forma, di negargli la morte.
+
+La pittura ha risposto parzialmente a questo desiderio, ma sempre con l'intermediazione della soggettivita del pittore. Per quanto realista, un dipinto porta sempre il segno dell'intervento umano: e una interpretazione del reale, non una sua impronta diretta.
+
+La fotografia segna una rottura storica e ontologica. Per la prima volta nella storia delle immagini, la formazione dell'immagine non richiede l'intervento attivo di un essere umano: e il processo fisico-chimico stesso — la luce che impressiona l'emulsione — a produrre l'immagine. La fotografia e un'impronta della realta nel senso pieno del termine: non e una rappresentazione (mediata dall'interpretazione), ma una traccia (prodotta dal contatto diretto).
+
+Bazin usa la parola "transfert di realta": tra il modello e la sua fotografia c'e un rapporto di co-presenzialita fisica. La luce che ha colpito il viso di una persona ha poi impressionato la pellicola. C'e un legame materiale, fisico, quasi magico tra la fotografia e il suo referente.
+
+Da qui la celebre formula: la fotografia e una "mummia del cambiamento". Essa preserva la vita nella sua forma, la sottrae al tempo — ma come una mummia, non come un essere vivente. La fotografia congela il flusso temporale, estrae un istante dalla corrente del tempo e lo preserva per sempre.
+
+Il cinema aggiunge una dimensione ulteriore a questa ontologia fotografica: il TEMPO. Il cinema non e solo una fotografia del mondo: e una fotografia del mondo che scorre, che si muove, che dura. Il cinema e la mummia del cambiamento in movimento — e questa e la sua specificita ontologica fondamentale. Il cinema non preserva solo la forma degli esseri, ma il tempo stesso della loro esistenza.
+
+---
+
+3. IL CINEMA COME ARTE DEL REALE
+
+Dall'analisi ontologica dell'immagine fotografica, Bazin deriva una conseguenza estetica fondamentale: il cinema ha una vocazione naturalistica iscritta nella sua stessa natura tecnica. La specificita del cinema come medium lo orienta verso il realismo non come scelta estetica, ma come destino ontologico.
+
+Questo non significa che tutti i film debbano essere documentari. Significa che quando il cinema tradisce la sua natura indicale — quando si allontana dalla realta per diventare costruzione artificiale, quando il montaggio impone al reale una logica esterna ad esso — tradisce se stesso. Il realismo non e un genere: e la vocazione profonda del medium cinematografico.
+
+Tuttavia, Bazin distingue attentamente tra realismo come categoria estetica e realismo come categoria morale. Il vero realismo baziniano non e il realismo superficiale della resa mimetica dei dettagli (il naturalismo di certi film hollywoodiani anni Trenta), ma un realismo ontologico e morale: il rispetto per l'ambiguita del reale, per la sua complessita irriducibile, per la sua resistenza alla semplificazione.
+
+---
+
+4. PROFONDITA DI CAMPO E AMBIGUITA: RENOIR E WELLES
+
+Il cuore della teoria baziniana e l'analisi delle tecniche cinematografiche che meglio rispettano l'ambiguita del reale: la profondita di campo e il piano sequenza.
+
+La profondita di campo — resa possibile tecnicamente dagli obiettivi grandangolari e dalle pellicole ortochromatiche — permette di mantenere a fuoco simultaneamente oggetti vicini e lontani dalla cinepresa. Nelle scene girate con profondita di campo, lo spettatore non e guidato dal fuoco selettivo della cinepresa a focalizzare l'attenzione su un elemento specifico: tutti gli elementi dello spazio sono ugualmente nitidi, ugualmente presenti.
+
+Bazin vede in questo una rivoluzione epistemologica. Nel cinema a montaggio, il regista sceglie per lo spettatore: gli mostra quello che deve vedere, nell'ordine in cui deve vederlo, con il significato che deve attribuirgli. E una retorica della necessita: ogni inquadratura ha una funzione determinata nel sistema del significato. Il montaggio e intrinsecamente autoritario.
+
+La profondita di campo, al contrario, offre allo spettatore una liberta di sguardo analoga a quella che ha nella vita reale. Guardando una scena in profondita di campo, lo spettatore puo scegliere su cosa concentrarsi, puo scoprire da solo i rapporti tra gli elementi dello spazio, puo costruire la sua interpretazione.
+
+Jean Renoir e il primo maestro della profondita di campo che Bazin analizza. In "La regle du jeu" (1939), Renoir usa sistematicamente la profondita di campo per mostrare simultaneamente piani di azione diversi, creando una texture spaziale e sociale di straordinaria ricchezza. La celebre scena della caccia, con i suoi movimenti di macchina fluidi, i suoi raccordi nel profondita, le sue sovrapposizioni di azioni simultanee, e per Bazin il modello del realismo cinematografico maturo.
+
+Orson Welles porta la profondita di campo alle sue conseguenze estreme in "Citizen Kane" (1941), girato con il direttore della fotografia Gregg Toland. Le inquadrature di Kane combinano grandangolo estremo, luce dura e profondita di campo totale per creare un effetto di realta amplificata, quasi espressionistica. Bazin analizza in particolare la scena del tentato suicidio di Susan Alexander: in un'unica inquadratura, in profondita di campo, si vede in primo piano il bicchiere di veleno e le medicine, a fuoco medio il corpo di Susan, e in fondo alla stanza la porta attraverso cui Kane irrompe. L'articolazione drammatica e tutta nello spazio, non nel tempo del montaggio.
+
+---
+
+5. IL PIANO SEQUENZA E LA CONTINUITA SPAZIO-TEMPORALE
+
+Intimamente connesso alla profondita di campo e il piano sequenza: un'inquadratura di lunga durata che segue un'azione senza tagli, mantenendo la continuita dello spazio e del tempo reali.
+
+Per Bazin, il piano sequenza ha un valore epistemologico e morale superiore al montaggio. Esso rispetta il tempo reale degli eventi — non lo manipola, non lo seleziona, non lo comprime o dilata arbitrariamente. Quando un regista usa il piano sequenza, accetta la durata degli eventi come un dato ineludibile, una resistenza del reale che non si lascia ridurre alla logica del racconto.
+
+Il piano sequenza implica anche una forma particolare di ambiguita spaziale. Nel montaggio, lo spazio e costruito attraverso la relazione tra inquadrature: e uno spazio logico, un'inferenza. Nel piano sequenza, lo spazio e dato direttamente, nella sua continuita e nella sua totalita: e uno spazio fenomenologico, un'esperienza.
+
+L'esempio piu citato da Bazin e la scena del salvataggio dalla corrente ne "Ladri di biciclette" di De Sica, ma soprattutto l'analisi di certi momenti di "Paisà" di Rossellini (1946), dove Bazin identifica un "realismo dei fatti" che non riduce la complessita storica e umana a una tesi dimostrabile.
+
+---
+
+6. LA PROIBIZIONE DEL MONTAGGIO: QUANDO IL MONTAGGIO E VIETATO
+
+Bazin formula una teoria normativa che e stata spesso fraintesa: la "proibizione del montaggio". Bazin non dice che il montaggio e sempre sbagliato: dice che in certi tipi di situazioni, il montaggio e filmicamente illegittimo perche tradisce l'essenza del reale che viene filmato.
+
+Il caso paradigmatico e quello che Bazin chiama "l'evenement spatial": le situazioni in cui il significato dipende dalla presenza simultanea di due o piu elementi nello stesso spazio. Se si filma un uomo che si avvicina a un leone feroce in campo aperto, e si usa il montaggio alternato (primo piano del volto terrorizzato dell'uomo, primo piano del leone che si avvicina), si produce effetto di tensione attraverso la grammatica del montaggio — ma si perde la realta dello spazio che separa uomo e leone, la realta del pericolo fisico concreto. Solo il piano sequenza in profondita di campo, che mantiene uomo e leone visibili nella stessa inquadratura, mostra il pericolo reale.
+
+Allo stesso modo, Bazin osserva che i documentari naturalistici dell'epoca che mostravano animali selvatici erano spesso truccati: il montaggio poteva creare l'illusione di situazioni che non erano realmente avvenute (un leone che attacca una gazzella montato insieme a riprese separate). La profondita di campo nel piano sequenza e una garanzia di autenticita — non assoluta, ma relativa.
+
+---
+
+7. IL NEOREALISMO ITALIANO: ROSSELLINI E DE SICA
+
+Il neorealismo italiano degli anni Quaranta rappresenta per Bazin la realizzazione piu compiuta del cinema realista. Rossellini, De Sica, Visconti e Zavattini hanno creato un cinema che rinuncia alle convenzioni del racconto cinematografico classico per avvicinarsi alla texture irriducibile della vita reale.
+
+In "Paisà" (1946) di Rossellini, Bazin individua quello che chiama un "realismo dei fatti". Rossellini non costruisce situazioni narrative, non psicologizza i personaggi, non usa l'ellissi del montaggio classico per condensare il tempo. I sei episodi del film mostrano situazioni incomplete, moralmente ambigue, storicamente contingenti — come frammenti di realta che resistono alla narrazione.
+
+In "Ladri di biciclette" (1948) di De Sica e Cesare Zavattini, Bazin vede il trionfo dell'estetica neorealista. Il film usa attori non professionisti, ambienti naturali, luci reali. Ma soprattutto, la sua struttura narrativa non impone una soluzione ai problemi che mostra: la fine del film lascia il protagonista nella stessa situazione di miseria da cui era partito, senza redenzione e senza consolazione. La realta resiste al racconto.
+
+Il realismo baziniano, nel neorealismo italiano, diventa una categoria morale e politica. Un cinema realista non e solo un cinema che usa certe tecniche: e un cinema che ha rispetto per la complessita morale delle situazioni umane, che non le riduce a schemi didascalici o propagandistici.
+
+---
+
+8. CRITICA AL MONTAGGIO EISENSTEINIANO
+
+Bazin dedica una parte significativa della sua teoria alla critica del montaggio eisensteiniano, che vede come la forma piu radicale e dunque piu criticabile di un cinema che impone al reale una logica esterna.
+
+In Eisenstein, il montaggio non si limita a narrare: dimostra. La collisione tra inquadrature produce un significato ideologico che non e presente in nessuna delle due inquadrature singolarmente. E una retorica della necessita: lo spettatore non puo che accettare la conclusione imposta dalla sequenza.
+
+Per Bazin, questo e un tradimento della specificita del cinema. Il montaggio eisensteiniano usa il cinema come strumento di propaganda intellettuale — lo piega a una logica argomentativa che appartiene al linguaggio verbale, non all'immagine fotografica. L'immagine cessa di essere una traccia del reale per diventare un segno, un elemento di un codice retorico prestabilito.
+
+La famosa sequenza delle bestie macellate in "Sciopero" (1925), che Eisenstein monta insieme alle immagini degli operai uccisi dalla polizia zarista, e per Bazin il paradigma del montaggio illegittimo: non mostra una realta, ma impone una metafora. Il cinema diventa letteratura visiva, e perde la sua specificita ontologica.
+
+---
+
+9. IL REALISMO COME CATEGORIA MORALE
+
+La formulazione piu suggestiva del pensiero baziniano e quella che assimila il realismo a una categoria morale piuttosto che estetica. Un film realista non e necessariamente un film girato con tecniche realistiche: e un film che manifesta una disposizione etica verso il mondo che mostra.
+
+Il realismo baziniano implica: rispetto per la complessita degli esseri e delle situazioni; rifiuto della manipolazione retorica; accettazione dell'ambiguita e dell'irriducibilita del reale; fiducia nella capacita dello spettatore di costruire il proprio senso; umilta del regista davanti alla realta.
+
+In questa prospettiva, certi film tecnicamente "realistici" (fotografia naturalistica, ambienti reali) possono essere moralmente falsificanti se impongono una lettura univoca della realta. Al contrario, un film come "La regle du jeu" di Renoir, con i suoi movimenti di macchina fluidi e la sua profondita di campo, e per Bazin moralmente superiore perche mostra la complessita delle relazioni umane senza ridurle a uno schema.
+
+---
+
+10. TRASPARENZA DELLO STILE E TEMPO REALE
+
+L'ideale baziniano e quello di uno stile trasparente — uno stile che si fa dimenticare, che non si impone tra lo spettatore e il reale. Questo non significa uno stile assente: significa uno stile che lavora per costruire l'impressione di realta piuttosto che per mostrare la propria virtuosita.
+
+Il tempo reale — il tempo della durata fenomenologica degli eventi — e il valore supremo di questo estetica. Il piano sequenza lungo, che permette al tempo di scorrere nella sua continuita, e la forma cinematografica per eccellenza di questo rispetto per la realta.
+
+L'eredita di Bazin e incalcolabile: dalla Nouvelle Vague (i suoi allievi Truffaut, Godard, Rivette) al cinema di Tarkovsky, Angelopoulos, Sokurov — tutti i registi che hanno scelto il tempo lungo, il piano sequenza, la durata come valore cinematografico si inscrivono consciamente o inconsciamente nella tradizione baziniana.
+
+---
+
+RIFERIMENTI BIBLIOGRAFICI ESSENZIALI
+
+Bazin, A. (1958-1962). Qu'est-ce que le cinema? (4 vol.). Les Editions du Cerf.
+Bazin, A. (1972). Jean Renoir. Champ Libre.
+Bazin, A. (1971). Orson Welles. Losfeld.
+Andrew, D. (1978). Andre Bazin. Oxford University Press.
+Rosen, P. (1986). Narrative, Apparatus, Ideology. Columbia University Press.
+Henderson, B. (1971). Two Types of Film Theory. Film Quarterly, 24(3).

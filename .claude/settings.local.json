@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(claude-api)",
+      "Bash(pip show:*)",
+      "Bash(pip3 show:*)",
+      "Bash(pip3 install:*)",
+      "WebSearch",
+      "WebFetch(domain:edinburghuniversitypress.com)",
+      "WebFetch(domain:filmquarterly.org)",
+      "WebFetch(domain:www.euppublishing.com)",
+      "WebFetch(domain:www.sensesofcinema.com)",
+      "WebFetch(domain:link.springer.com)",
+      "WebFetch(domain:www.aup.nl)",
+      "WebFetch(domain:cup.columbia.edu)",
+      "WebFetch(domain:necsus-ejms.org)",
+      "WebFetch(domain:framescinemajournal.com)",
+      "WebFetch(domain:www.researchgate.net)",
+      "WebFetch(domain:www.tandfonline.com)",
+      "WebFetch(domain:library.oapen.org)",
+      "Bash(find /Users/filippoarici/projects/Test_1/docs -name \"*.txt\" -exec wc -w {} +)",
+      "Bash(python cineauteur.py)",
+      "Bash(python3 cineauteur.py)",
+      "Bash(python3 /Users/filippoarici/projects/Test_1/cineauteur.py)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(python3 -c ':*)",
+      "Bash(python3:*)",
+      "Bash(bash:*)",
+      "Bash(brew install:*)",
+      "WebFetch(domain:federicodematte.com)",
+      "WebFetch(domain:www.prada.com)"
+    ]
+  }
+}

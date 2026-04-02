@@ -1,0 +1,49 @@
+TECNOLOGIA, SORVEGLIANZA DIGITALE E INTELLIGENZA ARTIFICIALE
+Per lo sviluppo di progetti filmici su tematiche tecnologiche e di controllo
+
+## Il capitalismo della sorveglianza
+
+Shoshana Zuboff in *The Age of Surveillance Capitalism* (2019) ha teorizzato un nuovo regime economico: le grandi piattaforme (Google, Meta, Amazon) estraggono dati comportamentali dagli utenti, li trasformano in "surplus comportamentale", li vendono ai mercati dei futures comportamentali per prevedere e modificare il comportamento umano. Non siamo clienti delle piattaforme — siamo la materia prima.
+
+Il meccanismo: ogni click, ogni secondo di attenzione, ogni relazione, ogni spostamento fisico diventa dato. Gli algoritmi di raccomandazione (TikTok, YouTube, Instagram) sono ottimizzati per massimizzare il tempo di permanenza — non per informare o connettere, ma per catturare attenzione. Il modello di business è la vendita di questa attenzione catturata agli inserzionisti.
+
+Le conseguenze documentate: polarizzazione politica accelerata dagli algoritmi (il sistema premia i contenuti emotivamente intensi, tipicamente outrage e paura), diffusione della disinformazione, crisi di salute mentale giovanile (documentata da Jonathan Haidt in *The Anxious Generation*, 2024 — correlazione tra adozione degli smartphone e aumento di depressione e ansia negli adolescenti, soprattutto femmine).
+
+## La sorveglianza di Stato
+
+Il sistema di sorveglianza digitale di Stato ha due forme principali:
+
+**La sorveglianza di massa occidentale**: rivelata da Edward Snowden nel 2013 — la NSA americana e il GCHQ britannico raccolgono sistematicamente le comunicazioni digitali globali. Il caso Cambridge Analytica (2018) ha mostrato come i dati di Facebook siano stati usati per influenzare le elezioni (Brexit, Trump 2016).
+
+**Il sistema di credito sociale cinese**: la Cina ha costruito il sistema di sorveglianza più completo al mondo — riconoscimento facciale ubiquo, monitoraggio delle comunicazioni, sistema di credito sociale che premia e punisce comportamenti. La regione dello Xinjiang (con la minoranza uigura) come laboratorio di sorveglianza totale: circa un milione di persone in campi di "rieducazione" documentati da giornalisti e ricercatori.
+
+**Il mercato degli spyware**: Pegasus (NSO Group israeliano) — software di sorveglianza venduto a governi per spiare giornalisti, attivisti, oppositori. Usato in Messico, Arabia Saudita (nel caso dell'omicidio di Khashoggi), India, Ungheria, molti altri.
+
+## L'intelligenza artificiale: stato al 2025
+
+Il 2022-2025 ha visto un'accelerazione senza precedenti dell'IA generativa. ChatGPT (OpenAI, lanciato novembre 2022) ha raggiunto 100 milioni di utenti in due mesi — il prodotto tecnologico con la crescita più rapida della storia. Seguiti da Gemini (Google), Claude (Anthropic), Llama (Meta).
+
+Le implicazioni:
+- **Lavoro cognitivo automatizzabile**: le IA generative possono scrivere codice, testi, immagini, musica, video. Professioni che sembravano al sicuro dall'automazione (avvocati, contabili, giornalisti, designer) sono ora esposte.
+- **Deepfake e disinformazione**: la capacità di generare video realistici di persone che non hanno mai detto o fatto cose è una minaccia alla fiducia epistemica — come sapere cosa è reale?
+- **La questione della coscienza e dei diritti**: dibattito filosofico e legale emergente — se un sistema di IA mostra comportamenti che assomigliano alla coscienza, che statuto ha?
+- **La concentrazione del potere**: poche aziende americane e cinesi controllano i sistemi più potenti. Il rischio di un oligopolio dell'intelligenza.
+
+## Il corpo nel mondo digitale
+
+La filosofa Katherine Hayles in *How We Became Posthuman* analizza il processo storico per cui il corpo è stato progressivamente escluso dalle concezioni dell'informazione — come se la mente potesse esistere senza il corpo, come se l'informazione fosse astratta dalla materia. Il digitale porta questa tendenza all'estremo.
+
+Mark Hansen risponde con *Bodies in Code* — il corpo non scompare nella digital culture, viene riorganizzato. L'avatar, il profilo, il feed Instagram sono estensioni del corpo, non sue sostituzioni.
+
+Il paradosso dei social media: piattaforme costruite sul corpo (selfie, video, performance del sé) che producono dissociazione dal corpo reale — la dipendenza dall'approvazione dell'immagine digitale a scapito dell'esperienza corporea diretta.
+
+## Per il cinema
+
+Il cinema che si confronta con la tecnologia come tema ha spesso il problema del cliché — il robot che si ribella, il sistema che controlla, la distopia. Il cinema d'autore che ha lavorato meglio su questi temi lo fa indirettamente:
+
+- **Michael Haneke** (*Caché*, *Funny Games*): la videocamera come strumento di potere e voyeurismo, lo schermo come mediazione del reale
+- **Hong Sang-soo**: lo smartphone come presenza costante nelle relazioni — ma mai come tema esplicito, sempre come dettaglio che cambia la textura delle interazioni
+- **Denis Villeneuve** (*Arrival*, *Blade Runner 2049*): la tecnologia come domanda filosofica, non come spettacolo
+- **Il cinema del reale**: i documentari sulla sorveglianza (Laura Poitras, *Citizenfour* sul caso Snowden)
+
+La domanda per un regista d'autore: la tecnologia come sfondo o come forma? Non filmare la tecnologia ma filmare come la tecnologia trasforma i corpi, i gesti, le relazioni, la percezione del tempo.

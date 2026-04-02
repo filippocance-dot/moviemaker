@@ -1,0 +1,147 @@
+CHRISTIAN METZ E LA SEMIOTICA DEL CINEMA
+=========================================
+Teoria, metodo, eredita critica
+
+---
+
+1. PREMESSA: IL PROGETTO SEMIOTICO DI METZ
+
+Christian Metz (1931-1993) e la figura piu importante della semiologia cinematografica del Novecento. La sua opera si situa all'incrocio tra la linguistica strutturale di Ferdinand de Saussure e Louis Hjelmslev, la teoria del cinema di Andre Bazin (da cui muove per poi distaccarsi radicalmente) e la psicoanalisi lacaniana, che diventa il fulcro del suo lavoro maturo. Metz non costruisce una teoria unitaria del cinema: costruisce piuttosto una serie di strumenti analitici che trasformano radicalmente il modo in cui il cinema viene pensato come sistema di significazione.
+
+Il progetto metziano nasce negli anni Sessanta con i "Essais sur la signification au cinema" (1968, 1972) e culmina con le due opere fondamentali: "Langage et cinema" (1971) e "Le signifiant imaginaire" (1977). In questi testi, Metz non si limita a descrivere il cinema: ne interroga le condizioni di possibilita come sistema semiotico, le sue specificita rispetto ad altri sistemi di segni, e infine le condizioni psichiche del desiderio di cinema.
+
+---
+
+2. LA QUESTIONE LANGUE/LANGAGE E IL RIFIUTO DELLA LINGUISTICA SAUSSURIANA
+
+Il punto di partenza di Metz e la domanda: il cinema e un linguaggio? La risposta richiede una distinzione fondamentale, che Metz eredita dalla linguistica ma subito problematizza.
+
+In Saussure, la "langue" e il sistema astratto, il codice condiviso da una comunita linguistica (la lingua francese, l'italiano), mentre la "parole" e l'atto individuale di enunciazione. La semiologia saussuriana presuppone che ogni sistema segnico abbia una "langue" sottostante.
+
+Metz dimostra che il cinema NON possiede una "langue" in senso saussuriano. Non esistono unita minime discrete (equivalenti ai fonemi o ai morfemi) che il cinema combini secondo regole paradigmatiche prestabilite. Il cinema non conosce doppia articolazione nel senso di Martinet. L'immagine cinematografica non si compone di unita convenzionali e arbitrarie: al contrario, il suo rapporto con il referente e motivato, analogico, iconico (in senso peirciano). Un primo piano di un volto non e un segno arbitrario del volto: e una traccia ottica del volto reale.
+
+Dunque il cinema non e una lingua (langue), ma e un linguaggio (langage): ovvero possiede dei meccanismi di significazione, dei codici, delle convenzioni che producono senso in modo sistematico. La differenza e cruciale: il linguaggio cinematografico non precede i film, ma si costituisce attraverso di essi. E la storia del cinema che ha costruito le convenzioni del linguaggio cinematografico — non un sistema preesistente che i registi applicano.
+
+Questo porta Metz a introdurre la nozione di "cinematic codes" (codici cinematografici), strumenti analitici piu flessibili della "langue" saussuriana.
+
+---
+
+3. I CODICI CINEMATOGRAFICI: SPECIFICI E NON-SPECIFICI
+
+Metz distingue tra codici specifici del cinema e codici non-specifici.
+
+I codici specifici sono quelli che appartengono esclusivamente al cinema, che non hanno equivalente in altri sistemi semiotici. Il principale e il codice della grande sintagmatica, ma rientrano in questa categoria anche: il montaggio, la mobilita della cinepresa, la scala dei piani (primo piano, campo totale, piano americano ecc.), il fuori campo come spazio implicitamente presente.
+
+I codici non-specifici sono invece codici che il cinema condivide con altri sistemi espressivi. La musica cinematografica condivide codici con la musica tout court. Il dialogo condivide codici con il linguaggio verbale. La scenografia condivide codici con le arti plastiche e l'architettura. La recitazione condivide codici con il teatro. Un film e sempre una compresenza di codici multipli, specifici e non-specifici, che si intrecciano e si stratificano.
+
+Questa distinzione ha implicazioni metodologiche fondamentali: l'analisi di un film non puo ridursi allo studio di un solo codice, ma deve affrontare la complessita della loro interazione. In "Jeanne Dielman" (1975) di Chantal Akerman, per esempio, la durata dei piani (codice cinematografico specifico) interagisce con i codici del comportamento gestuale quotidiano (codice non-specifico, condiviso con la vita reale) per produrre un effetto di defamiliarizzazione politica.
+
+---
+
+4. LA GRANDE SINTAGMATICA DEL FILM NARRATIVO
+
+Il contributo piu noto di Metz alla semiologia del cinema e la Grande Sintagmatica, elaborata nel saggio "La grande syntagmatique du film narratif" (1966), poi raccolto negli "Essais". Si tratta di una tassonomia degli otto tipi sintagmatici fondamentali che organizzano il film narrativo a livello del "segment" autonomo, ovvero dell'unita narrativa minimale superiore al singolo inquadratura.
+
+La Grande Sintagmatica si occupa dei rapporti sintagmatici tra inquadrature — non delle singole inquadrature. Si fonda su una distinzione tra ORDINE (la sequenza temporale delle immagini) e RACCONTO (la logica narrativa che essa esprime). I tipi sintagmatici sono otto:
+
+1. PIANO AUTONOMO (Syntagme autonome)
+Un'inquadratura che costituisce da sola un segmento autonomo. Si divide in inquadratura autonoma (un singolo evento non ulteriormente divisibile) e sequenza a inquadratura singola. Esempio: la singola inquadratura iniziale di "2001: Odissea nello spazio" (Kubrick, 1968) che mostra l'alba sull'Africa preistorica.
+
+2. SINTAGMA PARALLELO (Syntagme parallele)
+Due serie di immagini che si alternano senza relazione temporale o spaziale determinata, in un rapporto di analogia, opposizione o confronto tematico. Non c'e contemporaneita: e un montaggio di idee. Esempio: le alternanze ricorrenti in "Intolerance" (Griffith, 1916) tra le quattro epoche storiche.
+
+3. SINTAGMA A STAFFETTA O BRACKETTED SYNTAGMA
+Serie di brevi frammenti che illustrano una stessa idea o attivita senza relazione cronologica interna. E usato per riassumere stati abituali o attivita ripetute. Esempio: le scene di lavoro meccanico in fabbrica in "Tempi moderni" (Chaplin, 1936).
+
+4. SCENA DESCRITTIVA (Syntagme descriptif)
+Le inquadrature si trovano in contemporaneita spaziale ma senza relazione temporale determinata: descrivono un luogo o un insieme senza presupporre simultaneita tra gli elementi mostrati. E raro nel cinema narrativo classico. Esempio: l'apertura di "Barry Lyndon" (Kubrick, 1975) con le inquadrature dei paesaggi irlandesi.
+
+5. SINTAGMA ALTERNATO (Syntagme alternatif)
+L'alternanza classica tra due azioni simultanee in luoghi diversi, che convergeranno (montaggio parallelo con valore di contemporaneita e convergenza). E il sintagma del "last minute rescue" griffithiano. Esempio: l'inseguimento finale di "Nascita di una nazione" (Griffith, 1915).
+
+6. SCENA (Scene)
+Le inquadrature si svolgono in uno stesso luogo, in un tempo continuo, senza ellissi percettibile. La scena cinematografica mima la continuita della scena teatrale. E il sintagma dominante nel cinema di dialogo. Esempio: quasi ogni scena di "My Dinner with Andre" (Malle, 1981).
+
+7. SEQUENZA PER EPISODI (Sequence par episodes)
+La sequenza che mostra il decorso di un'azione attraverso una serie di episodi significativi, con ellissi esplicite tra un episodio e l'altro. E il sintagma della "montage sequence" hollywoodiana classica. Esempio: la sequenza dell'ascesa e della caduta di Kane in "Citizen Kane" (Welles, 1941).
+
+8. SEQUENZA ORDINARIA (Sequence ordinaire)
+La piu comune nel cinema narrativo. E una serie di inquadrature che mostrano un'azione continua attraverso ellissi implicite — salti temporali che il racconto non segnala esplicitamente ma che lo spettatore compie senza difficolta. Esempio: qualsiasi scena di spostamento in automobile nel cinema classico, dove i tagli eliminano parti del percorso senza che lo spettatore lo percepisca come lacuna.
+
+La Grande Sintagmatica e stata criticata (da Metz stesso in seguito, e da teorici come David Bordwell) per la sua rigidita tassonomica e per la sua applicabilita limitata al cinema narrativo classico. Tuttavia, il suo valore storico e metodologico resta fondamentale: per la prima volta il cinema viene analizzato come sistema con unita descrivibili e classificabili.
+
+---
+
+5. IL SIGNIFICANTE IMMAGINARIO: PSICOANALISI E CINEMA
+
+Con "Le signifiant imaginaire" (1977) Metz compie una svolta radicale. Abbandona la tassonomia sintagmatica per porsi una domanda piu profonda: quali meccanismi psichici reggono il desiderio di cinema? Perche il cinema produce piacere? Qual e la struttura psichica dello spettatore cinematografico?
+
+Il titolo e programmatico. Il significante cinematografico e "immaginario" in doppio senso: primo, perche le immagini in movimento appartengono al registro lacaniano dell'Immaginario (il registro dell'identificazione speculare, dell'illusione di totalita, del rapporto duale con l'immagine); secondo, perche il cinema e un significante che si fa sparire — le immagini non sono presenti fisicamente come le parole di un testo scritto, ma appaiono e scompaiono, esibendo una presenza radicalmente diversa da quella degli oggetti reali.
+
+5.1 LA PERCEZIONE CINEMATOGRAFICA E IL REGIME SCOPICO
+
+Metz analizza la specificita percettiva del cinema attraverso il concetto di "regime scopico" (che riprende da Jacques Lacan e dal dibattito psicoanalitico del periodo). Il cinema e anzitutto un'arte della visione, ma una visione particolare: lo spettatore vede senza essere visto, osserva da una posizione voyeuristica protetta dall'oscurita della sala.
+
+Nel cinema, a differenza del teatro, non c'e contatto diretto tra spettatore e performer. L'attore sullo schermo non vede lo spettatore, non puo ricambiare lo sguardo. Questa asimmetria e constitutiva del piacere cinematografico: la visione cinematografica e strutturalmente voyeuristica. Il cinema organizza uno sguardo unidirezionale che mette lo spettatore in una posizione di padronanza visiva — una padronanza illusoria, come Metz dimostra attraverso la psicoanalisi.
+
+5.2 IDENTIFICAZIONE PRIMARIA E IDENTIFICAZIONE SECONDARIA
+
+Metz introduce una distinzione fondamentale tra due livelli di identificazione cinematografica.
+
+L'identificazione secondaria e quella comunemente descritta dalla teoria del cinema: lo spettatore si identifica con i personaggi, partecipa emotivamente alle loro vicende, proietta se stesso nelle figure narrative. Questo e il livello dell'identificazione "diegetica" — all'interno del mondo narrativo.
+
+L'identificazione primaria e piu radicale e meno visibile. Lo spettatore si identifica non con un personaggio, ma con la cinepresa stessa — con lo sguardo che produce le immagini. E un'identificazione con il "soggetto della visione" trascendente, con il punto di vista costituente. Lo spettatore si percepisce come il centro organizzatore dello spazio visivo.
+
+Metz mette in relazione questa identificazione primaria con la struttura dello "stadio dello specchio" lacaniano. Il bambino si riconosce nello specchio, costruendo un'immagine unificata di se stesso attraverso la sua immagine riflessa. Lo schermo cinematografico funziona analogamente: offre allo spettatore un'immagine speculare del mondo in cui egli si riconosce come soggetto. Ma a differenza dello specchio reale, lo schermo cinematografico non riflette l'immagine dello spettatore: riflette un mondo che NON include lo spettatore, un mondo senza di lui. Questo e il fondamento della sua potenza illusoria.
+
+5.3 LO SCHERMO COME SPECCHIO: LA DIFFERENZA CON LO STADIO DELLO SPECCHIO
+
+Lo schermo cinematografico e uno specchio mancante. A differenza dello specchio lacaniano, in cui il bambino vede la propria immagine, lo schermo non riflette il corpo dello spettatore. Lo spettatore e assente dallo schermo. Ma questa assenza paradossalmente rafforza l'identificazione: lo spettatore occupa la posizione di "tutto-vedere" senza essere visto, si percepisce come puro sguardo, come soggetto trascendente della percezione.
+
+Questa struttura rinvia alla nozione lacaniana di "grand Autre" — lo spettatore si identifica con la posizione del soggetto che sa, che vede tutto, che detiene il controllo dello sguardo.
+
+5.4 IL FETICISMO CINEMATOGRAFICO
+
+Il secondo meccanismo psichico analizzato da Metz e il feticismo, che Metz deriva dalla teoria freudiana. Il feticismo, per Freud, e una formazione di compromesso: il feticista sa che la differenza sessuale esiste (che la madre non possiede il fallo), ma simultaneamente disconosce questa conoscenza mantenendo un oggetto feticistico che colma la mancanza.
+
+Metz applica questa struttura al cinema: lo spettatore sa che le immagini sullo schermo non sono reali (sa che e "solo un film"), ma disconosce questa conoscenza per potersi abbandonare alla finzione. La "sospensione dell'incredulita" non e semplicemente psicologica: ha una struttura feticistica precisa. Il cinema stesso, come istituzione, e un feticismo: produce oggetti (i film, le star) che fungono da feticci, che colmano una mancanza strutturale.
+
+La "star" cinematografica e il feticismo per eccellenza: il corpo della star (Marlene Dietrich, James Dean, Marilyn Monroe) viene investito di una carica libidica che eccede la sua funzione narrativa. Il particolare fisico — la voce, lo sguardo, il corpo — diventa oggetto di un godimento che non ha niente a che fare con la trama.
+
+---
+
+6. SEMIOTICA VS SEMIOLOGIA: LA DISTINZIONE DISCIPLINARE
+
+E necessario chiarire una distinzione terminologica che spesso genera confusione. Metz lavora nell'ambito della "semiologie" (semiologia), termine che deriva da Saussure e che indica lo studio dei sistemi di segni in prospettiva strutturalista-linguistica. La "semiotics" (semiotica), termine che deriva da Peirce, indica invece un approccio piu ampio che include la logica dei segni, la tripartizione icona/indice/simbolo, la nozione di interpretante.
+
+Metz nella sua opera principale lavora dentro la tradizione semiologica saussuriana (langue/parole, significante/significato, sintagma/paradigma). Tuttavia, la critica peirciana e sempre presente in sordina: la distinzione iconico/indicale/simbolico e fondamentale per comprendere perche le immagini cinematografiche non possono avere una "langue" nel senso saussuriano (sono icone e indici, non simboli arbitrari).
+
+Il superamento del dualismo semiologia/semiotica e uno dei compiti della teoria cinematografica contemporanea: teorici come Francesco Casetti e Tom Gunning hanno cercato di integrare le due tradizioni.
+
+---
+
+7. IMPATTO SULLA SEMIOTICA CONTEMPORANEA
+
+L'opera di Metz ha trasformato permanentemente il campo degli studi cinematografici. Alcune conseguenze fondamentali:
+
+Prima di Metz, la critica cinematografica era prevalentemente impressionistica e biografica. Metz ha introdotto la richiesta di rigore metodologico e terminologico.
+
+La nozione di codice cinematografico ha permesso lo sviluppo di analisi sistematiche dello stile cinematografico — dalle ricerche di David Bordwell sulla narratologia classica hollywoodiana agli studi sull'enunciazione di Francesco Casetti.
+
+Il dibattito sul regime scopico e sul voyeurismo cinematografico ha aperto la strada alla film theory femminista degli anni Settanta-Ottanta (Laura Mulvey, "Visual Pleasure and Narrative Cinema", 1975), che ha applicato le categorie metziane per analizzare il "male gaze" del cinema classico hollywoodiano.
+
+La distinzione storia/discorso, applicata al cinema da Metz e da Emile Benveniste, ha generato una vasta letteratura sull'enunciazione cinematografica: chi parla in un film? A chi si rivolge il film? Dove si colloca il soggetto dell'enunciazione? Queste domande strutturano ancora oggi la narratologia cinematografica contemporanea.
+
+Infine, la crisi dello strutturalismo e l'avvento degli studi culturali e della teoria postcoloniale hanno messo in discussione le pretese universalistiche della semiologia metziana. Tuttavia, la sua influenza metodologica rimane ineludibile per chiunque voglia affrontare seriamente lo studio del cinema come sistema di significazione.
+
+---
+
+RIFERIMENTI BIBLIOGRAFICI ESSENZIALI
+
+Metz, C. (1968). Essais sur la signification au cinema (vol. 1). Klincksieck.
+Metz, C. (1971). Langage et cinema. Larousse.
+Metz, C. (1977). Le signifiant imaginaire: Psychanalyse et cinema. UGE.
+Lacan, J. (1966). Ecrits. Seuil.
+Mulvey, L. (1975). Visual Pleasure and Narrative Cinema. Screen, 16(3).
+Casetti, F. (1986). Dentro lo sguardo. Bompiani.
+Bordwell, D. (1985). Narration in the Fiction Film. University of Wisconsin Press.

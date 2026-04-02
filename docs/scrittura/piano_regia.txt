@@ -1,0 +1,170 @@
+IL PIANO DI REGIA NEL CINEMA D'AUTORE
+======================================
+
+1. COS'È IL PIANO DI REGIA
+
+Il piano di regia è il documento che traduce la sceneggiatura in linguaggio tecnico delle inquadrature. Se la sceneggiatura descrive cosa succede in un film — le azioni, i dialoghi, gli ambienti — il piano di regia descrive come sarà filmato: quali inquadrature, da quali angolazioni, con quali movimenti di macchina, in quale sequenza.
+
+In senso stretto, il piano di regia è una lista numerata di tutte le inquadrature di un film, con indicazioni di formato (tipo di inquadratura), posizione della macchina da presa, movimento, lunghezza approssimativa. Ogni inquadratura corrisponde a un numero. Questo documento viene usato in produzione per organizzare le riprese: si filma per gruppi di inquadrature che condividono location e set-up tecnico, non necessariamente in ordine cronologico.
+
+Ma questa è la definizione industriale. Nel cinema d'autore il piano di regia ha una natura più fluida e più complessa. Per un autore come Bresson, il piano di regia era un documento di ricerca: si cercava, sul set, l'inquadratura giusta, e la giornata di riprese era un processo di scoperta, non di esecuzione di un piano predeterminato. Per un autore come Kubrick, il piano di regia era preparato con precisione millimetrica e eseguito con altrettanta precisione. Tra questi estremi c'è tutta la varietà del cinema d'autore.
+
+Ciò che accomuna tutti gli autori è che il piano di regia — esplicito o implicito, scritto prima o costruito sul set — è il luogo in cui si decidono le questioni fondamentali della messa in scena: la distanza, l'angolazione, il movimento, la durata. Queste sono decisioni estetiche ed etiche, non solo tecniche.
+
+
+2. TERMINOLOGIA COMPLETA DELLE INQUADRATURE
+
+2.1 Formati per dimensione del campo
+
+CAMPO LUNGHISSIMO (Extreme Long Shot, ELS): il soggetto è così lontano da essere indistinguibile o quasi invisibile nel paesaggio. Funzione: stabilire la scala, la vastità, il rapporto tra l'uomo e l'ambiente. Usato da Leone nei western, da Tarr nelle pianure ungheresi, da Diaz nelle foreste filippine.
+
+CAMPO LUNGO (Long Shot, LS): il soggetto è visibile per intero ma il suo ambiente è dominante. Funzione: contestualizzare spazialmente l'azione, mostrare le relazioni tra i corpi nello spazio. Bresson usava il campo lungo per mostrare l'isolamento fisico dei suoi personaggi.
+
+CAMPO MEDIO (Medium Shot, MS): il soggetto è visibile dalla testa alle ginocchia circa. È il formato più "neutro" del cinema classico: mostra il corpo senza essere troppo vicino o troppo lontano.
+
+PIANO AMERICANO (American Shot, 3/4 Shot): dal nome dato al formato tipico degli western americani, che riprendeva i pistoleri dalla fondina in su per mostrare sia la mano che poteva raggiungere l'arma sia l'espressione del volto. Riprende il soggetto dalla metà delle cosce in su.
+
+MEZZO BUSTO (Medium Close Shot, MCS): dalla vita in su. Il formato più comune per le conversazioni nel cinema classico.
+
+PRIMO PIANO (Close-Up, CU): il viso del soggetto riempie quasi tutto il fotogramma. È il formato filmico per eccellenza — il cinema ha inventato il primo piano come strumento espressivo e questo formato non esiste nella pittura né nel teatro. Il primo piano è una prossimità che nella vita reale è riservata all'intimità fisica.
+
+PRIMISSIMO PIANO (Extreme Close-Up, ECU): un elemento del viso (gli occhi, la bocca, un orecchio) o un dettaglio del corpo riempie il fotogramma.
+
+DETTAGLIO o PARTICOLARE: un oggetto, una parte del corpo non necessariamente del viso (una mano, un piede, un anello), un elemento dell'ambiente. Bresson usava sistematicamente il dettaglio per spostare l'attenzione dal viso — il luogo dell'interpretazione attoriale — alle mani, ai piedi, agli oggetti.
+
+2.2 Angolazioni
+
+ANGOLAZIONE NORMALE (Eye-Level): la macchina da presa è alla stessa altezza degli occhi del soggetto. Produce un effetto di parità, di rapporto neutro tra lo spettatore e il soggetto.
+
+PICCHIATA (High Angle, Bird's Eye): la macchina da presa guarda dall'alto verso il basso. In picchiata leggera produce un senso di sorveglianza, di osservazione distante; in picchiata estrema (pianta, zenitale) produce un effetto di mappa, di diagramma, di perdita dell'umano nella geometria.
+
+CONTROPICCHIATA (Low Angle): la macchina da presa guarda dal basso verso l'alto. Tradizionalmente associata all'effetto di grandiosità, potere, minaccia. Welles la usava sistematicamente in Citizen Kane per costruire l'aura di Kane.
+
+ANGOLAZIONE OLANDESE (Dutch Angle, Canted Frame): il fotogramma è inclinato rispetto all'asse orizzontale. Produce un senso di disorientamento, instabilità psicologica, perturbazione. Usata nel cinema espressionista tedesco, nei thriller psicologici, da Haneke in alcuni momenti di tensione massima.
+
+
+3. MOVIMENTI DI MACCHINA: TIPOLOGIA E FUNZIONI
+
+3.1 Movimenti fissi o quasi fissi
+
+PANORAMICA ORIZZONTALE (Pan): la macchina da presa ruota intorno al proprio asse orizzontale, da sinistra a destra o da destra a sinistra. Funzione: seguire un soggetto in movimento, stabilire la geografia di uno spazio, collegare due elementi nella stessa inquadratura.
+
+PANORAMICA VERTICALE (Tilt): rotazione intorno all'asse verticale, dall'alto verso il basso o viceversa. Funzione: rivelare un soggetto gradualmente, stabilire la dimensione verticale di uno spazio, produrre effetti drammatici di scoperta.
+
+3.2 Movimenti traslatori
+
+CARRELLATA: la macchina da presa si muove fisicamente nello spazio su rotaie (dolly tracks) o su veicolo. Può essere in avanti (verso il soggetto, effetto di avvicinamento progressivo), all'indietro (allontanamento), laterale (accompagnamento di un movimento o rivelazione dello spazio). La carrellata in avanti verso un volto produce un effetto molto diverso dal zoom: la carrellata muove lo spazio, il zoom comprime le profondità di campo.
+
+DOLLY: tecnicamente è il carrello su cui è montata la macchina da presa. "Fare un dolly" significa effettuare una carrellata con questo strumento. Il dolly shot ha una fluidità meccanica precisa, diversa dalla fluidità organica dello steadicam.
+
+ZOOM: variazione della lunghezza focale dell'obiettivo senza movimento fisico della macchina. Produce un effetto di avvicinamento (zoom in) o allontanamento (zoom out) ma comprime la prospettiva: i piani ravvicinati sembrano appiattirsi. Lo zoom è stato molto usato negli anni '70 (Altman, il cinema italiano di genere) ed è oggi un indicatore stilistico preciso.
+
+STEADICAM: sistema di stabilizzazione che permette alla macchina da presa di seguire il soggetto a mano libera ma con una fluidità fluida, senza le oscillazioni della camera a mano. Kubrick ne ha fatto un uso magistrale in "The Shining" (1980) per seguire il triciclo di Danny attraverso i corridoi dell'Overlook Hotel.
+
+PIANO SEQUENZA: inquadratura di lunga durata che segue un'azione senza stacchi di montaggio. Può combinare carrellate, panoramiche, zoom. Il piano sequenza è una dichiarazione estetica ed etica: non interrompere il tempo, mostrare la continuità dell'azione. Welles, Tarr, Jancso ne hanno fatto una firma stilistica.
+
+CAMERA A MANO (Handheld): la macchina da presa è tenuta a mano dal cameraman, senza stabilizzazione. Produce un'oscillazione organica che connota realismo, urgenza, presenza documentaria. La Nouvelle Vague la ha sdoganata come strumento autoriale (Cassavetes, Godard, Cassavetes).
+
+
+4. IL DÉCOUPAGE CLASSICO E IL DÉCOUPAGE MODERNO
+
+4.1 Il découpage classico (Hollywood)
+
+Il découpage classico hollywoodiano si basa su un sistema di convenzioni sviluppato negli anni '30 e '40 il cui obiettivo è la trasparenza: lo spettatore non deve accorgersi del montaggio, deve avere la sensazione di osservare direttamente la realtà.
+
+Le regole fondamentali: la regola dei 180 gradi (tutti i tagli devono mantenersi da un lato immaginario che separa i soggetti, così da preservare la coerenza spaziale); il raccordo sul movimento (si taglia mentre il soggetto è in movimento per rendere il taglio invisibile); il raccordo sullo sguardo (se un personaggio guarda qualcosa, il taglio verso l'oggetto dello sguardo è motivato e trasparente); il campo-controcampo nelle conversazioni (alternanza sistematica tra i due interlocutori).
+
+4.2 Il découpage moderno (Nouvelle Vague, cinema d'autore)
+
+Il cinema d'autore degli anni '60 ha messo in questione ogni regola del découpage classico come sistema ideologico, non come tecnica neutra. La trasparenza del montaggio classico è un'illusione che nasconde la mediazione del cinema, che fa sembrare "naturale" una costruzione artificiale.
+
+Il jump cut godardiano (in "À bout de souffle", 1960) è il gesto fondativo: tagliare nel mezzo di una scena, rompendo la continuità, rendendo visibile il montaggio come scelta. Questo non è una mancanza tecnica ma una dichiarazione: il cinema è costruzione, non finestra sulla realtà.
+
+
+5. COME I GRANDI AUTORI USANO LE INQUADRATURE
+
+5.1 Bresson: il frammento
+
+Bresson rifiuta sistematicamente i piani d'insieme che mostrano la scena nella sua totalità. Preferisce il dettaglio, il frammento corporeo, la parte per il tutto. Una conversazione tra due personaggi può essere girata come una serie di dettagli: le mani, i piedi, la tazza di caffè sul tavolo. Il viso appare raramente, e quando appare non è in un primo piano classico ma in una inquadratura distante e neutra.
+
+Questo ha un effetto preciso: lo spettatore deve costruire mentalmente la scena a partire dai frammenti. L'esperienza dello spettatore è attiva, non passiva.
+
+5.2 Tarkovsky: il piano lungo
+
+Tarkovsky privilegia il piano lungo — non il piano sequenza necessariamente, ma l'inquadratura tenuta a lungo, che permette al tempo di depositarsi nell'immagine. Il piano lungo di Tarkovsky spesso riprende movimenti lenti dell'acqua, della pioggia, del vento tra i rami: elementi naturali che cambiano continuamente ma lentamente, che obbligano lo spettatore a rallentare il proprio ritmo percettivo.
+
+5.3 Haneke: il piano fisso
+
+Haneke usa sistematicamente il piano fisso, fermo, spesso dalla distanza. In "Funny Games" (1997) e "Caché" la macchina da presa è ferma e distante come se stesse sorvegliando la scena piuttosto che parteciparvi. Questo produce un effetto di coldness, di distanza emotiva, ma anche di responsabilizzazione dello spettatore: nessun primo piano empatico, nessuna musica che suggerisca come sentirsi.
+
+5.4 Akerman: la frontale statica
+
+Chantal Akerman usa quasi esclusivamente inquadrature frontali, statiche, alla stessa altezza del soggetto. In "Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles" (1975) la macchina da presa è sempre posizionata di fronte ai piani di lavoro di Jeanne, alla giusta distanza per mostrare l'intero corpo mentre cucina, pulisce, sbuccia le patate. Questa frontali tà è una scelta politica: lo spazio domestico è trattato con la stessa dignità dello spazio pubblico. Il lavoro domestico è reso visibile come lavoro.
+
+5.5 Tarr: il piano sequenza rotante
+
+Béla Tarr costruisce i suoi film quasi esclusivamente con piani sequenza di lunga durata — da alcuni minuti a molti minuti — in cui la macchina da presa si muove lentamente attraverso spazi, segue personaggi, si allontana, ritorna. In "Sátántangó" (432 minuti) il piano sequenza è la forma stessa del film: ogni taglio è una violenza che Tarr si rifiuta di infliggere al tempo.
+
+
+6. COME SCRIVERE UN PIANO DI REGIA: FORMATO E NOTAZIONE
+
+Un piano di regia scritto contiene per ogni inquadratura:
+
+- Numero dell'inquadratura (progressivo)
+- Riferimento alla scena della sceneggiatura
+- Tipo di inquadratura (CL, CM, PP, ecc.)
+- Angolazione (normale, picchiata, ecc.)
+- Movimento di macchina (statica, pan, carrellata, ecc.)
+- Descrizione sintetica dell'azione
+- Durata approssimativa
+- Note tecniche (obiettivo, filtri, steadicam/dolly/handheld)
+
+Esempio di notazione:
+
+INQ. 47 | SC. 23 | PP - angolazione normale - statica | Marie guarda la finestra. Il suo respiro è visibile nel freddo. | 12-15 sec. | Obiettivo 50mm
+
+INQ. 48 | SC. 23 | DETTAGLIO - angolazione normale - statica | Le dita di Marie sul vetro appannato. | 5-7 sec. | Obiettivo 85mm macro
+
+INQ. 49 | SC. 23 | CL - angolazione normale - statica | Il cortile visto attraverso la finestra. Marie fuori fuoco in primo piano. | 8-10 sec. | Obiettivo 50mm, focus sul cortile
+
+
+7. IL CONTROCAMPO COME SCELTA POLITICA
+
+Nel découpage classico il controcampo è automatico: se un personaggio guarda qualcosa, si taglia sull'oggetto dello sguardo. Questa automaticità nasconde una scelta ideologica: il cinema ha deciso di seguire lo sguardo del personaggio, di confermare la sua visione del mondo.
+
+Haneke in "Caché" rifiuta sistematicamente il controcampo quando mostrerebbe violenza: la violenza è mostrata ma lo sguardo dello spettatore non è guidato. Il rifiuto del controcampo è una dichiarazione di responsabilità: lo spettatore deve costruire la propria risposta alla violenza senza essere guidato dal montaggio.
+
+Akerman rifiuta il controcampo perché costruisce spazi domestici frontali che non hanno un "fuori" narrativo: la cucina di Jeanne Dielman non ha un controcampo perché il film non è interessato a costruire uno spazio narrativo tradizionale. Lo spazio domestico è il mondo, non uno sfondo per un'azione situata altrove.
+
+
+8. IL FUORI CAMPO COME ELEMENTO COSTRUTTIVO
+
+Il fuori campo è tutto ciò che esiste nello spazio della storia ma non è visibile nel fotogramma. Nel cinema classico il fuori campo è ignorato o controllato: ciò che è importante è sempre nel campo. Nel cinema d'autore il fuori campo è spesso più importante di ciò che è nel campo.
+
+Bresson usa sistematicamente il fuori campo sonoro: si sente quello che non si vede. In "Un condamné à mort s'est échappé" (1956) la fuga del prigioniero è in gran parte costruita attraverso i suoni del fuori campo: i passi delle guardie, le porte che si aprono, i rumori del cortile. Il fuori campo sonoro produce tensione senza mostrare.
+
+Haneke in "Funny Games" sposta la violenza nel fuori campo: la scena più brutale del film — l'assassinio del bambino — avviene fuori campo. Si sente il colpo di fucile. Si vede la reazione della madre. Questa scelta è esplicitamente politica: Haneke rifiuta di spettacolarizzare la violenza mostrando i suoi effetti invece che la sua esecuzione.
+
+
+9. ESERCIZIO: ANALIZZARE UNA SEQUENZA E SCRIVERNE IL PIANO DI REGIA
+
+Sequenza scelta: "Jeanne Dielman" di Akerman, scena della preparazione del pasto.
+
+Descrizione della scena: Jeanne sbuccia le patate al tavolo della cucina. L'operazione dura circa quattro minuti in tempo reale. Non succede nient'altro.
+
+Analisi delle inquadrature:
+
+INQ. 1: Campo medio, frontale, statica. Jeanne seduta al tavolo. Il tavolo in primo piano. Le patate davanti a lei. Durata: circa 4 minuti.
+
+Una sola inquadratura per tutta la scena. Nessun taglio, nessun primo piano sul viso, nessun dettaglio sulle mani, nessun movimento di macchina.
+
+Commento: La scelta di Akerman è radicale. Una singola inquadratura, tenuta per tutto il tempo necessario a svolgere l'azione reale. L'azione domestica è trattata con la stessa dignità di qualsiasi altra azione filmica. Non c'è un "punto significativo" della scena verso cui il montaggio guida lo spettatore: tutta la scena è ugualmente significativa, cioè tutta la scena è ugualmente lavoro.
+
+Questo piano di regia — una sola inquadratura per quattro minuti — è una dichiarazione politica più efficace di qualsiasi manifesto.
+
+
+10. CONCLUSIONE: IL PIANO DI REGIA COME PENSIERO ESTETICO
+
+Il piano di regia non è un documento tecnico neutro: è il luogo in cui si manifestano le scelte estetiche ed etiche del regista. Come si guarda, da dove si guarda, per quanto tempo si guarda: queste non sono domande tecniche ma domande filosofiche sul cinema e sul suo rapporto con il mondo.
+
+Studiare il piano di regia dei grandi autori significa studiare come hanno pensato il cinema: non come hanno risolto problemi tecnici ma come hanno risposto a domande fondamentali sull'atto di filmare.

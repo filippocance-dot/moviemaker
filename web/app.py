@@ -11,7 +11,7 @@ from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
 
-import re, pathlib
+import re, pathlib, hashlib
 
 def _load_system_prompt() -> str:
     src = (pathlib.Path(__file__).parent.parent / "cineauteur.py").read_text(encoding="utf-8")
@@ -66,11 +66,28 @@ def get_current_user(session: Optional[str]) -> dict | None:
         return None
     return get_user_by_id(user_id)
 
+# Token per accesso diretto admin (derivato da SECRET_KEY)
+def _admin_magic_token() -> str:
+    from web.auth import SECRET_KEY
+    return hashlib.sha256(f"admin-magic-{SECRET_KEY}".encode()).hexdigest()[:32]
+
 # --- Routes pubbliche ---
 
 @app.get("/", response_class=RedirectResponse)
 def root():
     return RedirectResponse("/login", status_code=303)
+
+@app.get("/entra")
+def magic_login(token: str = ""):
+    if token != _admin_magic_token():
+        return RedirectResponse("/login", status_code=303)
+    user = get_user_by_email(ADMIN_EMAIL)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    session_token = make_token(user["id"])
+    resp = RedirectResponse("/admin", status_code=303)
+    resp.set_cookie("session", session_token, httponly=True, samesite="lax")
+    return resp
 
 @app.get("/registrati", response_class=HTMLResponse)
 def register_get(request: Request):

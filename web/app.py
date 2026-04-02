@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from contextlib import asynccontextmanager
 
-from web.db import init_db, create_user, get_user_by_email, get_user_by_id, list_pending, approve_user
+from web.db import init_db, create_user, get_user_by_email, get_user_by_id, list_pending, approve_user, update_user_password
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
@@ -44,9 +44,12 @@ async def lifespan(app: FastAPI):
             user = get_user_by_email(ADMIN_EMAIL)
             approve_user(user["id"])
             print(f"Admin creato: {ADMIN_EMAIL}")
-        elif existing["stato"] != "approved":
-            approve_user(existing["id"])
-            print(f"Admin approvato: {ADMIN_EMAIL}")
+        else:
+            # Aggiorna sempre la password all'avvio per evitare hash corrotti
+            update_user_password(existing["id"], hash_password(admin_password))
+            if existing["stato"] != "approved":
+                approve_user(existing["id"])
+            print(f"Admin sincronizzato: {ADMIN_EMAIL}")
     corpus_chunks, corpus_sources, n = load_corpus()
     bm25 = build_index(corpus_chunks)
     print(f"Corpus: {n} file, {len(corpus_chunks)} chunk")

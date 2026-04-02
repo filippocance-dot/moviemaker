@@ -11,10 +11,16 @@ from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
 
-# Import SYSTEM_PROMPT directly from cineauteur
-import sys, pathlib
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-from cineauteur import SYSTEM_PROMPT
+import re, pathlib
+
+def _load_system_prompt() -> str:
+    src = (pathlib.Path(__file__).parent.parent / "cineauteur.py").read_text(encoding="utf-8")
+    m = re.search(r'SYSTEM_PROMPT\s*=\s*"""\\\n(.*?)"""', src, re.DOTALL)
+    if not m:
+        raise RuntimeError("SYSTEM_PROMPT not found in cineauteur.py")
+    return m.group(1).replace("\\\n", "\n")
+
+SYSTEM_PROMPT = _load_system_prompt()
 
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@localhost")
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
@@ -53,30 +59,30 @@ def root():
 
 @app.get("/registrati", response_class=HTMLResponse)
 def register_get(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request, "error": None})
+    return templates.TemplateResponse(request, "register.html", {"error": None})
 
 @app.post("/registrati")
 def register_post(request: Request, nome: str = Form(...), email: str = Form(...), password: str = Form(...)):
     if get_user_by_email(email):
-        return templates.TemplateResponse("register.html", {"request": request, "error": "Email già registrata."})
+        return templates.TemplateResponse(request, "register.html", {"error": "Email già registrata."})
     create_user(nome, email, hash_password(password))
     return RedirectResponse("/attesa", status_code=303)
 
 @app.get("/attesa", response_class=HTMLResponse)
 def attesa(request: Request):
-    return templates.TemplateResponse("attesa.html", {"request": request})
+    return templates.TemplateResponse(request, "attesa.html", {})
 
 @app.get("/login", response_class=HTMLResponse)
 def login_get(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+    return templates.TemplateResponse(request, "login.html", {"error": None})
 
 @app.post("/login")
 def login_post(request: Request, email: str = Form(...), password: str = Form(...)):
     user = get_user_by_email(email)
     if not user or not verify_password(password, user["password_hash"]):
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Email o password errati."})
+        return templates.TemplateResponse(request, "login.html", {"error": "Email o password errati."})
     if user["stato"] != "approved":
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Accesso non ancora approvato."})
+        return templates.TemplateResponse(request, "login.html", {"error": "Accesso non ancora approvato."})
     token = make_token(user["id"])
     resp = RedirectResponse("/chat", status_code=303)
     resp.set_cookie("session", token, httponly=True, samesite="lax")
@@ -95,7 +101,7 @@ def chat_get(request: Request, session: Optional[str] = Cookie(default=None)):
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
-    return templates.TemplateResponse("chat.html", {"request": request, "user": user})
+    return templates.TemplateResponse(request, "chat.html", {"user": user})
 
 @app.post("/chat/stream")
 async def chat_stream(request: Request, session: Optional[str] = Cookie(default=None)):
@@ -103,8 +109,7 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
     if not user:
         return Response(status_code=401)
 
-    from openai import OpenAI
-    import json
+    from openai import AsyncOpenAI
 
     body = await request.json()
     conversation = body.get("conversation", [])
@@ -114,16 +119,16 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
         conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
     msgs = [{"role": "system", "content": SYSTEM_PROMPT}, *conversation]
 
-    def generate():
-        client = OpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
-        with client.chat.completions.create(
+    async def generate():
+        client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        stream = await client.chat.completions.create(
             model=MODEL, messages=msgs, max_tokens=8192, stream=True,
             extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "MovieMaker"},
-        ) as stream:
-            for chunk in stream:
-                delta = chunk.choices[0].delta.content
-                if delta:
-                    yield f"data: {delta}\n\n"
+        )
+        async for chunk in stream:
+            delta = chunk.choices[0].delta.content
+            if delta:
+                yield f"data: {delta}\n\n"
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
@@ -135,7 +140,7 @@ def admin_get(request: Request, session: Optional[str] = Cookie(default=None)):
     user = get_current_user(session)
     if not user or user["email"] != ADMIN_EMAIL:
         return RedirectResponse("/login", status_code=303)
-    return templates.TemplateResponse("admin.html", {"request": request, "users": list_pending()})
+    return templates.TemplateResponse(request, "admin.html", {"users": list_pending()})
 
 @app.post("/admin/approva/{user_id}")
 def admin_approva(user_id: int, session: Optional[str] = Cookie(default=None)):

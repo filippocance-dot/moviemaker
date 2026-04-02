@@ -11,6 +11,9 @@ def get_conn():
     try:
         yield conn
         conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
     finally:
         conn.close()
 
@@ -53,4 +56,8 @@ def list_pending() -> list[dict]:
 
 def approve_user(user_id: int):
     with get_conn() as conn:
-        conn.execute("UPDATE users SET stato = 'approved' WHERE id = ?", (user_id,))
+        rowcount = conn.execute(
+            "UPDATE users SET stato = 'approved' WHERE id = ?", (user_id,)
+        ).rowcount
+        if rowcount == 0:
+            raise ValueError(f"User {user_id} not found")

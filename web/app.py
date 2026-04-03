@@ -235,7 +235,13 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
     last_user = next((_extract_text(m["content"]) for m in reversed(conversation) if m["role"] == "user"), "")
     rag_ctx = retrieve(last_user, bm25, corpus_chunks, corpus_sources)
     if rag_ctx and conversation:
-        conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
+        last_msg = conversation[-1]
+        if isinstance(last_msg.get("content"), list):
+            # Contenuto multimodale: aggiungi il contesto RAG come primo blocco testo
+            new_blocks = [{"type": "text", "text": f"{rag_ctx}\n\n"}] + last_msg["content"]
+            conversation = conversation[:-1] + [{"role": "user", "content": new_blocks}]
+        else:
+            conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
     profile = get_profile(user["id"])
     system_content = SYSTEM_PROMPT
     if profile:

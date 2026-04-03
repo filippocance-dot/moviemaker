@@ -120,10 +120,13 @@ def get_session(session_id: int) -> dict | None:
         return dict(row) if row else None
 
 def save_messages(user_id: int, session_id: int, messages: list[dict]):
+    import json
     with get_conn() as conn:
         conn.executemany(
             "INSERT INTO messages (user_id, session_id, role, content) VALUES (?, ?, ?, ?)",
-            [(user_id, session_id, m["role"], m["content"]) for m in messages]
+            [(user_id, session_id, m["role"],
+              json.dumps(m["content"]) if isinstance(m["content"], list) else m["content"])
+             for m in messages]
         )
 
 def get_user_messages(user_id: int, limit: int = 100) -> list[dict]:

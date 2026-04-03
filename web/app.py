@@ -206,7 +206,7 @@ ULTIMA SESSIONE: (breve sintesi di questa conversazione)"""
             model=MODEL,
             messages=[{"role": "user", "content": profile_prompt}],
             max_tokens=500,
-            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "MovieMaker"},
+            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
         )
         new_profile = resp.choices[0].message.content.strip()
         upsert_profile(user["id"], new_profile)
@@ -246,7 +246,7 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
         client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
         stream = await client.chat.completions.create(
             model=MODEL, messages=msgs, max_tokens=8192, stream=True,
-            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "MovieMaker"},
+            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
         )
         async for chunk in stream:
             delta = chunk.choices[0].delta.content

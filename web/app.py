@@ -10,9 +10,11 @@ from web.db import (
     init_db, create_user, get_user_by_email, get_user_by_id,
     list_pending, approve_user, update_user_password,
     start_session, end_session, save_messages, get_session,
-    upsert_profile, get_profile,
+    upsert_profile, get_profile, get_profile_full,
+    update_session_activity,
     get_global_stats, list_all_users_with_stats, get_user_sessions,
     get_user_messages, get_session_messages,
+    get_admin_full_stats, get_user_detailed_stats,
 )
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
@@ -216,6 +218,30 @@ ULTIMA SESSIONE: (breve sintesi di questa conversazione)"""
     except Exception as e:
         print(f"Errore generazione profilo: {e}")
 
+    # Genera capability score
+    try:
+        capability_prompt = (
+            "Valuta in 2-3 frasi il livello intellettuale e creativo di questo autore "
+            "basandoti sulla conversazione. Considera: qualità delle idee, profondità critica, "
+            "originalità, capacità di sviluppo. Sii diretto e oggettivo. Non superare le 60 parole.\n\n"
+            "CONVERSAZIONE:\n"
+            + "\n".join(
+                f"{m['role'].upper()}: {m['content'] if isinstance(m['content'], str) else '[contenuto multimediale]'}"
+                for m in conversation
+            )
+        )
+        client_cap = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        resp_cap = await client_cap.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "user", "content": capability_prompt}],
+            max_tokens=120,
+            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
+        )
+        cap_score = resp_cap.choices[0].message.content.strip()
+        upsert_profile(user["id"], get_profile(user["id"]) or "", capability_score=cap_score)
+    except Exception as e:
+        print(f"Errore generazione capability_score: {e}")
+
     return Response(status_code=200)
 
 @app.post("/chat/stream")
@@ -229,6 +255,7 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
     body = await request.json()
     conversation = body.get("conversation", [])
     welcome = body.get("welcome", False)
+    stream_session_id = body.get("session_id", None)
 
     if welcome and not conversation:
         welcome_prompt = """Sei Filmmaker, un coach AI per autori audiovisivi. Stai incontrando questo autore per la prima volta.
@@ -283,6 +310,11 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
             delta = chunk.choices[0].delta.content
             if delta:
                 yield f"data: {delta}\n\n"
+        if stream_session_id:
+            try:
+                update_session_activity(stream_session_id)
+            except Exception as e:
+                print(f"Errore update_session_activity: {e}")
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
@@ -369,7 +401,7 @@ def admin_get(request: Request, t: str = "", session: Optional[str] = Cookie(def
         return RedirectResponse("/login", status_code=303)
     return templates.TemplateResponse(request, "admin.html", {
         "pending": list_pending(),
-        "stats": get_global_stats(),
+        "stats": get_admin_full_stats(),
         "users": list_all_users_with_stats(),
     })
 
@@ -381,9 +413,12 @@ def admin_user_detail(user_id: int, request: Request, session: Optional[str] = C
     target = get_user_by_id(user_id)
     if not target:
         return RedirectResponse("/admin", status_code=303)
+    profile_full = get_profile_full(user_id)
     return templates.TemplateResponse(request, "admin_user.html", {
         "target": target,
-        "profile": get_profile(user_id),
+        "profile": profile_full["profile_text"],
+        "capability_score": profile_full["capability_score"],
+        "detailed_stats": get_user_detailed_stats(user_id),
         "sessions": get_user_sessions(user_id),
         "messages": get_user_messages(user_id, limit=200),
     })

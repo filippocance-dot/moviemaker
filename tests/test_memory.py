@@ -31,9 +31,11 @@ def test_save_and_get_messages():
         {"role": "assistant", "content": "Ciao, come posso aiutarti?"},
     ]
     save_messages(user["id"], sid, msgs)
-    retrieved = get_user_messages(user["id"], limit=10)
-    assert len(retrieved) == 2
-    assert retrieved[0]["content"] == "Ciao"
+    # Filtra per session_id per isolare il test
+    all_msgs = get_user_messages(user["id"], limit=100)
+    session_msgs = [m for m in all_msgs if m["session_id"] == sid]
+    assert len(session_msgs) == 2
+    assert session_msgs[0]["content"] == "Ciao"
 
 def test_upsert_and_get_profile():
     from web.db import get_user_by_email

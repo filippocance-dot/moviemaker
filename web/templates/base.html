@@ -3,48 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Filmmaker</title>
+  <title>FilmMaker</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:      #1a1610;
-      --text:    #d4c5a9;
-      --border:  #2a2520;
-      --label:   #4a4540;
-      --faint:   #3a3028;
-      --accent:  #c8b89a;
+      --bg:       #0a0b0d;
+      --surface:  #111215;
+      --elevated: #18191d;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.14);
+      --text:     #f0f0f2;
+      --label:    #8e8e93;
+      --faint:    rgba(255,255,255,0.04);
+      --accent:   #f0ece6;
+      --font:     -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', sans-serif;
     }
+
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: var(--font);
       font-size: 14px;
+      line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* ── NAV ── */
     .nav {
-      padding: 1.1rem 2rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
+      height: 44px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,11,13,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
+
     .nav-brand {
-      font-size: 0.8rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--accent);
       text-decoration: none;
+      text-align: center;
     }
+
+    .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
     .nav-link {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-size: 12px;
       color: var(--label);
       text-decoration: none;
-      transition: color 0.2s;
+      letter-spacing: 0.03em;
+      transition: color 0.15s;
     }
     .nav-link:hover { color: var(--text); }
-    .page { padding: 4rem 2.5rem; max-width: 420px; margin: 0 auto; }
+
+    .nav-badge {
+      font-size: 10px;
+      color: var(--label);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border2);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── PAGE (login/register/admin pages) ── */
+    .page {
+      padding: 4rem 2.5rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
     .title {
       font-size: 1.8rem;
       font-style: italic;
@@ -53,90 +96,99 @@
       line-height: 1.25;
       margin-bottom: 0.3rem;
     }
-    .divider { width: 28px; height: 1px; background: var(--faint); margin: 1.8rem 0 2.2rem; }
+
+    .divider {
+      width: 28px;
+      height: 1px;
+      background: var(--border2);
+      margin: 1.8rem 0 2.2rem;
+    }
+
     .field { margin-bottom: 1.5rem; }
+
     .field label {
       display: block;
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
+      font-size: 10px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--label);
       margin-bottom: 0.6rem;
     }
+
     .field input {
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border2);
       padding: 0.6rem 0;
       font-size: 0.95rem;
       color: var(--text);
-      font-family: inherit;
+      font-family: var(--font);
       outline: none;
       transition: border-color 0.2s;
     }
     .field input:focus { border-bottom-color: var(--accent); }
-    .field input::placeholder { color: var(--faint); }
+    .field input::placeholder { color: var(--label); opacity: 0.5; }
+
     .btn {
-      font-size: 0.62rem;
-      letter-spacing: 0.18em;
+      font-size: 11px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text);
       background: none;
       border: none;
       cursor: pointer;
-      font-family: inherit;
+      font-family: var(--font);
       padding: 0;
       transition: opacity 0.2s;
     }
-    .btn:hover { opacity: 0.6; }
+    .btn:hover { opacity: 0.5; }
+
     .error {
       font-size: 0.78rem;
-      color: #c17a5a;
+      color: #ff6b6b;
       margin-bottom: 1.2rem;
-      letter-spacing: 0.02em;
     }
+
     .subtitle {
       font-size: 0.78rem;
       color: var(--label);
       line-height: 2;
-      letter-spacing: 0.02em;
     }
-    /* Markdown rendering inside AI messages */
-    .md p { margin-bottom: 0.9rem; line-height: 1.85; }
+
+    /* ── MARKDOWN (AI messages) ── */
+    .md p { margin-bottom: 0.9rem; line-height: 1.8; }
     .md p:last-child { margin-bottom: 0; }
     .md h1, .md h2, .md h3 {
-      font-family: 'Times New Roman', serif;
-      font-style: italic;
-      font-weight: normal;
+      font-weight: 600;
       margin: 1.2rem 0 0.5rem;
       color: var(--text);
     }
-    .md h1 { font-size: 1.2rem; }
-    .md h2 { font-size: 1.05rem; }
+    .md h1 { font-size: 1.1rem; }
+    .md h2 { font-size: 1rem; }
     .md h3 { font-size: 0.95rem; }
     .md ul, .md ol { margin: 0.4rem 0 0.9rem 1.4rem; }
-    .md li { margin-bottom: 0.35rem; line-height: 1.8; }
+    .md li { margin-bottom: 0.35rem; line-height: 1.75; }
     .md strong { color: var(--accent); font-weight: 600; }
-    .md em { font-style: italic; }
+    .md em { font-style: italic; opacity: 0.85; }
     .md code {
       background: rgba(255,255,255,0.06);
-      padding: 0.15rem 0.35rem;
-      border-radius: 2px;
-      font-family: 'Courier New', monospace;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Menlo', monospace;
       font-size: 0.82em;
     }
     .md pre {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border2);
       padding: 1rem 1.2rem;
-      border-radius: 3px;
+      border-radius: 8px;
       overflow-x: auto;
       margin: 0.8rem 0;
     }
     .md pre code { background: none; padding: 0; }
     .md blockquote {
-      border-left: 2px solid var(--faint);
+      border-left: 2px solid var(--border2);
       padding-left: 1rem;
       color: var(--label);
       margin: 0.8rem 0;
@@ -147,8 +199,9 @@
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-brand">Filmmaker</a>
-    {% block nav_right %}{% endblock %}
+    <div></div>
+    <a href="/" class="nav-brand">FilmMaker</a>
+    <div class="nav-right">{% block nav_right %}{% endblock %}</div>
   </nav>
   {% block content %}{% endblock %}
 </body>

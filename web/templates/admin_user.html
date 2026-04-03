@@ -6,39 +6,52 @@
   </div>
 {% endblock %}
 {% block content %}
-<div style="padding:2rem 1.5rem;max-width:700px;">
+<div style="padding:2rem 1.5rem;max-width:760px;">
 
-  <div style="font-size:1.4rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);margin-bottom:0.3rem;">{{ target.nome }}</div>
-  <div style="font-size:0.7rem;color:var(--label);margin-bottom:2rem;">{{ target.email }} · registrato il {{ target.created_at[:10] }}</div>
+  <div style="font-size:1.4rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);margin-bottom:0.2rem;">{{ target.nome }}</div>
+  <div style="font-size:0.68rem;color:var(--label);margin-bottom:2.5rem;">{{ target.email }} · registrato il {{ target.created_at[:10] }}</div>
 
-  <!-- Statistiche utente -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem;">
-    <div style="border:1px solid var(--border);padding:1rem;">
-      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">Sessioni</div>
-      <div style="font-size:1.4rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ sessions|length }}</div>
+  <!-- 8 metriche -->
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Statistiche</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-bottom:3rem;">
+    {% set ds = detailed_stats %}
+    {% for label, value in [
+      ("Sessioni", ds.total_sessions),
+      ("Messaggi", ds.total_messages),
+      ("Token stimati", ds.total_tokens),
+      ("Minuti totali", ds.total_minutes),
+      ("Msg / sessione", ds.avg_messages_per_session),
+      ("Sessioni (7gg)", ds.sessions_this_week),
+      ("Messaggi (7gg)", ds.messages_this_week),
+      ("Prima sessione", ds.first_session_date[:10] if ds.first_session_date else "—"),
+    ] %}
+    <div style="border:1px solid var(--border);padding:0.85rem;">
+      <div style="font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--label);margin-bottom:0.4rem;">{{ label }}</div>
+      <div style="font-size:1.2rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ value }}</div>
     </div>
-    <div style="border:1px solid var(--border);padding:1rem;">
-      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">Messaggi</div>
-      <div style="font-size:1.4rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ messages|length }}</div>
-    </div>
-    <div style="border:1px solid var(--border);padding:1rem;">
-      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">Ultima sessione</div>
-      <div style="font-size:0.85rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">
-        {% if sessions %}{{ sessions[0].started_at[:10] }}{% else %}—{% endif %}
-      </div>
-    </div>
+    {% endfor %}
   </div>
 
+  <!-- Valutazione creativa -->
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Valutazione creativa</div>
+  {% if capability_score %}
+  <div style="border:1px solid var(--border);padding:1.4rem;margin-bottom:3rem;background:rgba(200,184,154,0.04);">
+    <div style="font-size:0.95rem;line-height:1.85;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ capability_score }}</div>
+  </div>
+  {% else %}
+  <div style="font-size:0.8rem;color:var(--label);margin-bottom:3rem;">Nessuna valutazione ancora — si genera al termine della prima sessione.</div>
+  {% endif %}
+
   <!-- Profilo autore -->
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Profilo Autore</div>
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Profilo Autore</div>
   {% if profile %}
   <div style="font-size:0.85rem;line-height:1.9;color:var(--text);white-space:pre-wrap;margin-bottom:3rem;padding:1.2rem;border:1px solid var(--border);">{{ profile }}</div>
   {% else %}
-  <div style="font-size:0.8rem;color:var(--label);margin-bottom:3rem;">Nessun profilo ancora — il profilo si genera al termine della prima sessione.</div>
+  <div style="font-size:0.8rem;color:var(--label);margin-bottom:3rem;">Nessun profilo ancora — si genera al termine della prima sessione.</div>
   {% endif %}
 
   <!-- Reset password -->
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Reset Password</div>
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Reset Password</div>
   <form method="post" action="/admin/reset-password/{{ target.id }}" style="display:flex;gap:1rem;align-items:flex-end;margin-bottom:3rem;">
     <div style="flex:1;">
       <input type="password" name="new_password" placeholder="Nuova password" required
@@ -48,14 +61,19 @@
   </form>
 
   <!-- Sessioni -->
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Sessioni</div>
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Sessioni</div>
   {% for s in sessions %}
-  <div style="padding:0.8rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
-    <div style="font-size:0.8rem;color:var(--text);">{{ s.started_at[:16] }}</div>
-    <div style="font-size:0.75rem;color:var(--label);">{{ s.message_count }} messaggi · ~{{ s.token_estimate }} token</div>
+  <div style="padding:0.85rem 0;border-bottom:1px solid var(--border);">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <div style="font-size:0.82rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ s.started_at[:16] }}</div>
+      <div style="font-size:0.72rem;color:var(--label);">{{ s.message_count }} msg · ~{{ s.token_estimate }} tok</div>
+    </div>
+    <div style="font-size:0.62rem;color:var(--label);margin-top:0.2rem;opacity:0.7;">
+      {% if s.last_active_at %}ultimo messaggio: {{ s.last_active_at[:16] }}{% elif not s.ended_at %}sessione aperta{% else %}conclusa{% endif %}
+    </div>
   </div>
   {% else %}
-  <div style="font-size:0.8rem;color:var(--label);">Nessuna sessione completata.</div>
+  <div style="font-size:0.8rem;color:var(--label);">Nessuna sessione.</div>
   {% endfor %}
 
 </div>

@@ -1,35 +1,82 @@
 {% extends "base.html" %}
 {% block nav_right %}<a href="/logout" class="nav-link">Esci</a>{% endblock %}
 {% block content %}
-<div style="padding:2rem 1.5rem;max-width:900px;">
+<div style="padding:2rem 1.5rem;max-width:960px;">
 
-  <!-- Statistiche globali -->
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1.5rem;">Statistiche</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:3rem;">
-    {% set stats_items = [
-      ("Utenti approvati", stats.total_users),
-      ("In attesa", stats.pending_users),
-      ("Attivi (7 giorni)", stats.active_7d),
-      ("Sessioni totali", stats.total_sessions),
+  <div style="font-size:1.6rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);margin-bottom:0.3rem;">Dashboard.</div>
+  <div style="width:28px;height:1px;background:var(--faint);margin:1.2rem 0 2.5rem;"></div>
+
+  <!-- 6 metriche globali -->
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Statistiche globali</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.85rem;margin-bottom:3rem;">
+    {% for label, value in [
+      ("Utenti totali", stats.total_users),
+      ("Utenti approvati", stats.approved_users),
+      ("Attivi oggi", stats.active_today),
+      ("Attivi (7 giorni)", stats.active_this_week),
+      ("Sessioni completate", stats.total_sessions),
       ("Messaggi totali", stats.total_messages),
-      ("Costo API stimato", "$" ~ stats.cost_estimate),
     ] %}
-    {% for label, value in stats_items %}
-    <div style="border:1px solid var(--border);padding:1rem;">
-      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">{{ label }}</div>
-      <div style="font-size:1.4rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ value }}</div>
+    <div style="border:1px solid var(--border);padding:1rem 1.1rem;">
+      <div style="font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);margin-bottom:0.45rem;">{{ label }}</div>
+      <div style="font-size:1.5rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ value }}</div>
     </div>
     {% endfor %}
   </div>
 
+  <!-- Utenti più attivi -->
+  {% if stats.most_active_users %}
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Più attivi</div>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:3rem;">
+    <thead>
+      <tr style="border-bottom:1px solid var(--border);">
+        <th style="text-align:left;font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);padding:0.5rem 0;">Autore</th>
+        <th style="text-align:right;font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);padding:0.5rem;">Sessioni</th>
+        <th style="text-align:right;font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);padding:0.5rem;">Messaggi</th>
+        <th style="text-align:right;font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);padding:0.5rem 0;">Ultimo accesso</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in stats.most_active_users %}
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:0.85rem 0;">
+          <a href="/admin/utente/{{ u.id }}" style="text-decoration:none;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;font-size:0.9rem;">{{ u.nome }}</a>
+          <div style="font-size:0.62rem;color:var(--label);margin-top:0.12rem;">{{ u.email }}</div>
+        </td>
+        <td style="text-align:right;font-size:0.85rem;color:var(--text);padding:0.85rem 0.5rem;">{{ u.session_count }}</td>
+        <td style="text-align:right;font-size:0.85rem;color:var(--text);padding:0.85rem 0.5rem;">{{ u.message_count }}</td>
+        <td style="text-align:right;font-size:0.72rem;color:var(--label);padding:0.85rem 0;">
+          {% if u.last_active %}{{ u.last_active[:10] }}{% else %}—{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  <!-- Sessioni recenti -->
+  {% if stats.recent_sessions %}
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Sessioni recenti</div>
+  {% for s in stats.recent_sessions %}
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0.8rem 0;border-bottom:1px solid var(--border);">
+    <div>
+      <a href="/admin/utente/{{ s.user_id }}" style="text-decoration:none;font-family:'Times New Roman',serif;font-style:italic;font-size:0.88rem;color:var(--text);">{{ s.user_name }}</a>
+      <span style="font-size:0.65rem;color:var(--label);margin-left:0.6rem;">{{ s.started_at[:16] }}</span>
+    </div>
+    <div style="font-size:0.72rem;color:var(--label);">{{ s.message_count }} msg · ~{{ s.token_estimate }} tok</div>
+  </div>
+  {% endfor %}
+  <div style="margin-bottom:3rem;"></div>
+  {% endif %}
+
   <!-- Richieste in attesa -->
   {% if pending %}
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1.5rem;">Richieste in attesa — {{ pending|length }}</div>
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">In attesa — {{ pending|length }}</div>
   {% for u in pending %}
-  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--border);">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border);">
     <div>
-      <div style="font-size:0.9rem;font-family:'Times New Roman',serif;font-style:italic;">{{ u.nome }}</div>
-      <div style="font-size:0.7rem;color:var(--label);margin-top:0.2rem;">{{ u.email }} · {{ u.created_at }}</div>
+      <div style="font-size:0.88rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);">{{ u.nome }}</div>
+      <div style="font-size:0.65rem;color:var(--label);margin-top:0.2rem;">{{ u.email }}</div>
     </div>
     <form method="post" action="/admin/approva/{{ u.id }}">
       <button type="submit" class="btn">Approva →</button>
@@ -40,28 +87,21 @@
   {% endif %}
 
   <!-- Tutti gli utenti -->
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1.5rem;">Utenti — {{ users|length }}</div>
-  {% if users %}
+  <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Tutti gli utenti — {{ users|length }}</div>
   {% for u in users %}
-  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.9rem;font-family:'Times New Roman',serif;font-style:italic;">{{ u.nome }}</div>
-      <div style="font-size:0.7rem;color:var(--label);margin-top:0.2rem;">
-        {{ u.email }} · {{ u.session_count }} sessioni · {{ u.message_count }} messaggi
-        {% if u.last_active %} · ultimo accesso {{ u.last_active[:10] }}{% endif %}
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border);">
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:0.88rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);">{{ u.nome }}</div>
+      <div style="font-size:0.65rem;color:var(--label);margin-top:0.15rem;">
+        {{ u.email }} · {{ u.session_count }} sessioni · {{ u.message_count }} msg
+        {% if u.last_active %} · {{ u.last_active[:10] }}{% endif %}
       </div>
-      {% if u.profile_text %}
-      <div style="font-size:0.75rem;color:var(--text);margin-top:0.4rem;opacity:0.7;max-width:500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-        {{ u.profile_text[:120] }}…
-      </div>
-      {% endif %}
     </div>
-    <a href="/admin/utente/{{ u.id }}" class="btn" style="text-decoration:none;">Dettaglio →</a>
+    <a href="/admin/utente/{{ u.id }}" class="btn" style="text-decoration:none;flex-shrink:0;margin-left:1rem;">Dettaglio →</a>
   </div>
-  {% endfor %}
   {% else %}
   <div class="subtitle">Nessun utente ancora.</div>
-  {% endif %}
+  {% endfor %}
 
 </div>
 {% endblock %}

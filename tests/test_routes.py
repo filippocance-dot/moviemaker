@@ -35,3 +35,19 @@ def test_chat_requires_auth():
 def test_admin_requires_admin_cookie():
     r = client.get("/admin")
     assert r.status_code == 303
+
+def test_end_session_requires_auth():
+    r = client.post("/chat/end-session", json={"session_id": 1, "conversation": []})
+    assert r.status_code == 401
+
+def test_start_session_on_chat_get():
+    from web.db import get_user_by_email, approve_user
+    user = get_user_by_email("t@t.com")
+    if user and user["stato"] != "approved":
+        approve_user(user["id"])
+    r_login = client.post("/login", data={"email": "t@t.com", "password": "pass123"})
+    if r_login.status_code != 303:
+        return
+    r = client.get("/chat")
+    assert r.status_code == 200
+    assert "session_id" in r.text

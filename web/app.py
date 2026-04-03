@@ -6,7 +6,14 @@ from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from contextlib import asynccontextmanager
 
-from web.db import init_db, create_user, get_user_by_email, get_user_by_id, list_pending, approve_user, update_user_password
+from web.db import (
+    init_db, create_user, get_user_by_email, get_user_by_id,
+    list_pending, approve_user, update_user_password,
+    start_session, end_session, save_messages,
+    upsert_profile, get_profile,
+    get_global_stats, list_all_users_with_stats, get_user_sessions,
+    get_user_messages,
+)
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
@@ -141,7 +148,67 @@ def chat_get(request: Request, session: Optional[str] = Cookie(default=None)):
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
-    return templates.TemplateResponse(request, "chat.html", {"user": user})
+    session_id = start_session(user["id"])
+    profile = get_profile(user["id"])
+    return templates.TemplateResponse(request, "chat.html", {
+        "user": user,
+        "session_id": session_id,
+        "profile": profile,
+    })
+
+@app.post("/chat/end-session")
+async def chat_end_session(request: Request, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return Response(status_code=401)
+
+    from openai import AsyncOpenAI
+
+    body = await request.json()
+    session_id = body.get("session_id")
+    conversation = body.get("conversation", [])
+
+    if not session_id or not conversation:
+        return Response(status_code=200)
+
+    total_chars = sum(len(m.get("content", "")) for m in conversation)
+    token_estimate = total_chars // 4
+
+    save_messages(user["id"], session_id, conversation)
+    end_session(session_id, message_count=len(conversation), token_estimate=token_estimate)
+
+    existing_profile = get_profile(user["id"])
+    profile_prompt = f"""Sei un assistente che analizza conversazioni tra un filmmaker e un AI coach.
+
+PROFILO ESISTENTE DELL'AUTORE (vuoto se prima sessione):
+{existing_profile if existing_profile else "(nessun profilo ancora)"}
+
+CONVERSAZIONE DI QUESTA SESSIONE:
+{chr(10).join(f"{m['role'].upper()}: {m['content']}" for m in conversation)}
+
+Aggiorna il profilo dell'autore in italiano. Sii conciso e preciso. Usa questo formato esatto:
+
+TEMI RICORRENTI: (temi del suo lavoro che emergono)
+PUNTI DI FORZA: (cosa sa fare bene)
+PUNTI DEBOLI: (dove ha difficoltà)
+PROGETTO ATTUALE: (a cosa sta lavorando)
+PROGRESSI: (confronto con sessioni precedenti, o "prima sessione" se non c'è profilo)
+ULTIMA SESSIONE: (breve sintesi di questa conversazione)"""
+
+    try:
+        client_ai = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        resp = await client_ai.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "user", "content": profile_prompt}],
+            max_tokens=500,
+            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "MovieMaker"},
+        )
+        new_profile = resp.choices[0].message.content.strip()
+        upsert_profile(user["id"], new_profile)
+    except Exception as e:
+        print(f"Errore generazione profilo: {e}")
+
+    return Response(status_code=200)
 
 @app.post("/chat/stream")
 async def chat_stream(request: Request, session: Optional[str] = Cookie(default=None)):
@@ -157,7 +224,11 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
     rag_ctx = retrieve(last_user, bm25, corpus_chunks, corpus_sources)
     if rag_ctx and conversation:
         conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
-    msgs = [{"role": "system", "content": SYSTEM_PROMPT}, *conversation]
+    profile = get_profile(user["id"])
+    system_content = SYSTEM_PROMPT
+    if profile:
+        system_content = f"{SYSTEM_PROMPT}\n\nPROFILO DELL'AUTORE (usa queste informazioni per personalizzare le risposte):\n{profile}"
+    msgs = [{"role": "system", "content": system_content}, *conversation]
 
     async def generate():
         client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)

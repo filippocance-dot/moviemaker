@@ -18,6 +18,7 @@
 <script>
 const messages = document.getElementById('messages');
 const input = document.getElementById('input');
+const SESSION_ID = {{ session_id }};
 let conversation = [];
 
 input.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
@@ -75,5 +76,13 @@ async function sendMessage() {
   }
   conversation.push({role:'assistant', content:full});
 }
+
+window.addEventListener('beforeunload', () => {
+  if (conversation.length === 0) return;
+  navigator.sendBeacon('/chat/end-session', JSON.stringify({
+    session_id: SESSION_ID,
+    conversation: conversation
+  }));
+});
 </script>
 {% endblock %}

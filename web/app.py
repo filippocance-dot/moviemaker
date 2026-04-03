@@ -154,6 +154,7 @@ def chat_get(request: Request, session: Optional[str] = Cookie(default=None)):
         "user": user,
         "session_id": session_id,
         "profile": profile,
+        "is_first_session": profile is None,
     })
 
 @app.post("/chat/end-session")
@@ -225,6 +226,28 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
 
     body = await request.json()
     conversation = body.get("conversation", [])
+    welcome = body.get("welcome", False)
+
+    if welcome and not conversation:
+        welcome_prompt = """Sei Filmmaker, un coach AI per autori audiovisivi. Stai incontrando questo autore per la prima volta.
+Presentati brevemente (2 righe max), poi fai UNA sola domanda per capire su cosa sta lavorando o cosa vuole esplorare oggi.
+Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non da assistente."""
+        async def generate_welcome():
+            client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+            stream = await client.chat.completions.create(
+                model=MODEL,
+                messages=[{"role": "system", "content": SYSTEM_PROMPT},
+                          {"role": "user", "content": welcome_prompt}],
+                max_tokens=200, stream=True,
+                extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
+            )
+            async for chunk in stream:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    yield f"data: {delta}\n\n"
+            yield "data: [DONE]\n\n"
+        return StreamingResponse(generate_welcome(), media_type="text/event-stream")
+
     def _extract_text(content) -> str:
         if isinstance(content, str):
             return content

@@ -112,3 +112,81 @@ def test_history_loads_for_authed_user():
     r = client.get("/chat/storia")
     assert r.status_code == 200
     assert "storico" in r.text.lower() or "sessioni" in r.text.lower() or "filmmaker" in r.text.lower()
+
+def test_update_session_activity():
+    import os, tempfile
+    db_path = tempfile.mktemp(suffix=".db")
+    os.environ["DATABASE_URL"] = db_path
+    from importlib import reload
+    import web.db as dbmod
+    reload(dbmod)
+    dbmod.init_db()
+    dbmod.create_user("Tester", "tester_act@x.com", "hash")
+    user = dbmod.get_user_by_email("tester_act@x.com")
+    dbmod.approve_user(user["id"])
+    sid = dbmod.start_session(user["id"])
+    dbmod.update_session_activity(sid)
+    sess = dbmod.get_session(sid)
+    assert sess["last_active_at"] is not None
+
+def test_get_user_detailed_stats():
+    import os, tempfile
+    db_path = tempfile.mktemp(suffix=".db")
+    os.environ["DATABASE_URL"] = db_path
+    from importlib import reload
+    import web.db as dbmod
+    reload(dbmod)
+    dbmod.init_db()
+    dbmod.create_user("Stats User", "stats@x.com", "hash")
+    user = dbmod.get_user_by_email("stats@x.com")
+    dbmod.approve_user(user["id"])
+    sid = dbmod.start_session(user["id"])
+    dbmod.update_session_activity(sid)
+    dbmod.end_session(sid, message_count=4, token_estimate=200)
+    dbmod.save_messages(user["id"], sid, [
+        {"role": "user", "content": "ciao"},
+        {"role": "assistant", "content": "risposta"},
+        {"role": "user", "content": "ok"},
+        {"role": "assistant", "content": "bene"},
+    ])
+    stats = dbmod.get_user_detailed_stats(user["id"])
+    assert stats["total_sessions"] == 1
+    assert stats["total_messages"] == 4
+    assert stats["total_tokens"] == 200
+    assert stats["avg_messages_per_session"] == 4.0
+
+def test_get_admin_full_stats():
+    import os, tempfile
+    db_path = tempfile.mktemp(suffix=".db")
+    os.environ["DATABASE_URL"] = db_path
+    from importlib import reload
+    import web.db as dbmod
+    reload(dbmod)
+    dbmod.init_db()
+    dbmod.create_user("Admin Full", "adminfull@x.com", "hash")
+    user = dbmod.get_user_by_email("adminfull@x.com")
+    dbmod.approve_user(user["id"])
+    sid = dbmod.start_session(user["id"])
+    dbmod.end_session(sid, message_count=2, token_estimate=100)
+    stats = dbmod.get_admin_full_stats()
+    assert stats["total_users"] >= 1
+    assert stats["total_sessions"] >= 1
+    assert isinstance(stats["most_active_users"], list)
+    assert isinstance(stats["recent_sessions"], list)
+
+def test_upsert_profile_with_capability_score():
+    import os, tempfile, sqlite3
+    db_path = tempfile.mktemp(suffix=".db")
+    os.environ["DATABASE_URL"] = db_path
+    from importlib import reload
+    import web.db as dbmod
+    reload(dbmod)
+    dbmod.init_db()
+    dbmod.create_user("Cap User", "cap@x.com", "hash")
+    user = dbmod.get_user_by_email("cap@x.com")
+    dbmod.upsert_profile(user["id"], "test profile", capability_score="Alto livello creativo.")
+    conn = sqlite3.connect(db_path)
+    row = conn.execute("SELECT capability_score FROM user_profiles WHERE user_id = ?", (user["id"],)).fetchone()
+    conn.close()
+    assert row is not None
+    assert row[0] == "Alto livello creativo."

@@ -61,6 +61,15 @@ def init_db():
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
         """)
+        # Schema migrations
+        try:
+            conn.execute("ALTER TABLE sessions ADD COLUMN last_active_at TEXT")
+        except Exception:
+            pass
+        try:
+            conn.execute("ALTER TABLE user_profiles ADD COLUMN capability_score TEXT")
+        except Exception:
+            pass
 
 def create_user(nome: str, email: str, password_hash: str):
     with get_conn() as conn:
@@ -114,6 +123,13 @@ def end_session(session_id: int, message_count: int, token_estimate: int):
             (message_count, token_estimate, session_id)
         )
 
+def update_session_activity(session_id: int):
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE sessions SET last_active_at = datetime('now') WHERE id = ?",
+            (session_id,)
+        )
+
 def get_session(session_id: int) -> dict | None:
     with get_conn() as conn:
         row = conn.execute("SELECT * FROM sessions WHERE id = ?", (session_id,)).fetchone()
@@ -137,7 +153,117 @@ def get_user_messages(user_id: int, limit: int = 100) -> list[dict]:
         ).fetchall()
         return [dict(r) for r in rows]
 
-def upsert_profile(user_id: int, profile_text: str):
+def get_user_detailed_stats(user_id: int) -> dict:
+    with get_conn() as conn:
+        total_sessions = conn.execute(
+            "SELECT COUNT(*) FROM sessions WHERE user_id = ?", (user_id,)
+        ).fetchone()[0]
+        total_messages = conn.execute(
+            "SELECT COUNT(*) FROM messages WHERE user_id = ?", (user_id,)
+        ).fetchone()[0]
+        total_tokens = conn.execute(
+            "SELECT COALESCE(SUM(token_estimate), 0) FROM sessions WHERE user_id = ?",
+            (user_id,)
+        ).fetchone()[0]
+        total_minutes_row = conn.execute("""
+            SELECT COALESCE(SUM(
+                (JULIANDAY(COALESCE(last_active_at, ended_at)) - JULIANDAY(started_at)) * 1440
+            ), 0)
+            FROM sessions
+            WHERE user_id = ? AND (last_active_at IS NOT NULL OR ended_at IS NOT NULL)
+        """, (user_id,)).fetchone()
+        total_minutes = round(total_minutes_row[0], 1) if total_minutes_row[0] else 0.0
+        avg_messages_per_session = round(total_messages / total_sessions, 1) if total_sessions > 0 else 0.0
+        first_session_date = conn.execute(
+            "SELECT MIN(started_at) FROM sessions WHERE user_id = ?", (user_id,)
+        ).fetchone()[0]
+        last_session_date = conn.execute(
+            "SELECT MAX(started_at) FROM sessions WHERE user_id = ?", (user_id,)
+        ).fetchone()[0]
+        sessions_this_week = conn.execute("""
+            SELECT COUNT(*) FROM sessions
+            WHERE user_id = ? AND started_at >= datetime('now', '-7 days')
+        """, (user_id,)).fetchone()[0]
+        messages_this_week = conn.execute("""
+            SELECT COUNT(*) FROM messages
+            WHERE user_id = ? AND created_at >= datetime('now', '-7 days')
+        """, (user_id,)).fetchone()[0]
+        return {
+            "total_sessions": total_sessions,
+            "total_messages": total_messages,
+            "total_tokens": total_tokens,
+            "total_minutes": total_minutes,
+            "avg_messages_per_session": avg_messages_per_session,
+            "first_session_date": first_session_date,
+            "last_session_date": last_session_date,
+            "sessions_this_week": sessions_this_week,
+            "messages_this_week": messages_this_week,
+        }
+
+def get_admin_full_stats() -> dict:
+    with get_conn() as conn:
+        total_users = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        approved_users = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE stato = 'approved'"
+        ).fetchone()[0]
+        active_today = conn.execute("""
+            SELECT COUNT(DISTINCT user_id) FROM sessions
+            WHERE DATE(started_at) = DATE('now')
+        """).fetchone()[0]
+        active_this_week = conn.execute("""
+            SELECT COUNT(DISTINCT user_id) FROM sessions
+            WHERE started_at >= datetime('now', '-7 days')
+        """).fetchone()[0]
+        total_sessions = conn.execute(
+            "SELECT COUNT(*) FROM sessions WHERE ended_at IS NOT NULL"
+        ).fetchone()[0]
+        total_messages = conn.execute("SELECT COUNT(*) FROM messages").fetchone()[0]
+        total_tokens = conn.execute(
+            "SELECT COALESCE(SUM(token_estimate), 0) FROM sessions"
+        ).fetchone()[0]
+        avg_row = conn.execute("""
+            SELECT AVG(
+                (JULIANDAY(COALESCE(last_active_at, ended_at)) - JULIANDAY(started_at)) * 1440
+            )
+            FROM sessions
+            WHERE ended_at IS NOT NULL AND (last_active_at IS NOT NULL OR ended_at IS NOT NULL)
+        """).fetchone()
+        avg_session_minutes = round(avg_row[0], 1) if avg_row[0] else 0.0
+        most_active_users = conn.execute("""
+            SELECT u.id, u.nome, u.email,
+                   COUNT(m.id) as message_count,
+                   COUNT(DISTINCT s.id) as session_count,
+                   MAX(s.started_at) as last_active
+            FROM users u
+            LEFT JOIN messages m ON m.user_id = u.id
+            LEFT JOIN sessions s ON s.user_id = u.id
+            GROUP BY u.id
+            ORDER BY message_count DESC
+            LIMIT 5
+        """).fetchall()
+        recent_sessions = conn.execute("""
+            SELECT s.id, s.user_id, s.started_at, s.ended_at,
+                   s.message_count, s.token_estimate, s.last_active_at,
+                   u.nome as user_name, u.email as user_email
+            FROM sessions s
+            JOIN users u ON u.id = s.user_id
+            ORDER BY s.started_at DESC
+            LIMIT 10
+        """).fetchall()
+        return {
+            "total_users": total_users,
+            "approved_users": approved_users,
+            "active_today": active_today,
+            "active_this_week": active_this_week,
+            "total_sessions": total_sessions,
+            "total_messages": total_messages,
+            "total_tokens": total_tokens,
+            "avg_session_minutes": avg_session_minutes,
+            "most_active_users": [dict(r) for r in most_active_users],
+            "recent_sessions": [dict(r) for r in recent_sessions],
+        }
+
+def upsert_profile(user_id: int, profile_text: str, capability_score: str | None = None):
     with get_conn() as conn:
         conn.execute("""
             INSERT INTO user_profiles (user_id, profile_text, updated_at)
@@ -146,6 +272,11 @@ def upsert_profile(user_id: int, profile_text: str):
                 profile_text = excluded.profile_text,
                 updated_at = excluded.updated_at
         """, (user_id, profile_text))
+        if capability_score is not None:
+            conn.execute(
+                "UPDATE user_profiles SET capability_score = ? WHERE user_id = ?",
+                (capability_score, user_id)
+            )
 
 def get_profile(user_id: int) -> str:
     with get_conn() as conn:
@@ -153,6 +284,16 @@ def get_profile(user_id: int) -> str:
             "SELECT profile_text FROM user_profiles WHERE user_id = ?", (user_id,)
         ).fetchone()
         return row["profile_text"] if row else ""
+
+def get_profile_full(user_id: int) -> dict:
+    with get_conn() as conn:
+        row = conn.execute(
+            "SELECT profile_text, capability_score FROM user_profiles WHERE user_id = ?",
+            (user_id,)
+        ).fetchone()
+        if row:
+            return {"profile_text": row["profile_text"] or "", "capability_score": row["capability_score"]}
+        return {"profile_text": "", "capability_score": None}
 
 def get_global_stats() -> dict:
     with get_conn() as conn:

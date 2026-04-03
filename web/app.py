@@ -84,7 +84,7 @@ def _admin_magic_token() -> str:
 def root():
     return RedirectResponse("/login", status_code=303)
 
-@app.get("/entra")
+@app.get("/entra", response_class=HTMLResponse)
 def magic_login(token: str = ""):
     if token != _admin_magic_token():
         return RedirectResponse("/login", status_code=303)
@@ -92,9 +92,11 @@ def magic_login(token: str = ""):
     if not user:
         return RedirectResponse("/login", status_code=303)
     session_token = make_token(user["id"])
-    resp = RedirectResponse("/admin", status_code=303)
-    resp.set_cookie("session", session_token, httponly=True, samesite="lax")
-    return resp
+    html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8">
+<script>document.cookie="session={session_token};path=/;samesite=lax";</script>
+<meta http-equiv="refresh" content="0;url=/admin">
+</head><body></body></html>"""
+    return HTMLResponse(content=html)
 
 @app.get("/registrati", response_class=HTMLResponse)
 def register_get(request: Request):

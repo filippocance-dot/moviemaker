@@ -37,6 +37,16 @@
   <div style="font-size:0.8rem;color:var(--label);margin-bottom:3rem;">Nessun profilo ancora — il profilo si genera al termine della prima sessione.</div>
   {% endif %}
 
+  <!-- Reset password -->
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Reset Password</div>
+  <form method="post" action="/admin/reset-password/{{ target.id }}" style="display:flex;gap:1rem;align-items:flex-end;margin-bottom:3rem;">
+    <div style="flex:1;">
+      <input type="password" name="new_password" placeholder="Nuova password" required
+        style="width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);padding:0.5rem 0;font-size:0.9rem;color:var(--text);font-family:inherit;outline:none;">
+    </div>
+    <button type="submit" class="btn">Imposta →</button>
+  </form>
+
   <!-- Sessioni -->
   <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Sessioni</div>
   {% for s in sessions %}

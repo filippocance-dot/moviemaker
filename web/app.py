@@ -382,6 +382,14 @@ def admin_user_detail(user_id: int, request: Request, session: Optional[str] = C
         "messages": get_user_messages(user_id, limit=200),
     })
 
+@app.post("/admin/reset-password/{user_id}")
+def admin_reset_password(user_id: int, new_password: str = Form(...), session: Optional[str] = Cookie(default=None)):
+    current = get_current_user(session)
+    if not current or current["email"] != ADMIN_EMAIL:
+        return RedirectResponse("/login", status_code=303)
+    update_user_password(user_id, hash_password(new_password))
+    return RedirectResponse(f"/admin/utente/{user_id}", status_code=303)
+
 @app.post("/admin/approva/{user_id}")
 def admin_approva(user_id: int, session: Optional[str] = Cookie(default=None)):
     current = get_current_user(session)

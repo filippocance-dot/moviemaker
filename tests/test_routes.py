@@ -88,8 +88,7 @@ def test_upload_text_file():
     if not user:
         return
     r_login = client.post("/login", data={"email": "t@t.com", "password": "pass123"})
-    if r_login.status_code != 303:
-        return
+    assert r_login.status_code == 303, f"Login failed: {r_login.status_code}"
     import io
     data = {"file": ("test.txt", io.BytesIO(b"Questo e un documento di test"), "text/plain")}
     r = client.post("/chat/upload", files=data)

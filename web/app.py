@@ -268,6 +268,8 @@ async def chat_upload(
 
     content_type = file.content_type or ""
     data = await file.read()
+    if len(data) > 10 * 1024 * 1024:  # 10 MB
+        return Response(status_code=413, content="File troppo grande (max 10 MB)")
 
     # Immagini → base64 per vision model
     if content_type.startswith("image/"):
@@ -283,7 +285,8 @@ async def chat_upload(
             reader = PdfReader(io.BytesIO(data))
             text = "\n".join(page.extract_text() or "" for page in reader.pages)
             return {"type": "text", "content": text[:20000]}
-        except Exception:
+        except Exception as e:
+            print(f"Errore lettura PDF: {e}")
             return Response(status_code=422, content="PDF non leggibile")
 
     # Testo plain / markdown

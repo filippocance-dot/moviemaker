@@ -1,24 +1,67 @@
 {% extends "base.html" %}
 {% block nav_right %}<a href="/logout" class="nav-link">Esci</a>{% endblock %}
 {% block content %}
-<div style="padding:2rem 1.5rem;">
-  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:2rem;">
-    Richieste in attesa — {{ users|length }}
-  </div>
-  {% if users %}
-    {% for u in users %}
-    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--border);">
-      <div>
-        <div style="font-size:0.9rem;font-family:'Times New Roman',serif;font-style:italic;">{{ u.nome }}</div>
-        <div style="font-size:0.7rem;color:var(--label);margin-top:0.2rem;">{{ u.email }} · {{ u.created_at }}</div>
-      </div>
-      <form method="post" action="/admin/approva/{{ u.id }}">
-        <button type="submit" class="btn">Approva →</button>
-      </form>
+<div style="padding:2rem 1.5rem;max-width:900px;">
+
+  <!-- Statistiche globali -->
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1.5rem;">Statistiche</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:3rem;">
+    {% set stats_items = [
+      ("Utenti approvati", stats.total_users),
+      ("In attesa", stats.pending_users),
+      ("Attivi (7 giorni)", stats.active_7d),
+      ("Sessioni totali", stats.total_sessions),
+      ("Messaggi totali", stats.total_messages),
+      ("Costo API stimato", "$" ~ stats.cost_estimate),
+    ] %}
+    {% for label, value in stats_items %}
+    <div style="border:1px solid var(--border);padding:1rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">{{ label }}</div>
+      <div style="font-size:1.4rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ value }}</div>
     </div>
     {% endfor %}
-  {% else %}
-    <div class="subtitle">Nessuna richiesta in attesa.</div>
+  </div>
+
+  <!-- Richieste in attesa -->
+  {% if pending %}
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1.5rem;">Richieste in attesa — {{ pending|length }}</div>
+  {% for u in pending %}
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--border);">
+    <div>
+      <div style="font-size:0.9rem;font-family:'Times New Roman',serif;font-style:italic;">{{ u.nome }}</div>
+      <div style="font-size:0.7rem;color:var(--label);margin-top:0.2rem;">{{ u.email }} · {{ u.created_at }}</div>
+    </div>
+    <form method="post" action="/admin/approva/{{ u.id }}">
+      <button type="submit" class="btn">Approva →</button>
+    </form>
+  </div>
+  {% endfor %}
+  <div style="margin-bottom:3rem;"></div>
   {% endif %}
+
+  <!-- Tutti gli utenti -->
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1.5rem;">Utenti — {{ users|length }}</div>
+  {% if users %}
+  {% for u in users %}
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--border);">
+    <div style="flex:1;">
+      <div style="font-size:0.9rem;font-family:'Times New Roman',serif;font-style:italic;">{{ u.nome }}</div>
+      <div style="font-size:0.7rem;color:var(--label);margin-top:0.2rem;">
+        {{ u.email }} · {{ u.session_count }} sessioni · {{ u.message_count }} messaggi
+        {% if u.last_active %} · ultimo accesso {{ u.last_active[:10] }}{% endif %}
+      </div>
+      {% if u.profile_text %}
+      <div style="font-size:0.75rem;color:var(--text);margin-top:0.4rem;opacity:0.7;max-width:500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+        {{ u.profile_text[:120] }}…
+      </div>
+      {% endif %}
+    </div>
+    <a href="/admin/utente/{{ u.id }}" class="btn" style="text-decoration:none;">Dettaglio →</a>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="subtitle">Nessun utente ancora.</div>
+  {% endif %}
+
 </div>
 {% endblock %}

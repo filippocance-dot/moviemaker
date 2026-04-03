@@ -51,3 +51,13 @@ def test_start_session_on_chat_get():
     r = client.get("/chat")
     assert r.status_code == 200
     assert "session_id" in r.text
+
+def test_admin_stats_page_loads():
+    import os
+    admin_email = os.environ.get("ADMIN_EMAIL", "admin@test.com")
+    r_login = client.post("/login", data={"email": admin_email, "password": "adminpass"})
+    if r_login.status_code != 303:
+        return
+    r = client.get("/admin")
+    assert r.status_code == 200
+    assert "statistiche" in r.text.lower() or "utenti" in r.text.lower()

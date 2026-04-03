@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block nav_right %}
+  <div style="display:flex;gap:1.5rem;align-items:center;">
+    <a href="/admin" class="nav-link">← Admin</a>
+    <a href="/logout" class="nav-link">Esci</a>
+  </div>
+{% endblock %}
+{% block content %}
+<div style="padding:2rem 1.5rem;max-width:700px;">
+
+  <div style="font-size:1.4rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);margin-bottom:0.3rem;">{{ target.nome }}</div>
+  <div style="font-size:0.7rem;color:var(--label);margin-bottom:2rem;">{{ target.email }} · registrato il {{ target.created_at[:10] }}</div>
+
+  <!-- Statistiche utente -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem;">
+    <div style="border:1px solid var(--border);padding:1rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">Sessioni</div>
+      <div style="font-size:1.4rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ sessions|length }}</div>
+    </div>
+    <div style="border:1px solid var(--border);padding:1rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">Messaggi</div>
+      <div style="font-size:1.4rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">{{ messages|length }}</div>
+    </div>
+    <div style="border:1px solid var(--border);padding:1rem;">
+      <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.5rem;">Ultima sessione</div>
+      <div style="font-size:0.85rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">
+        {% if sessions %}{{ sessions[0].started_at[:10] }}{% else %}—{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Profilo autore -->
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Profilo Autore</div>
+  {% if profile %}
+  <div style="font-size:0.85rem;line-height:1.9;color:var(--text);white-space:pre-wrap;margin-bottom:3rem;padding:1.2rem;border:1px solid var(--border);">{{ profile }}</div>
+  {% else %}
+  <div style="font-size:0.8rem;color:var(--label);margin-bottom:3rem;">Nessun profilo ancora — il profilo si genera al termine della prima sessione.</div>
+  {% endif %}
+
+  <!-- Sessioni -->
+  <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--label);margin-bottom:1rem;">Sessioni</div>
+  {% for s in sessions %}
+  <div style="padding:0.8rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+    <div style="font-size:0.8rem;color:var(--text);">{{ s.started_at[:16] }}</div>
+    <div style="font-size:0.75rem;color:var(--label);">{{ s.message_count }} messaggi · ~{{ s.token_estimate }} token</div>
+  </div>
+  {% else %}
+  <div style="font-size:0.8rem;color:var(--label);">Nessuna sessione completata.</div>
+  {% endfor %}
+
+</div>
+{% endblock %}

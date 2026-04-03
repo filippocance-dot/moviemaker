@@ -251,7 +251,26 @@ def admin_get(request: Request, session: Optional[str] = Cookie(default=None)):
     user = get_current_user(session)
     if not user or user["email"] != ADMIN_EMAIL:
         return RedirectResponse("/login", status_code=303)
-    return templates.TemplateResponse(request, "admin.html", {"users": list_pending()})
+    return templates.TemplateResponse(request, "admin.html", {
+        "pending": list_pending(),
+        "stats": get_global_stats(),
+        "users": list_all_users_with_stats(),
+    })
+
+@app.get("/admin/utente/{user_id}", response_class=HTMLResponse)
+def admin_user_detail(user_id: int, request: Request, session: Optional[str] = Cookie(default=None)):
+    current = get_current_user(session)
+    if not current or current["email"] != ADMIN_EMAIL:
+        return RedirectResponse("/login", status_code=303)
+    target = get_user_by_id(user_id)
+    if not target:
+        return RedirectResponse("/admin", status_code=303)
+    return templates.TemplateResponse(request, "admin_user.html", {
+        "target": target,
+        "profile": get_profile(user_id),
+        "sessions": get_user_sessions(user_id),
+        "messages": get_user_messages(user_id, limit=200),
+    })
 
 @app.post("/admin/approva/{user_id}")
 def admin_approva(user_id: int, session: Optional[str] = Cookie(default=None)):

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block nav_right %}
+  <div style="display:flex;gap:2rem;align-items:center;">
+    <a href="/chat/storia" class="nav-link">← Storico</a>
+    <a href="/chat" class="nav-link">Chat</a>
+    <a href="/logout" class="nav-link">Esci</a>
+  </div>
+{% endblock %}
+{% block content %}
+<style>
+  .h-msg { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:2rem; }
+  .h-msg.user { align-items: flex-end; }
+  .h-msg.ai { align-items: flex-start; max-width: 78%; }
+  .h-label { font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--label); }
+  .h-bubble { font-size:0.88rem; line-height:1.85; color:var(--text); }
+  .h-msg.user .h-bubble {
+    background: var(--border);
+    padding: 0.7rem 1.1rem;
+    border-radius: 2px 12px 12px 12px;
+    max-width: 70%;
+    white-space: pre-wrap;
+  }
+</style>
+
+<div style="padding:2.5rem 2rem;max-width:680px;margin:0 auto;">
+
+  <div style="font-size:1.1rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);margin-bottom:0.2rem;">
+    {{ sess.started_at[:10] }} — {{ sess.started_at[11:16] }}
+  </div>
+  <div style="font-size:0.7rem;color:var(--label);margin-bottom:0.3rem;">{{ sess.message_count }} messaggi</div>
+  <div style="width:28px;height:1px;background:var(--faint);margin:1.5rem 0 2.5rem;"></div>
+
+  {% for m in messages %}
+  <div class="h-msg {{ 'user' if m.role == 'user' else 'ai' }}">
+    <div class="h-label">{{ 'Tu' if m.role == 'user' else 'Filmmaker' }}</div>
+    <div class="h-bubble {{ 'md' if m.role == 'assistant' else '' }}" data-content="{{ m.content | e }}">
+      {{ m.content }}
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+// Render markdown per messaggi AI
+document.querySelectorAll('.h-bubble.md').forEach(el => {
+  const raw = el.getAttribute('data-content');
+  if (raw) el.innerHTML = marked.parse(raw);
+});
+</script>
+{% endblock %}

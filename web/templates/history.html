@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block nav_right %}
+  <div style="display:flex;gap:2rem;align-items:center;">
+    <a href="/chat" class="nav-link">← Chat</a>
+    <a href="/logout" class="nav-link">Esci</a>
+  </div>
+{% endblock %}
+{% block content %}
+<div style="padding:2.5rem 2rem;max-width:680px;margin:0 auto;">
+
+  <div style="font-size:1.6rem;font-family:'Times New Roman',serif;font-style:italic;color:var(--text);margin-bottom:0.3rem;">
+    Le tue conversazioni.
+  </div>
+  <div style="width:28px;height:1px;background:var(--faint);margin:1.5rem 0 2.5rem;"></div>
+
+  {% if sessions %}
+  {% for s in sessions %}
+  <a href="/chat/storia/{{ s.id }}" style="text-decoration:none;display:block;">
+    <div style="padding:1.2rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+      <div>
+        <div style="font-size:0.88rem;color:var(--text);font-family:'Times New Roman',serif;font-style:italic;">
+          {{ s.started_at[:10] }}
+          <span style="font-size:0.7rem;color:var(--label);font-style:normal;margin-left:0.5rem;">{{ s.started_at[11:16] }}</span>
+        </div>
+        <div style="font-size:0.7rem;color:var(--label);margin-top:0.3rem;letter-spacing:0.02em;">
+          {{ s.message_count }} messaggi
+        </div>
+      </div>
+      <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--label);">Leggi →</div>
+    </div>
+  </a>
+  {% endfor %}
+  {% else %}
+  <div class="subtitle">Nessuna conversazione salvata ancora.</div>
+  {% endif %}
+
+</div>
+{% endblock %}

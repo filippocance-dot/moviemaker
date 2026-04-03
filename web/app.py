@@ -296,6 +296,35 @@ async def chat_upload(
     except Exception:
         return Response(status_code=422, content="Formato non supportato")
 
+@app.get("/chat/storia", response_class=HTMLResponse)
+def chat_history(request: Request, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    sessions = get_user_sessions(user["id"])
+    # Filtra solo sessioni concluse con almeno un messaggio
+    sessions = [s for s in sessions if s["ended_at"] and s["message_count"] > 0]
+    return templates.TemplateResponse(request, "history.html", {
+        "user": user,
+        "sessions": sessions,
+    })
+
+@app.get("/chat/storia/{session_id}", response_class=HTMLResponse)
+def chat_history_session(session_id: int, request: Request, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    # Verifica che la sessione appartenga all'utente
+    sess = get_session(session_id)
+    if not sess or sess["user_id"] != user["id"]:
+        return RedirectResponse("/chat/storia", status_code=303)
+    msgs = get_session_messages(session_id)
+    return templates.TemplateResponse(request, "history_session.html", {
+        "user": user,
+        "sess": sess,
+        "messages": msgs,
+    })
+
 # --- Admin ---
 
 @app.get("/admin", response_class=HTMLResponse)

@@ -96,3 +96,19 @@ def test_upload_text_file():
     body = r.json()
     assert body["type"] == "text"
     assert "documento" in body["content"]
+
+def test_history_requires_auth():
+    r = client.get("/chat/storia")
+    assert r.status_code == 303
+    assert r.headers["location"] == "/login"
+
+def test_history_loads_for_authed_user():
+    from web.db import get_user_by_email
+    user = get_user_by_email("t@t.com")
+    if not user:
+        return
+    r_login = client.post("/login", data={"email": "t@t.com", "password": "pass123"})
+    assert r_login.status_code == 303, f"Login failed: {r_login.status_code}"
+    r = client.get("/chat/storia")
+    assert r.status_code == 200
+    assert "storico" in r.text.lower() or "sessioni" in r.text.lower() or "filmmaker" in r.text.lower()

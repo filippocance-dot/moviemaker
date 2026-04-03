@@ -79,10 +79,10 @@ async function sendMessage() {
 
 window.addEventListener('beforeunload', () => {
   if (conversation.length === 0) return;
-  navigator.sendBeacon('/chat/end-session', JSON.stringify({
-    session_id: SESSION_ID,
-    conversation: conversation
-  }));
+  navigator.sendBeacon('/chat/end-session', new Blob(
+    [JSON.stringify({ session_id: SESSION_ID, conversation: conversation })],
+    { type: 'application/json' }
+  ));
 });
 </script>
 {% endblock %}

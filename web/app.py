@@ -171,6 +171,12 @@ async def chat_end_session(request: Request, session: Optional[str] = Cookie(def
     if not session_id or not conversation:
         return Response(status_code=200)
 
+    # Verifica che la sessione appartenga all'utente autenticato
+    from web.db import get_session
+    sess = get_session(session_id)
+    if not sess or sess["user_id"] != user["id"]:
+        return Response(status_code=403)
+
     total_chars = sum(len(m.get("content", "")) for m in conversation)
     token_estimate = total_chars // 4
 

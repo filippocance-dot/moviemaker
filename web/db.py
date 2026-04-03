@@ -198,3 +198,11 @@ def get_user_sessions(user_id: int) -> list[dict]:
             (user_id,)
         ).fetchall()
         return [dict(r) for r in rows]
+
+def get_session_messages(session_id: int) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM messages WHERE session_id = ? ORDER BY created_at ASC",
+            (session_id,)
+        ).fetchall()
+        return [dict(r) for r in rows]

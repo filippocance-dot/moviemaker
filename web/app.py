@@ -1,7 +1,7 @@
 from __future__ import annotations
 import os
 from typing import Optional
-from fastapi import FastAPI, Request, Form, Cookie, Response
+from fastapi import FastAPI, Request, Form, Cookie, Response, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from contextlib import asynccontextmanager
@@ -9,10 +9,10 @@ from contextlib import asynccontextmanager
 from web.db import (
     init_db, create_user, get_user_by_email, get_user_by_id,
     list_pending, approve_user, update_user_password,
-    start_session, end_session, save_messages,
+    start_session, end_session, save_messages, get_session,
     upsert_profile, get_profile,
     get_global_stats, list_all_users_with_stats, get_user_sessions,
-    get_user_messages,
+    get_user_messages, get_session_messages,
 )
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
@@ -172,7 +172,6 @@ async def chat_end_session(request: Request, session: Optional[str] = Cookie(def
         return Response(status_code=200)
 
     # Verifica che la sessione appartenga all'utente autenticato
-    from web.db import get_session
     sess = get_session(session_id)
     if not sess or sess["user_id"] != user["id"]:
         return Response(status_code=403)
@@ -226,7 +225,14 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
 
     body = await request.json()
     conversation = body.get("conversation", [])
-    last_user = next((m["content"] for m in reversed(conversation) if m["role"] == "user"), "")
+    def _extract_text(content) -> str:
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            return " ".join(p.get("text", "") for p in content if p.get("type") == "text")
+        return ""
+
+    last_user = next((_extract_text(m["content"]) for m in reversed(conversation) if m["role"] == "user"), "")
     rag_ctx = retrieve(last_user, bm25, corpus_chunks, corpus_sources)
     if rag_ctx and conversation:
         conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
@@ -249,6 +255,43 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
+
+@app.post("/chat/upload")
+async def chat_upload(
+    request: Request,
+    file: UploadFile = File(...),
+    session: Optional[str] = Cookie(default=None)
+):
+    user = get_current_user(session)
+    if not user:
+        return Response(status_code=401)
+
+    content_type = file.content_type or ""
+    data = await file.read()
+
+    # Immagini → base64 per vision model
+    if content_type.startswith("image/"):
+        import base64
+        b64 = base64.b64encode(data).decode()
+        return {"type": "image_url", "url": f"data:{content_type};base64,{b64}"}
+
+    # PDF → estrazione testo con pypdf
+    if content_type == "application/pdf" or (file.filename and file.filename.endswith(".pdf")):
+        import io
+        from pypdf import PdfReader
+        try:
+            reader = PdfReader(io.BytesIO(data))
+            text = "\n".join(page.extract_text() or "" for page in reader.pages)
+            return {"type": "text", "content": text[:20000]}
+        except Exception:
+            return Response(status_code=422, content="PDF non leggibile")
+
+    # Testo plain / markdown
+    try:
+        text = data.decode("utf-8", errors="replace")
+        return {"type": "text", "content": text[:20000]}
+    except Exception:
+        return Response(status_code=422, content="Formato non supportato")
 
 # --- Admin ---
 

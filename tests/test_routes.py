@@ -75,3 +75,25 @@ def test_chat_has_textarea():
     assert "<textarea" in r.text
     assert "sendBeacon" in r.text
     assert "userScrolled" in r.text
+
+def test_upload_requires_auth():
+    import io
+    data = {"file": ("test.txt", io.BytesIO(b"contenuto test"), "text/plain")}
+    r = client.post("/chat/upload", files=data)
+    assert r.status_code == 401
+
+def test_upload_text_file():
+    from web.db import get_user_by_email
+    user = get_user_by_email("t@t.com")
+    if not user:
+        return
+    r_login = client.post("/login", data={"email": "t@t.com", "password": "pass123"})
+    if r_login.status_code != 303:
+        return
+    import io
+    data = {"file": ("test.txt", io.BytesIO(b"Questo e un documento di test"), "text/plain")}
+    r = client.post("/chat/upload", files=data)
+    assert r.status_code == 200
+    body = r.json()
+    assert body["type"] == "text"
+    assert "documento" in body["content"]

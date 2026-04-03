@@ -359,8 +359,12 @@ def chat_history_session(session_id: int, request: Request, session: Optional[st
 # --- Admin ---
 
 @app.get("/admin", response_class=HTMLResponse)
-def admin_get(request: Request, session: Optional[str] = Cookie(default=None)):
-    user = get_current_user(session)
+def admin_get(request: Request, t: str = "", session: Optional[str] = Cookie(default=None)):
+    # Accesso diretto via token (bypassa il cookie — per Safari/ITP)
+    if t and t == _admin_magic_token():
+        user = get_user_by_email(ADMIN_EMAIL)
+    else:
+        user = get_current_user(session)
     if not user or user["email"] != ADMIN_EMAIL:
         return RedirectResponse("/login", status_code=303)
     return templates.TemplateResponse(request, "admin.html", {

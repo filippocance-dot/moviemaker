@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block nav_right %}
+  <a href="/progetti" class="nav-link">← Progetti</a>
+  <a href="/chat" class="nav-link">Chat</a>
+  <a href="/logout" class="nav-link">Esci</a>
+{% endblock %}
+{% block content %}
+<style>
+  .pw { padding: 40px 48px; max-width: 900px; }
+  .pw-title { font-size: 1.6rem; font-style: italic; font-family: 'Times New Roman', serif; color: var(--text); margin-bottom: 0.2rem; }
+  .pw-divider { width: 28px; height: 1px; background: var(--border2); margin: 1.5rem 0 2.5rem; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 1rem;
+  }
+
+  /* Note */
+  #note-area {
+    width: 100%;
+    min-height: 120px;
+    max-height: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    font-family: var(--font);
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+    margin-bottom: 0.6rem;
+  }
+  #note-area:focus { border-color: rgba(255,255,255,0.28); }
+  #note-area::placeholder { color: var(--label); opacity: 0.5; }
+  #note-status { font-size: 11px; color: var(--label); opacity: 0.6; min-height: 16px; }
+
+  /* Files */
+  .upload-form { display: flex; gap: 10px; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 22px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--label);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .file-label:hover { border-color: rgba(255,255,255,0.28); color: var(--text); }
+  #file-name { font-size: 12px; color: var(--label); }
+  .upload-btn {
+    background: #f0ece6;
+    border: none;
+    border-radius: 22px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-family: var(--font);
+    color: #0a0b0d;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    display: none;
+  }
+  .upload-btn.visible { display: inline-block; }
+  .upload-btn:hover { opacity: 0.8; }
+
+  .file-list { margin-bottom: 2.5rem; }
+  .file-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .file-row:last-child { border-bottom: none; }
+  .file-info { display: flex; flex-direction: column; gap: 2px; }
+  .file-name { font-size: 13px; color: var(--text); }
+  .file-meta { font-size: 11px; color: var(--label); }
+  .file-actions { display: flex; gap: 12px; }
+  .file-link { font-size: 11px; color: var(--label); text-decoration: none; transition: color 0.15s; }
+  .file-link:hover { color: var(--text); }
+  .file-del { font-size: 11px; color: var(--label); cursor: pointer; background: none; border: none; font-family: var(--font); padding: 0; transition: color 0.15s; }
+  .file-del:hover { color: #ff6b6b; }
+
+  /* Sessions */
+  .sess-list { margin-bottom: 2.5rem; }
+  .sess-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sess-row:last-child { border-bottom: none; }
+  .sess-date { font-size: 13px; color: var(--text); }
+  .sess-meta { font-size: 11px; color: var(--label); }
+  .sess-actions { display: flex; gap: 12px; align-items: center; }
+  .sess-link { font-size: 11px; color: var(--label); text-decoration: none; transition: color 0.15s; }
+  .sess-link:hover { color: var(--text); }
+
+  /* Link session form */
+  .link-form { display: flex; gap: 10px; align-items: center; margin-top: 1rem; flex-wrap: wrap; }
+  .link-select {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 22px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--text);
+    font-family: var(--font);
+    outline: none;
+    cursor: pointer;
+    max-width: 300px;
+  }
+  .link-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    border-radius: 22px;
+    padding: 8px 14px;
+    font-size: 11px;
+    color: var(--label);
+    font-family: var(--font);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .link-btn:hover { border-color: rgba(255,255,255,0.28); color: var(--text); }
+
+  /* Delete project */
+  .danger-zone { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .del-proj-btn {
+    background: none;
+    border: none;
+    font-size: 11px;
+    color: var(--label);
+    font-family: var(--font);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+    padding: 0;
+  }
+  .del-proj-btn:hover { color: #ff6b6b; }
+</style>
+
+<div class="pw">
+  <div class="pw-title">{{ project.name }}</div>
+  <div style="font-size:11px;color:var(--label);margin-bottom:0.2rem;">creato il {{ project.created_at[:10] }}</div>
+  <div class="pw-divider"></div>
+
+  <!-- NOTE -->
+  <div class="section-label">Note</div>
+  <textarea id="note-area" placeholder="Scrivi note, idee, rimandi…">{{ project.note }}</textarea>
+  <div id="note-status"></div>
+  <div style="margin-bottom:2.5rem;"></div>
+
+  <!-- FILE -->
+  <div class="section-label">File</div>
+  <form method="post" action="/progetti/{{ project.id }}/file" enctype="multipart/form-data" class="upload-form">
+    <label class="file-label" for="proj-file">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+      </svg>
+      Scegli file
+    </label>
+    <input type="file" id="proj-file" name="file" style="display:none"
+      accept=".pdf,.txt,.md,.jpg,.jpeg,.png,.webp,.doc,.docx">
+    <span id="file-name"></span>
+    <button class="upload-btn" id="upload-btn" type="submit">Carica →</button>
+  </form>
+
+  <div class="file-list">
+    {% for f in files %}
+    <div class="file-row">
+      <div class="file-info">
+        <div class="file-name">{{ f.original_name }}</div>
+        <div class="file-meta">{{ (f.file_size / 1024) | round(1) }} KB · {{ f.created_at[:10] }}</div>
+      </div>
+      <div class="file-actions">
+        <a class="file-link" href="/progetti/{{ project.id }}/file/{{ f.id }}" download>Scarica</a>
+        <form method="post" action="/progetti/{{ project.id }}/file/{{ f.id }}/elimina" style="display:inline">
+          <button class="file-del" type="submit">Elimina</button>
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <div style="font-size:12px;color:var(--label);padding:0.5rem 0;">Nessun file ancora.</div>
+    {% endfor %}
+  </div>
+
+  <!-- SESSIONI -->
+  <div class="section-label">Sessioni collegate</div>
+  <div class="sess-list">
+    {% for s in linked_sessions %}
+    <div class="sess-row">
+      <div>
+        <div class="sess-date">{{ s.started_at[:10] }} <span style="opacity:0.5;font-size:11px;">{{ s.started_at[11:16] }}</span></div>
+        <div class="sess-meta">{{ s.message_count }} messaggi</div>
+      </div>
+      <div class="sess-actions">
+        <a class="sess-link" href="/chat/storia/{{ s.id }}">Leggi →</a>
+        <form method="post" action="/progetti/{{ project.id }}/sessione/{{ s.id }}/rimuovi" style="display:inline">
+          <button class="file-del" type="submit">Rimuovi</button>
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <div style="font-size:12px;color:var(--label);padding:0.5rem 0;">Nessuna sessione collegata.</div>
+    {% endfor %}
+  </div>
+
+  {% if available_sessions %}
+  <div class="section-label" style="margin-top:0.5rem;">Collega una sessione</div>
+  <form method="post" action="/progetti/{{ project.id }}/sessione" class="link-form">
+    <select name="session_id" class="link-select">
+      {% for s in available_sessions %}
+      <option value="{{ s.id }}">{{ s.started_at[:10] }} {{ s.started_at[11:16] }} — {{ s.message_count }} msg</option>
+      {% endfor %}
+    </select>
+    <button class="link-btn" type="submit">Collega →</button>
+  </form>
+  {% endif %}
+
+  <!-- ELIMINA PROGETTO -->
+  <div class="danger-zone">
+    <form method="post" action="/progetti/{{ project.id }}/elimina"
+          onsubmit="return confirm('Eliminare il progetto e tutti i suoi file?')">
+      <button class="del-proj-btn" type="submit">Elimina progetto</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// Auto-save note
+const noteEl = document.getElementById('note-area');
+const noteStatus = document.getElementById('note-status');
+let saveTimer;
+noteEl.addEventListener('input', () => {
+  noteStatus.textContent = '';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    const res = await fetch('/progetti/{{ project.id }}/nota', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ note: noteEl.value })
+    });
+    noteStatus.textContent = res.ok ? 'Salvato.' : 'Errore salvataggio.';
+    setTimeout(() => { noteStatus.textContent = ''; }, 2000);
+  }, 800);
+});
+
+// File input preview
+document.getElementById('proj-file').addEventListener('change', function() {
+  const name = this.files[0]?.name || '';
+  document.getElementById('file-name').textContent = name;
+  document.getElementById('upload-btn').classList.toggle('visible', !!name);
+});
+</script>
+{% endblock %}

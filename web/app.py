@@ -15,12 +15,17 @@ from web.db import (
     get_global_stats, list_all_users_with_stats, get_user_sessions,
     get_user_messages, get_session_messages,
     get_admin_full_stats, get_user_detailed_stats,
+    create_project, get_project, list_projects, delete_project,
+    update_project_note, add_project_file, list_project_files,
+    get_project_file, delete_project_file,
+    link_session_to_project, unlink_session_from_project, list_project_sessions,
 )
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
 
-import re, pathlib, hashlib
+import re, pathlib, hashlib, uuid, shutil
+from fastapi.responses import FileResponse
 
 def _load_system_prompt() -> str:
     src = (pathlib.Path(__file__).parent.parent / "cineauteur.py").read_text(encoding="utf-8")
@@ -35,6 +40,10 @@ ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@localhost")
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 MODEL = "anthropic/claude-sonnet-4-6"
+
+_db_dir = os.path.dirname(os.path.abspath(os.environ.get("DATABASE_URL", "moviemaker.db")))
+UPLOAD_DIR = os.path.join(_db_dir, "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 corpus_chunks: list = []
 corpus_sources: list = []
@@ -441,3 +450,151 @@ def admin_approva(user_id: int, session: Optional[str] = Cookie(default=None)):
         approve_user(user_id)
         send_approval_email(target["email"], target["nome"])
     return RedirectResponse("/admin", status_code=303)
+
+# ── PROGETTI ───────────────────────────────────────────────────────────────────
+
+def _upload_dir(user_id: int, project_id: int) -> str:
+    d = os.path.join(UPLOAD_DIR, str(user_id), str(project_id))
+    os.makedirs(d, exist_ok=True)
+    return d
+
+@app.get("/progetti", response_class=HTMLResponse)
+def projects_list(request: Request, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    projects = list_projects(user["id"])
+    return templates.TemplateResponse(request, "projects.html", {
+        "user": user, "projects": projects
+    })
+
+@app.post("/progetti")
+def projects_create(request: Request, name: str = Form(...),
+                    session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    project_id = create_project(user["id"], name.strip())
+    return RedirectResponse(f"/progetti/{project_id}", status_code=303)
+
+@app.get("/progetti/{project_id}", response_class=HTMLResponse)
+def project_detail(project_id: int, request: Request,
+                   session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    project = get_project(project_id)
+    if not project or project["user_id"] != user["id"]:
+        return RedirectResponse("/progetti", status_code=303)
+    files = list_project_files(project_id)
+    linked_sessions = list_project_sessions(project_id)
+    linked_ids = {s["id"] for s in linked_sessions}
+    all_sessions = [s for s in get_user_sessions(user["id"]) if s["id"] not in linked_ids]
+    return templates.TemplateResponse(request, "project.html", {
+        "user": user,
+        "project": project,
+        "files": files,
+        "linked_sessions": linked_sessions,
+        "available_sessions": all_sessions,
+    })
+
+@app.post("/progetti/{project_id}/nota")
+async def project_save_note(project_id: int, request: Request,
+                            session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return Response(status_code=401)
+    project = get_project(project_id)
+    if not project or project["user_id"] != user["id"]:
+        return Response(status_code=403)
+    body = await request.json()
+    update_project_note(project_id, body.get("note", ""))
+    return Response(status_code=200)
+
+@app.post("/progetti/{project_id}/file")
+async def project_upload_file(project_id: int, file: UploadFile = File(...),
+                               session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return Response(status_code=401)
+    project = get_project(project_id)
+    if not project or project["user_id"] != user["id"]:
+        return Response(status_code=403)
+    content = await file.read()
+    if len(content) > 20 * 1024 * 1024:
+        return Response(status_code=413)
+    ext = pathlib.Path(file.filename).suffix.lower()
+    stored_name = uuid.uuid4().hex + ext
+    dest = os.path.join(_upload_dir(user["id"], project_id), stored_name)
+    with open(dest, "wb") as f:
+        f.write(content)
+    add_project_file(project_id, user["id"], stored_name,
+                     file.filename, file.content_type or "", len(content))
+    return RedirectResponse(f"/progetti/{project_id}", status_code=303)
+
+@app.get("/progetti/{project_id}/file/{file_id}")
+def project_download_file(project_id: int, file_id: int,
+                           session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    pf = get_project_file(file_id)
+    if not pf or pf["project_id"] != project_id or pf["user_id"] != user["id"]:
+        return Response(status_code=404)
+    path = os.path.join(_upload_dir(user["id"], project_id), pf["stored_name"])
+    return FileResponse(path, filename=pf["original_name"], media_type=pf["mime_type"] or "application/octet-stream")
+
+@app.post("/progetti/{project_id}/file/{file_id}/elimina")
+def project_delete_file(project_id: int, file_id: int,
+                        session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    pf = get_project_file(file_id)
+    if not pf or pf["project_id"] != project_id or pf["user_id"] != user["id"]:
+        return Response(status_code=404)
+    path = os.path.join(_upload_dir(user["id"], project_id), pf["stored_name"])
+    try:
+        os.remove(path)
+    except FileNotFoundError:
+        pass
+    delete_project_file(file_id)
+    return RedirectResponse(f"/progetti/{project_id}", status_code=303)
+
+@app.post("/progetti/{project_id}/sessione")
+def project_link_session(project_id: int, session_id: int = Form(...),
+                         session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    project = get_project(project_id)
+    if not project or project["user_id"] != user["id"]:
+        return Response(status_code=403)
+    link_session_to_project(project_id, session_id)
+    return RedirectResponse(f"/progetti/{project_id}", status_code=303)
+
+@app.post("/progetti/{project_id}/sessione/{session_id}/rimuovi")
+def project_unlink_session(project_id: int, session_id: int,
+                            session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    project = get_project(project_id)
+    if not project or project["user_id"] != user["id"]:
+        return Response(status_code=403)
+    unlink_session_from_project(project_id, session_id)
+    return RedirectResponse(f"/progetti/{project_id}", status_code=303)
+
+@app.post("/progetti/{project_id}/elimina")
+def project_delete(project_id: int, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return RedirectResponse("/login", status_code=303)
+    project = get_project(project_id)
+    if not project or project["user_id"] != user["id"]:
+        return Response(status_code=403)
+    # Elimina file dal disco
+    dir_path = os.path.join(UPLOAD_DIR, str(user["id"]), str(project_id))
+    shutil.rmtree(dir_path, ignore_errors=True)
+    delete_project(project_id)
+    return RedirectResponse("/progetti", status_code=303)

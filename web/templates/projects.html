@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block nav_right %}
+  <a href="/chat" class="nav-link">Chat</a>
+  <a href="/chat/storia" class="nav-link">Storico</a>
+  <a href="/logout" class="nav-link">Esci</a>
+{% endblock %}
+{% block content %}
+<style>
+  .proj-wrap { padding: 40px 48px; max-width: 860px; }
+  .proj-title { font-size: 1.6rem; font-style: italic; font-family: 'Times New Roman', serif; color: var(--text); margin-bottom: 0.2rem; }
+  .proj-divider { width: 28px; height: 1px; background: var(--border2); margin: 1.5rem 0 2.5rem; }
+
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .proj-card {
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 1.2rem 1.3rem;
+    background: var(--surface);
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .proj-card:hover { border-color: rgba(255,255,255,0.25); background: var(--elevated); }
+
+  .proj-card-name {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .proj-card-meta {
+    font-size: 11px;
+    color: var(--label);
+    letter-spacing: 0.03em;
+  }
+
+  /* New project form */
+  .new-proj-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 2.5rem;
+  }
+  .new-proj-input {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 22px;
+    padding: 9px 18px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: var(--font);
+    outline: none;
+    width: 280px;
+    transition: border-color 0.2s;
+  }
+  .new-proj-input::placeholder { color: var(--label); opacity: 0.5; }
+  .new-proj-input:focus { border-color: rgba(255,255,255,0.28); }
+  .new-proj-btn {
+    background: #f0ece6;
+    border: none;
+    border-radius: 22px;
+    padding: 9px 18px;
+    font-size: 12px;
+    font-family: var(--font);
+    color: #0a0b0d;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+  }
+  .new-proj-btn:hover { opacity: 0.8; }
+</style>
+
+<div class="proj-wrap">
+  <div class="proj-title">I tuoi progetti.</div>
+  <div class="proj-divider"></div>
+
+  <form method="post" action="/progetti" class="new-proj-form">
+    <input class="new-proj-input" type="text" name="name" placeholder="Nome del nuovo progetto…" required maxlength="80">
+    <button class="new-proj-btn" type="submit">Crea →</button>
+  </form>
+
+  {% if projects %}
+  <div class="proj-grid">
+    {% for p in projects %}
+    <a href="/progetti/{{ p.id }}" class="proj-card">
+      <div class="proj-card-name">{{ p.name }}</div>
+      <div class="proj-card-meta">{{ p.updated_at[:10] }}</div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="subtitle">Nessun progetto ancora. Creane uno per iniziare.</div>
+  {% endif %}
+</div>
+{% endblock %}

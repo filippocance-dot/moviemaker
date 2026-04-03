@@ -61,6 +61,42 @@ def init_db():
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS projects (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                note TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS project_files (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                project_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                stored_name TEXT NOT NULL,
+                original_name TEXT NOT NULL,
+                mime_type TEXT NOT NULL DEFAULT '',
+                file_size INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (project_id) REFERENCES projects(id),
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS project_sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                project_id INTEGER NOT NULL,
+                session_id INTEGER NOT NULL,
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (project_id) REFERENCES projects(id),
+                FOREIGN KEY (session_id) REFERENCES sessions(id),
+                UNIQUE(project_id, session_id)
+            )
+        """)
         # Schema migrations
         try:
             conn.execute("ALTER TABLE sessions ADD COLUMN last_active_at TEXT")
@@ -341,6 +377,103 @@ def get_user_sessions(user_id: int) -> list[dict]:
             "SELECT * FROM sessions WHERE user_id = ? ORDER BY started_at DESC",
             (user_id,)
         ).fetchall()
+        return [dict(r) for r in rows]
+
+# ── PROJECTS ──────────────────────────────────────────────────────────────────
+
+def create_project(user_id: int, name: str) -> int:
+    with get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO projects (user_id, name) VALUES (?, ?)", (user_id, name)
+        )
+        return cur.lastrowid
+
+def get_project(project_id: int) -> dict | None:
+    with get_conn() as conn:
+        row = conn.execute("SELECT * FROM projects WHERE id = ?", (project_id,)).fetchone()
+        return dict(row) if row else None
+
+def list_projects(user_id: int) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM projects WHERE user_id = ? ORDER BY updated_at DESC",
+            (user_id,)
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+def delete_project(project_id: int):
+    with get_conn() as conn:
+        conn.execute("DELETE FROM project_sessions WHERE project_id = ?", (project_id,))
+        conn.execute("DELETE FROM project_files WHERE project_id = ?", (project_id,))
+        conn.execute("DELETE FROM projects WHERE id = ?", (project_id,))
+
+def update_project_note(project_id: int, note: str):
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE projects SET note = ?, updated_at = datetime('now') WHERE id = ?",
+            (note, project_id)
+        )
+
+def add_project_file(project_id: int, user_id: int, stored_name: str,
+                     original_name: str, mime_type: str, file_size: int) -> int:
+    with get_conn() as conn:
+        cur = conn.execute(
+            """INSERT INTO project_files
+               (project_id, user_id, stored_name, original_name, mime_type, file_size)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (project_id, user_id, stored_name, original_name, mime_type, file_size)
+        )
+        conn.execute(
+            "UPDATE projects SET updated_at = datetime('now') WHERE id = ?", (project_id,)
+        )
+        return cur.lastrowid
+
+def list_project_files(project_id: int) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM project_files WHERE project_id = ? ORDER BY created_at DESC",
+            (project_id,)
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+def get_project_file(file_id: int) -> dict | None:
+    with get_conn() as conn:
+        row = conn.execute("SELECT * FROM project_files WHERE id = ?", (file_id,)).fetchone()
+        return dict(row) if row else None
+
+def delete_project_file(file_id: int):
+    with get_conn() as conn:
+        conn.execute("DELETE FROM project_files WHERE id = ?", (file_id,))
+
+def link_session_to_project(project_id: int, session_id: int):
+    with get_conn() as conn:
+        try:
+            conn.execute(
+                "INSERT INTO project_sessions (project_id, session_id) VALUES (?, ?)",
+                (project_id, session_id)
+            )
+            conn.execute(
+                "UPDATE projects SET updated_at = datetime('now') WHERE id = ?", (project_id,)
+            )
+        except Exception:
+            pass  # already linked
+
+def unlink_session_from_project(project_id: int, session_id: int):
+    with get_conn() as conn:
+        conn.execute(
+            "DELETE FROM project_sessions WHERE project_id = ? AND session_id = ?",
+            (project_id, session_id)
+        )
+
+def list_project_sessions(project_id: int) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT s.*, ps.id as link_id
+            FROM sessions s
+            JOIN project_sessions ps ON ps.session_id = s.id
+            WHERE ps.project_id = ?
+            ORDER BY s.started_at DESC
+        """, (project_id,)).fetchall()
         return [dict(r) for r in rows]
 
 def get_session_messages(session_id: int) -> list[dict]:

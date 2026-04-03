@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MovieMaker</title>
+  <title>Filmmaker</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -12,6 +12,7 @@
       --border:  #2a2520;
       --label:   #4a4540;
       --faint:   #3a3028;
+      --accent:  #c8b89a;
     }
     body {
       background: var(--bg);
@@ -21,61 +22,64 @@
       min-height: 100vh;
     }
     .nav {
-      padding: 1.2rem 1.5rem;
+      padding: 1.1rem 2rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .nav-brand {
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--text);
       text-decoration: none;
     }
     .nav-link {
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--label);
       text-decoration: none;
+      transition: color 0.2s;
     }
-    .page { padding: 3rem 2.5rem; max-width: 400px; margin: 0 auto; }
+    .nav-link:hover { color: var(--text); }
+    .page { padding: 4rem 2.5rem; max-width: 420px; margin: 0 auto; }
     .title {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-style: italic;
       font-family: 'Times New Roman', Times, serif;
       color: var(--text);
-      line-height: 1.3;
+      line-height: 1.25;
       margin-bottom: 0.3rem;
     }
-    .divider { width: 30px; height: 1px; background: var(--faint); margin: 1.5rem 0 2rem; }
-    .field { margin-bottom: 1.2rem; }
+    .divider { width: 28px; height: 1px; background: var(--faint); margin: 1.8rem 0 2.2rem; }
+    .field { margin-bottom: 1.5rem; }
     .field label {
       display: block;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--label);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
     .field input {
       width: 100%;
       background: transparent;
       border: none;
       border-bottom: 1px solid var(--border);
-      padding: 0.5rem 0;
-      font-size: 0.9rem;
+      padding: 0.6rem 0;
+      font-size: 0.95rem;
       color: var(--text);
       font-family: inherit;
       outline: none;
+      transition: border-color 0.2s;
     }
-    .field input:focus { border-bottom-color: var(--text); }
+    .field input:focus { border-bottom-color: var(--accent); }
     .field input::placeholder { color: var(--faint); }
     .btn {
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text);
       background: none;
@@ -83,20 +87,67 @@
       cursor: pointer;
       font-family: inherit;
       padding: 0;
+      transition: opacity 0.2s;
     }
-    .btn:hover { opacity: 0.7; }
-    .error { font-size: 0.8rem; color: #c17a5a; margin-bottom: 1rem; }
-    .subtitle {
-      font-size: 0.8rem;
-      color: var(--label);
-      line-height: 1.9;
+    .btn:hover { opacity: 0.6; }
+    .error {
+      font-size: 0.78rem;
+      color: #c17a5a;
+      margin-bottom: 1.2rem;
       letter-spacing: 0.02em;
     }
+    .subtitle {
+      font-size: 0.78rem;
+      color: var(--label);
+      line-height: 2;
+      letter-spacing: 0.02em;
+    }
+    /* Markdown rendering inside AI messages */
+    .md p { margin-bottom: 0.9rem; line-height: 1.85; }
+    .md p:last-child { margin-bottom: 0; }
+    .md h1, .md h2, .md h3 {
+      font-family: 'Times New Roman', serif;
+      font-style: italic;
+      font-weight: normal;
+      margin: 1.2rem 0 0.5rem;
+      color: var(--text);
+    }
+    .md h1 { font-size: 1.2rem; }
+    .md h2 { font-size: 1.05rem; }
+    .md h3 { font-size: 0.95rem; }
+    .md ul, .md ol { margin: 0.4rem 0 0.9rem 1.4rem; }
+    .md li { margin-bottom: 0.35rem; line-height: 1.8; }
+    .md strong { color: var(--accent); font-weight: 600; }
+    .md em { font-style: italic; }
+    .md code {
+      background: rgba(255,255,255,0.06);
+      padding: 0.15rem 0.35rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82em;
+    }
+    .md pre {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+      border-radius: 3px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+    }
+    .md pre code { background: none; padding: 0; }
+    .md blockquote {
+      border-left: 2px solid var(--faint);
+      padding-left: 1rem;
+      color: var(--label);
+      margin: 0.8rem 0;
+      font-style: italic;
+    }
+    .md hr { border: none; border-top: 1px solid var(--border); margin: 1.2rem 0; }
   </style>
 </head>
 <body>
   <nav class="nav">
-    <a href="/" class="nav-brand">MovieMaker</a>
+    <a href="/" class="nav-brand">Filmmaker</a>
     {% block nav_right %}{% endblock %}
   </nav>
   {% block content %}{% endblock %}

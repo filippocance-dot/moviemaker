@@ -1,67 +1,269 @@
 {% extends "base.html" %}
 {% block nav_right %}
-  <div style="display:flex;gap:1.5rem;align-items:center;">
-    <span style="font-size:0.65rem;color:var(--label);letter-spacing:0.1em;text-transform:uppercase;">claude-sonnet</span>
+  <div style="display:flex;gap:2rem;align-items:center;">
+    <a href="/chat/storia" class="nav-link">Storico</a>
+    <span style="font-size:0.6rem;color:var(--label);letter-spacing:0.1em;text-transform:uppercase;opacity:0.5;">claude-sonnet</span>
     <a href="/logout" class="nav-link">Esci</a>
   </div>
 {% endblock %}
 {% block content %}
-<div style="display:flex;flex-direction:column;height:calc(100vh - 49px);">
-  <div id="messages" style="flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem;"></div>
-  <div style="border-top:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;">
-    <input id="input" type="text" placeholder="Scrivi"
-      style="flex:1;background:transparent;border:none;font-size:0.9rem;color:var(--text);font-family:inherit;outline:none;"
-      autocomplete="off">
-    <button onclick="sendMessage()" class="btn">→</button>
+<style>
+  #chat-wrap { display:flex; flex-direction:column; height:calc(100vh - 48px); }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    scroll-behavior: smooth;
+  }
+  .msg { display:flex; flex-direction:column; gap:0.5rem; }
+  .msg.user { align-items: flex-end; }
+  .msg.ai { align-items: flex-start; max-width: 78%; }
+  .msg-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+  .msg-bubble {
+    font-size: 0.88rem;
+    line-height: 1.85;
+    color: var(--text);
+  }
+  .msg.user .msg-bubble {
+    background: var(--border);
+    padding: 0.7rem 1.1rem;
+    border-radius: 2px 12px 12px 12px;
+    max-width: 70%;
+    white-space: pre-wrap;
+  }
+  .msg.ai .msg-bubble { max-width: 100%; }
+
+  #input-area {
+    border-top: 1px solid var(--border);
+    padding: 1rem 2rem 1.4rem;
+    background: var(--bg);
+  }
+  #input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.8rem 1.2rem;
+  }
+  #input-row:focus-within { border-color: var(--faint); }
+  #chat-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    font-size: 0.9rem;
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    resize: none;
+    line-height: 1.65;
+    min-height: 24px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  #chat-input::placeholder { color: var(--label); }
+  #attach-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--label);
+    padding: 2px 4px;
+    font-size: 1rem;
+    line-height: 1;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  #attach-btn:hover { color: var(--text); }
+  #send-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: inherit;
+    padding: 2px 0;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+  #send-btn:hover { opacity: 0.6; }
+  #attach-preview {
+    font-size: 0.7rem;
+    color: var(--label);
+    margin-bottom: 0.5rem;
+    display: none;
+  }
+  #attach-preview.visible { display: block; }
+  #scroll-btn {
+    position: fixed;
+    bottom: 100px;
+    right: 2rem;
+    background: var(--border);
+    border: 1px solid var(--faint);
+    color: var(--text);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    display: none;
+    font-family: inherit;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+  #scroll-btn.visible { display: block; }
+</style>
+
+<div id="chat-wrap">
+  <div id="messages"></div>
+  <div id="input-area">
+    <div id="attach-preview"></div>
+    <div id="input-row">
+      <button id="attach-btn" title="Allega file" onclick="document.getElementById('file-input').click()">⌂</button>
+      <input type="file" id="file-input" style="display:none"
+        accept=".pdf,.txt,.md,.jpg,.jpeg,.png,.webp,.gif">
+      <textarea id="chat-input" placeholder="Scrivi un messaggio..." rows="1"></textarea>
+      <button id="send-btn" onclick="sendMessage()">Invia →</button>
+    </div>
   </div>
 </div>
-<script>
-const messages = document.getElementById('messages');
-const input = document.getElementById('input');
-const SESSION_ID = {{ session_id }};
-let conversation = [];
+<button id="scroll-btn" onclick="scrollToBottom(true)">↓ In fondo</button>
 
-input.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+const SESSION_ID = {{ session_id }};
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('chat-input');
+const attachPreview = document.getElementById('attach-preview');
+const scrollBtn = document.getElementById('scroll-btn');
+const fileInput = document.getElementById('file-input');
+
+let conversation = [];
+let attachment = null;
+let userScrolled = false;
+
+inputEl.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 180) + 'px';
+});
+
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+messagesEl.addEventListener('scroll', () => {
+  const atBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 60;
+  userScrolled = !atBottom;
+  scrollBtn.classList.toggle('visible', userScrolled);
+});
+
+function scrollToBottom(force) {
+  if (force || !userScrolled) {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    userScrolled = false;
+    scrollBtn.classList.remove('visible');
+  }
+}
+
+fileInput.addEventListener('change', async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  attachPreview.textContent = 'Caricamento\u2026';
+  attachPreview.classList.add('visible');
+
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch('/chat/upload', { method: 'POST', body: formData });
+  if (!res.ok) {
+    attachPreview.textContent = 'Errore nel caricamento.';
+    return;
+  }
+  attachment = await res.json();
+  attachPreview.textContent = '\u2713 ' + file.name + ' allegato';
+  fileInput.value = '';
+});
 
 function addMessage(role, content) {
-  const wrap = document.createElement('div');
-  wrap.style.cssText = role === 'user' ? 'text-align:right;' : '';
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + (role === 'user' ? 'user' : 'ai');
+
   const label = document.createElement('div');
-  label.style.cssText = 'font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--label);margin-bottom:0.4rem;';
-  label.textContent = role === 'user' ? 'Tu' : 'MovieMaker';
-  const text = document.createElement('div');
-  text.style.cssText = 'font-size:0.85rem;line-height:1.8;max-width:80%;display:inline-block;text-align:left;white-space:pre-wrap;';
-  text.textContent = content;
-  wrap.appendChild(label);
-  wrap.appendChild(text);
-  messages.appendChild(wrap);
-  messages.scrollTop = messages.scrollHeight;
-  return text;
+  label.className = 'msg-label';
+  label.textContent = role === 'user' ? 'Tu' : 'Filmmaker';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble' + (role === 'ai' ? ' md' : '');
+
+  if (typeof content === 'string') {
+    bubble.textContent = content;
+  }
+
+  msg.appendChild(label);
+  msg.appendChild(bubble);
+  messagesEl.appendChild(msg);
+  scrollToBottom();
+  return bubble;
+}
+
+function renderMarkdown(el, text) {
+  el.innerHTML = marked.parse(text);
 }
 
 async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  addMessage('user', text);
-  conversation.push({role:'user', content:text});
+  const text = inputEl.value.trim();
+  if (!text && !attachment) return;
 
-  const aiText = addMessage('assistant', '');
-  const parent = aiText.parentElement;
-  parent.querySelector('div').textContent = 'MovieMaker';
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+
+  let userContent;
+  if (attachment && attachment.type === 'image_url') {
+    userContent = [
+      { type: 'text', text: text || 'Analizza questa immagine.' },
+      { type: 'image_url', image_url: { url: attachment.url } }
+    ];
+  } else if (attachment && attachment.type === 'text') {
+    userContent = (text ? text + '\n\n' : '') + '[Documento allegato]\n' + attachment.content;
+  } else {
+    userContent = text;
+  }
+
+  const displayText = text || (attachment ? '[file allegato]' : '');
+  addMessage('user', displayText);
+
+  attachment = null;
+  attachPreview.textContent = '';
+  attachPreview.classList.remove('visible');
+
+  conversation.push({ role: 'user', content: userContent });
+
+  const aiBubble = addMessage('ai', '');
+  let full = '';
 
   const res = await fetch('/chat/stream', {
     method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({conversation})
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ conversation })
   });
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
-  let full = '';
 
   while (true) {
-    const {done, value} = await reader.read();
+    const { done, value } = await reader.read();
     if (done) break;
     const chunk = decoder.decode(value);
     for (const line of chunk.split('\n')) {
@@ -69,12 +271,14 @@ async function sendMessage() {
         const data = line.slice(6);
         if (data === '[DONE]') break;
         full += data;
-        aiText.textContent = full;
-        messages.scrollTop = messages.scrollHeight;
+        aiBubble.textContent = full;
+        scrollToBottom();
       }
     }
   }
-  conversation.push({role:'assistant', content:full});
+
+  renderMarkdown(aiBubble, full);
+  conversation.push({ role: 'assistant', content: full });
 }
 
 window.addEventListener('beforeunload', () => {

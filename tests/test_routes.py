@@ -61,3 +61,17 @@ def test_admin_stats_page_loads():
     r = client.get("/admin")
     assert r.status_code == 200
     assert "statistiche" in r.text.lower() or "utenti" in r.text.lower()
+
+def test_chat_has_textarea():
+    from web.db import get_user_by_email, approve_user
+    user = get_user_by_email("t@t.com")
+    if user and user["stato"] != "approved":
+        approve_user(user["id"])
+    r = client.post("/login", data={"email": "t@t.com", "password": "pass123"})
+    if r.status_code != 303:
+        return
+    r = client.get("/chat")
+    assert r.status_code == 200
+    assert "<textarea" in r.text
+    assert "sendBeacon" in r.text
+    assert "userScrolled" in r.text

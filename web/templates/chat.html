@@ -334,7 +334,7 @@ async function readStream(res, bubble, onUpdate) {
     buffer = lines.pop();
     for (const line of lines) {
       if (line.startsWith('data: ')) {
-        const data = line.slice(6);
+        const data = line.slice(6).replace(/\\n/g, '\n');
         if (data === '[DONE]') { onUpdate(full); return; }
         full += data;
         bubble.textContent = full;

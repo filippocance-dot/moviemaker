@@ -273,7 +273,7 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
             async for chunk in stream:
                 delta = chunk.choices[0].delta.content
                 if delta:
-                    yield f"data: {delta}\n\n"
+                    yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
             yield "data: [DONE]\n\n"
         return StreamingResponse(generate_welcome(), media_type="text/event-stream")
 
@@ -309,7 +309,7 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
         async for chunk in stream:
             delta = chunk.choices[0].delta.content
             if delta:
-                yield f"data: {delta}\n\n"
+                yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
         if stream_session_id:
             try:
                 update_session_activity(stream_session_id)

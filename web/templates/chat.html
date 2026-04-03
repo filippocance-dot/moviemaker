@@ -18,9 +18,9 @@
     gap: 2rem;
     scroll-behavior: smooth;
   }
-  .msg { display:flex; flex-direction:column; gap:0.5rem; }
+  .msg { display:flex; flex-direction:column; gap:0.4rem; }
   .msg.user { align-items: flex-end; }
-  .msg.ai { align-items: flex-start; max-width: 78%; }
+  .msg.ai { align-items: flex-start; max-width: 72%; }
   .msg-label {
     font-size: 0.58rem;
     letter-spacing: 0.18em;
@@ -28,18 +28,21 @@
     color: var(--label);
   }
   .msg-bubble {
-    font-size: 0.88rem;
-    line-height: 1.85;
+    font-size: 0.92rem;
+    line-height: 1.9;
     color: var(--text);
   }
   .msg.user .msg-bubble {
     background: var(--border);
-    padding: 0.7rem 1.1rem;
-    border-radius: 2px 12px 12px 12px;
-    max-width: 70%;
+    padding: 0.65rem 1rem;
+    border-radius: 2px 10px 10px 10px;
+    max-width: 68%;
     white-space: pre-wrap;
   }
-  .msg.ai .msg-bubble { max-width: 100%; }
+  .msg.ai .msg-bubble {
+    max-width: 100%;
+    padding-left: 0.1rem;
+  }
 
   #input-area {
     border-top: 1px solid var(--border);
@@ -201,18 +204,20 @@ function addMessage(role, content) {
   const msg = document.createElement('div');
   msg.className = 'msg ' + (role === 'user' ? 'user' : 'ai');
 
-  const label = document.createElement('div');
-  label.className = 'msg-label';
-  label.textContent = role === 'user' ? 'Tu' : 'Filmmaker';
-
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble' + (role === 'ai' ? ' md' : '');
+
+  if (role === 'user') {
+    const label = document.createElement('div');
+    label.className = 'msg-label';
+    label.textContent = 'Tu';
+    msg.appendChild(label);
+  }
 
   if (typeof content === 'string') {
     bubble.textContent = content;
   }
 
-  msg.appendChild(label);
   msg.appendChild(bubble);
   messagesEl.appendChild(msg);
   scrollToBottom();
@@ -260,26 +265,34 @@ async function sendMessage() {
     body: JSON.stringify({ conversation })
   });
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
+  await readStream(res, aiBubble, (text) => { full = text; });
+  renderMarkdown(aiBubble, full);
+  conversation.push({ role: 'assistant', content: full });
+}
 
+async function readStream(res, bubble, onUpdate) {
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder('utf-8', { fatal: false });
+  let full = '';
+  let buffer = '';
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    const chunk = decoder.decode(value);
-    for (const line of chunk.split('\n')) {
+    // stream:true evita di spezzare caratteri multibyte tra chunk
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop(); // l'ultima riga potrebbe essere incompleta
+    for (const line of lines) {
       if (line.startsWith('data: ')) {
         const data = line.slice(6);
-        if (data === '[DONE]') break;
+        if (data === '[DONE]') { onUpdate(full); return; }
         full += data;
-        aiBubble.textContent = full;
+        bubble.textContent = full;
         scrollToBottom();
       }
     }
   }
-
-  renderMarkdown(aiBubble, full);
-  conversation.push({ role: 'assistant', content: full });
+  onUpdate(full);
 }
 
 async function streamWelcome() {
@@ -290,22 +303,7 @@ async function streamWelcome() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ conversation: [], welcome: true })
   });
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value);
-    for (const line of chunk.split('\n')) {
-      if (line.startsWith('data: ')) {
-        const data = line.slice(6);
-        if (data === '[DONE]') break;
-        full += data;
-        aiBubble.textContent = full;
-        scrollToBottom();
-      }
-    }
-  }
+  await readStream(res, aiBubble, (text) => { full = text; });
   renderMarkdown(aiBubble, full);
   conversation.push({ role: 'assistant', content: full });
 }

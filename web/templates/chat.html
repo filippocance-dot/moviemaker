@@ -2,6 +2,7 @@
 {% block nav_right %}
   <a href="/progetti" class="nav-link">Progetti</a>
   <a href="/chat/storia" class="nav-link">Storico</a>
+  {% if is_admin %}<a href="/admin" class="nav-link">Admin</a>{% endif %}
   <button id="model-toggle" onclick="toggleModel()" class="nav-badge" style="cursor:pointer;border:none;background:none;font-family:var(--font);">claude <span id="model-name">sonnet</span></button>
   <a href="/logout" class="nav-link">Esci</a>
 {% endblock %}

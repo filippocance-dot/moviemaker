@@ -228,6 +228,7 @@ def chat_get(request: Request, session: Optional[str] = Cookie(default=None)):
         "profile": profile,
         "is_first_session": profile is None,
         "preferred_model": get_preferred_model(user["id"]),
+        "is_admin": user["email"] == ADMIN_EMAIL,
     })
 
 @app.post("/chat/end-session")

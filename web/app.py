@@ -36,6 +36,44 @@ def _load_system_prompt() -> str:
 
 SYSTEM_PROMPT = _load_system_prompt()
 
+async def _summarize_old_messages(messages: list[dict], keep_recent: int = 8) -> list[dict]:
+    """Se la conversazione supera keep_recent*2 messaggi, riassume i più vecchi."""
+    if len(messages) <= keep_recent * 2:
+        return messages
+
+    from openai import AsyncOpenAI
+    old_msgs = messages[:-keep_recent * 2]
+    recent_msgs = messages[-keep_recent * 2:]
+
+    old_text = "\n".join(
+        f"{m['role'].upper()}: {m['content'] if isinstance(m['content'], str) else '[file allegato]'}"
+        for m in old_msgs
+    )
+    summary_prompt = f"""Riassumi questa parte di conversazione tra un filmmaker e un AI coach in 3-5 frasi.
+Includi: i progetti discussi, le decisioni prese, i punti chiave emersi.
+Sii concreto e preciso — questo riassunto sostituirà la storia della conversazione per continuare il lavoro.
+
+CONVERSAZIONE DA RIASSUMERE:
+{old_text}"""
+
+    try:
+        client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        resp = await client.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "user", "content": summary_prompt}],
+            max_tokens=300,
+            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
+        )
+        summary_text = resp.choices[0].message.content.strip()
+        summary_msg = {
+            "role": "assistant",
+            "content": f"[Riassunto conversazione precedente]\n{summary_text}"
+        }
+        return [summary_msg] + recent_msgs
+    except Exception as e:
+        print(f"Errore summarizzazione: {e}")
+        return messages
+
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@localhost")
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -333,6 +371,9 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
             conversation = conversation[:-1] + [{"role": "user", "content": new_blocks}]
         else:
             conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
+    # Comprimi conversazioni lunghe
+    conversation = await _summarize_old_messages(conversation, keep_recent=8)
+
     import json as _json
     profile = get_profile(user["id"])
     system_content = SYSTEM_PROMPT

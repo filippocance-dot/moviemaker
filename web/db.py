@@ -314,12 +314,20 @@ def upsert_profile(user_id: int, profile_text: str, capability_score: str | None
                 (capability_score, user_id)
             )
 
-def get_profile(user_id: int) -> str:
+def get_profile(user_id: int) -> dict | None:
+    """Restituisce il profilo come dict. None se non esiste."""
+    import json
     with get_conn() as conn:
         row = conn.execute(
             "SELECT profile_text FROM user_profiles WHERE user_id = ?", (user_id,)
         ).fetchone()
-        return row["profile_text"] if row else ""
+        if not row or not row["profile_text"]:
+            return None
+        try:
+            return json.loads(row["profile_text"])
+        except (json.JSONDecodeError, TypeError):
+            # Profilo legacy in formato testo: wrappalo
+            return {"legacy": row["profile_text"]}
 
 def get_profile_full(user_id: int) -> dict:
     with get_conn() as conn:

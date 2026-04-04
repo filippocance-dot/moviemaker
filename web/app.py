@@ -216,22 +216,28 @@ async def chat_end_session(request: Request, session: Optional[str] = Cookie(def
     end_session(session_id, message_count=len(conversation), token_estimate=token_estimate)
 
     existing_profile = get_profile(user["id"])
-    profile_prompt = f"""Sei un assistente che analizza conversazioni tra un filmmaker e un AI coach.
+    import json as _json
 
-PROFILO ESISTENTE DELL'AUTORE (vuoto se prima sessione):
-{existing_profile if existing_profile else "(nessun profilo ancora)"}
+    profile_prompt = f"""Analizza questa conversazione tra un filmmaker e un AI coach e aggiorna il profilo dell'autore.
 
-CONVERSAZIONE DI QUESTA SESSIONE:
-{chr(10).join(f"{m['role'].upper()}: {m['content']}" for m in conversation)}
+PROFILO ESISTENTE (JSON, null se prima sessione):
+{_json.dumps(existing_profile, ensure_ascii=False, indent=2) if existing_profile else "null"}
 
-Aggiorna il profilo dell'autore in italiano. Sii conciso e preciso. Usa questo formato esatto:
+CONVERSAZIONE:
+{chr(10).join(f"{m['role'].upper()}: {m['content']}" for m in conversation if isinstance(m.get('content'), str))}
 
-TEMI RICORRENTI: (temi del suo lavoro che emergono)
-PUNTI DI FORZA: (cosa sa fare bene)
-PUNTI DEBOLI: (dove ha difficoltà)
-PROGETTO ATTUALE: (a cosa sta lavorando)
-PROGRESSI: (confronto con sessioni precedenti, o "prima sessione" se non c'è profilo)
-ULTIMA SESSIONE: (breve sintesi di questa conversazione)"""
+Restituisci SOLO un oggetto JSON valido, senza testo prima o dopo, con questi campi esatti:
+
+{{
+  "progetti_attivi": ["lista dei progetti cinematografici in corso"],
+  "temi_ricorrenti": ["temi, ossessioni, motivi che tornano nel lavoro"],
+  "punti_di_forza": ["cosa sa fare bene come autore"],
+  "aree_di_sviluppo": ["dove ha ancora margine di crescita"],
+  "stile_preferito": "descrizione breve del suo approccio estetico/narrativo",
+  "livello_tecnico": "principiante | intermedio | avanzato",
+  "ultima_sessione": "sintesi in 2-3 frasi di questa conversazione",
+  "progressi": "confronto con sessioni precedenti, o 'prima sessione' se profilo era null"
+}}"""
 
     try:
         client_ai = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
@@ -242,6 +248,11 @@ ULTIMA SESSIONE: (breve sintesi di questa conversazione)"""
             extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
         )
         new_profile = resp.choices[0].message.content.strip()
+        # Verifica che sia JSON valido, altrimenti salva come legacy
+        try:
+            _json.loads(new_profile)
+        except _json.JSONDecodeError:
+            new_profile = _json.dumps({"legacy": new_profile}, ensure_ascii=False)
         upsert_profile(user["id"], new_profile)
     except Exception as e:
         print(f"Errore generazione profilo: {e}")
@@ -322,10 +333,21 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
             conversation = conversation[:-1] + [{"role": "user", "content": new_blocks}]
         else:
             conversation = conversation[:-1] + [{"role": "user", "content": f"{rag_ctx}\n\n{last_user}"}]
+    import json as _json
     profile = get_profile(user["id"])
     system_content = SYSTEM_PROMPT
     if profile:
-        system_content = f"{SYSTEM_PROMPT}\n\nPROFILO DELL'AUTORE (usa queste informazioni per personalizzare le risposte):\n{profile}"
+        if "legacy" in profile:
+            profile_str = profile["legacy"]
+        else:
+            profile_str = f"""Progetti attivi: {', '.join(profile.get('progetti_attivi', [])) or 'nessuno'}
+Temi ricorrenti: {', '.join(profile.get('temi_ricorrenti', [])) or 'nessuno'}
+Punti di forza: {', '.join(profile.get('punti_di_forza', [])) or 'non ancora definiti'}
+Aree di sviluppo: {', '.join(profile.get('aree_di_sviluppo', [])) or 'non ancora definite'}
+Stile: {profile.get('stile_preferito', '')}
+Livello tecnico: {profile.get('livello_tecnico', '')}
+Ultima sessione: {profile.get('ultima_sessione', '')}"""
+        system_content = f"{SYSTEM_PROMPT}\n\nPROFILO DELL'AUTORE:\n{profile_str}"
     msgs = [{"role": "system", "content": system_content}, *conversation]
 
     async def generate():

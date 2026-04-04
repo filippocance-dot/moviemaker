@@ -58,12 +58,11 @@ CONVERSAZIONE DA RIASSUMERE:
 {old_text}"""
 
     try:
-        client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        client = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
         resp = await client.chat.completions.create(
             model=MODEL,
             messages=[{"role": "user", "content": summary_prompt}],
             max_tokens=300,
-            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
         )
         summary_text = resp.choices[0].message.content.strip()
         summary_msg = {
@@ -76,9 +75,11 @@ CONVERSAZIONE DA RIASSUMERE:
         return messages
 
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@localhost")
-OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-MODEL = "anthropic/claude-sonnet-4-6"
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1"
+MODEL_SONNET = "claude-sonnet-4-6"
+MODEL_OPUS = "claude-opus-4-6"
+MODEL = MODEL_SONNET
 
 _db_dir = os.path.dirname(os.path.abspath(os.environ.get("DATABASE_URL", "moviemaker.db")))
 UPLOAD_DIR = os.path.join(_db_dir, "uploads")
@@ -280,12 +281,11 @@ Restituisci SOLO un oggetto JSON valido, senza testo prima o dopo, con questi ca
 }}"""
 
     try:
-        client_ai = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        client_ai = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
         resp = await client_ai.chat.completions.create(
             model=MODEL,
             messages=[{"role": "user", "content": profile_prompt}],
             max_tokens=500,
-            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
         )
         new_profile = resp.choices[0].message.content.strip()
         # Verifica che sia JSON valido, altrimenti salva come legacy
@@ -309,12 +309,11 @@ Restituisci SOLO un oggetto JSON valido, senza testo prima o dopo, con questi ca
                 for m in conversation
             )
         )
-        client_cap = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+        client_cap = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
         resp_cap = await client_cap.chat.completions.create(
             model=MODEL,
             messages=[{"role": "user", "content": capability_prompt}],
             max_tokens=120,
-            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
         )
         cap_score = resp_cap.choices[0].message.content.strip()
         upsert_profile(user["id"], get_profile(user["id"]) or "", capability_score=cap_score)
@@ -332,7 +331,7 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
     from openai import AsyncOpenAI
 
     preferred = get_preferred_model(user["id"])
-    active_model = "anthropic/claude-opus-4-6" if preferred == "opus" else "anthropic/claude-sonnet-4-6"
+    active_model = MODEL_OPUS if preferred == "opus" else MODEL_SONNET
 
     body = await request.json()
     conversation = body.get("conversation", [])
@@ -344,13 +343,12 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
 Presentati brevemente (2 righe max), poi fai UNA sola domanda per capire su cosa sta lavorando o cosa vuole esplorare oggi.
 Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non da assistente."""
         async def generate_welcome():
-            client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+            client = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
             stream = await client.chat.completions.create(
                 model=active_model,
                 messages=[{"role": "system", "content": SYSTEM_PROMPT},
                           {"role": "user", "content": welcome_prompt}],
                 max_tokens=200, stream=True,
-                extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
             )
             async for chunk in stream:
                 delta = chunk.choices[0].delta.content
@@ -398,10 +396,9 @@ Ultima sessione: {profile.get('ultima_sessione', '')}"""
 
     async def generate():
         try:
-            client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+            client = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
             stream = await client.chat.completions.create(
                 model=active_model, messages=msgs, max_tokens=8192, stream=True,
-                extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
             )
             async for chunk in stream:
                 delta = chunk.choices[0].delta.content

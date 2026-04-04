@@ -106,6 +106,10 @@ def init_db():
             conn.execute("ALTER TABLE user_profiles ADD COLUMN capability_score TEXT")
         except Exception:
             pass
+        try:
+            conn.execute("ALTER TABLE user_profiles ADD COLUMN preferred_model TEXT DEFAULT 'sonnet'")
+        except Exception:
+            pass
 
 def create_user(nome: str, email: str, password_hash: str):
     with get_conn() as conn:
@@ -483,6 +487,23 @@ def list_project_sessions(project_id: int) -> list[dict]:
             ORDER BY s.started_at DESC
         """, (project_id,)).fetchall()
         return [dict(r) for r in rows]
+
+def set_preferred_model(user_id: int, model: str):
+    with get_conn() as conn:
+        conn.execute("""
+            INSERT INTO user_profiles (user_id, profile_text, preferred_model)
+            VALUES (?, '', ?)
+            ON CONFLICT(user_id) DO UPDATE SET preferred_model = excluded.preferred_model
+        """, (user_id, model))
+
+def get_preferred_model(user_id: int) -> str:
+    with get_conn() as conn:
+        row = conn.execute(
+            "SELECT preferred_model FROM user_profiles WHERE user_id = ?", (user_id,)
+        ).fetchone()
+        if row and row["preferred_model"]:
+            return row["preferred_model"]
+        return "sonnet"
 
 def get_session_messages(session_id: int) -> list[dict]:
     with get_conn() as conn:

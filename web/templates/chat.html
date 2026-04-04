@@ -2,7 +2,7 @@
 {% block nav_right %}
   <a href="/progetti" class="nav-link">Progetti</a>
   <a href="/chat/storia" class="nav-link">Storico</a>
-  <span class="nav-badge">claude opus</span>
+  <button id="model-toggle" onclick="toggleModel()" class="nav-badge" style="cursor:pointer;border:none;background:none;font-family:var(--font);">claude <span id="model-name">sonnet</span></button>
   <a href="/logout" class="nav-link">Esci</a>
 {% endblock %}
 {% block content %}
@@ -377,6 +377,20 @@ async function streamWelcome() {
 }
 
 if (IS_FIRST_SESSION) streamWelcome();
+
+// Model switcher
+let currentModel = '{{ preferred_model }}';
+document.getElementById('model-name').textContent = currentModel;
+
+async function toggleModel() {
+  currentModel = currentModel === 'sonnet' ? 'opus' : 'sonnet';
+  document.getElementById('model-name').textContent = currentModel;
+  await fetch('/chat/set-model', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: currentModel })
+  });
+}
 
 window.addEventListener('beforeunload', () => {
   if (conversation.length === 0) return;

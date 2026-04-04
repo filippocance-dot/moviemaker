@@ -19,6 +19,7 @@ from web.db import (
     update_project_note, add_project_file, list_project_files,
     get_project_file, delete_project_file,
     link_session_to_project, unlink_session_from_project, list_project_sessions,
+    set_preferred_model, get_preferred_model,
 )
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
@@ -225,6 +226,7 @@ def chat_get(request: Request, session: Optional[str] = Cookie(default=None)):
         "session_id": session_id,
         "profile": profile,
         "is_first_session": profile is None,
+        "preferred_model": get_preferred_model(user["id"]),
     })
 
 @app.post("/chat/end-session")
@@ -329,6 +331,9 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
 
     from openai import AsyncOpenAI
 
+    preferred = get_preferred_model(user["id"])
+    active_model = "anthropic/claude-opus-4-6" if preferred == "opus" else "anthropic/claude-sonnet-4-6"
+
     body = await request.json()
     conversation = body.get("conversation", [])
     welcome = body.get("welcome", False)
@@ -341,7 +346,7 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
         async def generate_welcome():
             client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
             stream = await client.chat.completions.create(
-                model=MODEL,
+                model=active_model,
                 messages=[{"role": "system", "content": SYSTEM_PROMPT},
                           {"role": "user", "content": welcome_prompt}],
                 max_tokens=200, stream=True,
@@ -395,7 +400,7 @@ Ultima sessione: {profile.get('ultima_sessione', '')}"""
         try:
             client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
             stream = await client.chat.completions.create(
-                model=MODEL, messages=msgs, max_tokens=8192, stream=True,
+                model=active_model, messages=msgs, max_tokens=8192, stream=True,
                 extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
             )
             async for chunk in stream:
@@ -415,6 +420,18 @@ Ultima sessione: {profile.get('ultima_sessione', '')}"""
             yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
+
+@app.post("/chat/set-model")
+async def set_model(request: Request, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return Response(status_code=401)
+    body = await request.json()
+    model_choice = body.get("model", "sonnet")
+    if model_choice not in ("sonnet", "opus"):
+        return Response(status_code=400)
+    set_preferred_model(user["id"], model_choice)
+    return Response(status_code=200)
 
 @app.post("/chat/upload")
 async def chat_upload(

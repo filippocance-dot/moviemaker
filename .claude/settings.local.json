@@ -29,7 +29,25 @@
       "Bash(bash:*)",
       "Bash(brew install:*)",
       "WebFetch(domain:federicodematte.com)",
-      "WebFetch(domain:www.prada.com)"
+      "WebFetch(domain:www.prada.com)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(git init:*)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8001/)",
+      "Bash(gh auth:*)",
+      "Bash(gh --version)",
+      "Bash(gh repo:*)",
+      "Bash(npm install:*)",
+      "Bash(railway:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://moviemaker-production-c379.up.railway.app/)",
+      "Bash(curl:*)",
+      "Bash(git push:*)",
+      "Bash(/usr/local/bin/python:*)",
+      "Bash(/usr/bin/python3:*)",
+      "Bash(open:*)"
     ]
   }
 }

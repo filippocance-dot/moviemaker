@@ -103,11 +103,9 @@ def magic_login(token: str = ""):
     if not user:
         return RedirectResponse("/login", status_code=303)
     session_token = make_token(user["id"])
-    html = f"""<!DOCTYPE html><html><head><meta charset="UTF-8">
-<script>document.cookie="session={session_token};path=/;samesite=lax";</script>
-<meta http-equiv="refresh" content="0;url=/admin">
-</head><body></body></html>"""
-    return HTMLResponse(content=html)
+    resp = RedirectResponse("/admin", status_code=303)
+    resp.set_cookie("session", session_token, httponly=True, samesite="lax")
+    return resp
 
 @app.get("/registrati", response_class=HTMLResponse)
 def register_get(request: Request):
@@ -310,21 +308,27 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
     msgs = [{"role": "system", "content": system_content}, *conversation]
 
     async def generate():
-        client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
-        stream = await client.chat.completions.create(
-            model=MODEL, messages=msgs, max_tokens=8192, stream=True,
-            extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
-        )
-        async for chunk in stream:
-            delta = chunk.choices[0].delta.content
-            if delta:
-                yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
-        if stream_session_id:
-            try:
-                update_session_activity(stream_session_id)
-            except Exception as e:
-                print(f"Errore update_session_activity: {e}")
-        yield "data: [DONE]\n\n"
+        try:
+            client = AsyncOpenAI(api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL)
+            stream = await client.chat.completions.create(
+                model=MODEL, messages=msgs, max_tokens=8192, stream=True,
+                extra_headers={"HTTP-Referer": "https://moviemaker.io", "X-Title": "Filmmaker"},
+            )
+            async for chunk in stream:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+        except Exception as e:
+            print(f"Errore stream AI: {e}")
+            error_msg = "Si è verificato un errore. Riprova."
+            yield f"data: {error_msg}\n\n"
+        finally:
+            if stream_session_id:
+                try:
+                    update_session_activity(stream_session_id)
+                except Exception as e:
+                    print(f"Errore update_session_activity: {e}")
+            yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 

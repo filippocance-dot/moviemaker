@@ -1,4 +1,6 @@
 from __future__ import annotations
+import os
+import pickle
 from pathlib import Path
 
 try:
@@ -13,11 +15,21 @@ try:
 except ImportError:
     PYPDF_AVAILABLE = False
 
+try:
+    from sentence_transformers import SentenceTransformer
+    import numpy as np
+    EMBEDDINGS_AVAILABLE = True
+except ImportError:
+    EMBEDDINGS_AVAILABLE = False
+
 DOCS_DIR      = Path(__file__).parent.parent / "docs"
 CHUNK_SIZE    = 350
 CHUNK_OVERLAP = 60
 TOP_K         = 6
 MIN_SCORE     = 0.1
+EMBED_CACHE   = Path(os.environ.get("DATABASE_URL", "moviemaker.db")).parent / "embeddings.pkl"
+MODEL_CACHE   = Path(os.environ.get("DATABASE_URL", "moviemaker.db")).parent / "hf_cache"
+EMBED_MODEL   = "paraphrase-multilingual-MiniLM-L12-v2"
 
 def read_file_content(path: Path) -> str | None:
     try:
@@ -61,13 +73,80 @@ def load_corpus() -> tuple[list[str], list[str], int]:
     return chunks, sources, file_count
 
 def build_index(chunks: list[str]):
+    """Build BM25 index (fallback)."""
     if not BM25_AVAILABLE or not chunks:
         return None
     return BM25Okapi([c.lower().split() for c in chunks])
 
-def retrieve(query: str, index, chunks: list[str], sources: list[str]) -> str:
-    if index is None or not chunks:
+def build_embedding_index(chunks: list[str]) -> dict | None:
+    """Build or load semantic embedding index."""
+    if not EMBEDDINGS_AVAILABLE or not chunks:
+        return None
+    os.makedirs(MODEL_CACHE, exist_ok=True)
+    os.environ["SENTENCE_TRANSFORMERS_HOME"] = str(MODEL_CACHE)
+
+    # Carica da cache se esiste e il numero di chunk corrisponde
+    if EMBED_CACHE.exists():
+        try:
+            with open(EMBED_CACHE, "rb") as f:
+                cached = pickle.load(f)
+            if cached.get("chunk_count") == len(chunks):
+                print(f"Embedding index caricato da cache ({len(chunks)} chunk)")
+                # model_obj non è serializzato nel pickle — ricaricalo
+                cached["model_obj"] = SentenceTransformer(EMBED_MODEL)
+                return cached
+        except Exception:
+            pass
+
+    print(f"Generazione embedding per {len(chunks)} chunk (prima volta, può richiedere qualche minuto)...")
+    model = SentenceTransformer(EMBED_MODEL)
+    embeddings = model.encode(chunks, show_progress_bar=True, batch_size=64, normalize_embeddings=True)
+
+    # Salva solo embeddings + metadata, NON il modello (troppo grande per pickle)
+    data_to_save = {"model": EMBED_MODEL, "embeddings": embeddings, "chunk_count": len(chunks)}
+    try:
+        with open(EMBED_CACHE, "wb") as f:
+            pickle.dump(data_to_save, f)
+        print("Embedding index salvato in cache.")
+    except Exception as e:
+        print(f"Impossibile salvare embedding cache: {e}")
+
+    # Restituisce dict con model_obj in memoria
+    return {"model": EMBED_MODEL, "model_obj": model, "embeddings": embeddings, "chunk_count": len(chunks)}
+
+def retrieve(query: str, index, chunks: list[str], sources: list[str],
+             embed_index: dict | None = None) -> str:
+    """Retrieve relevant chunks. Uses semantic search if available, else BM25."""
+    if not chunks:
         return ""
+    if embed_index is not None and EMBEDDINGS_AVAILABLE:
+        return _retrieve_semantic(query, chunks, sources, embed_index)
+    if index is None:
+        return ""
+    return _retrieve_bm25(query, index, chunks, sources)
+
+def _retrieve_semantic(query: str, chunks: list[str], sources: list[str], embed_index: dict) -> str:
+    os.environ["SENTENCE_TRANSFORMERS_HOME"] = str(MODEL_CACHE)
+    model = embed_index.get("model_obj") or SentenceTransformer(EMBED_MODEL)
+    query_vec = model.encode([query], normalize_embeddings=True)[0]
+    embeddings = embed_index["embeddings"]
+    scores = embeddings @ query_vec  # cosine similarity (vettori normalizzati)
+    ranked = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)
+    selected = []
+    for idx, score in ranked:
+        if float(score) < MIN_SCORE or len(selected) >= TOP_K:
+            break
+        if sum(1 for _, s in selected if s == sources[idx]) >= 2:
+            continue
+        selected.append((chunks[idx], sources[idx]))
+    if not selected:
+        return ""
+    lines = ["[Contesto documentale rilevante]"]
+    for i, (chunk, src) in enumerate(selected, 1):
+        lines.append(f"[{i}] {src}:\n{chunk.strip()}")
+    return "\n\n".join(lines)
+
+def _retrieve_bm25(query: str, index, chunks: list[str], sources: list[str]) -> str:
     scores = index.get_scores(query.lower().split())
     ranked = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)
     selected = []

@@ -48,6 +48,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 corpus_chunks: list = []
 corpus_sources: list = []
 bm25 = None
+embed_index = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -71,6 +72,13 @@ async def lifespan(app: FastAPI):
     corpus_chunks, corpus_sources, n = load_corpus()
     bm25 = build_index(corpus_chunks)
     print(f"Corpus: {n} file, {len(corpus_chunks)} chunk")
+    global embed_index
+    from web.rag import build_embedding_index
+    embed_index = build_embedding_index(corpus_chunks)
+    if embed_index:
+        print("RAG semantico attivo (sentence-transformers)")
+    else:
+        print("RAG BM25 attivo (fallback)")
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -305,7 +313,7 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
         return ""
 
     last_user = next((_extract_text(m["content"]) for m in reversed(conversation) if m["role"] == "user"), "")
-    rag_ctx = retrieve(last_user, bm25, corpus_chunks, corpus_sources)
+    rag_ctx = retrieve(last_user, bm25, corpus_chunks, corpus_sources, embed_index=embed_index)
     if rag_ctx and conversation:
         last_msg = conversation[-1]
         if isinstance(last_msg.get("content"), list):

@@ -97,15 +97,28 @@ def root():
 
 @app.get("/entra", response_class=HTMLResponse)
 def magic_login(token: str = ""):
-    if token != _admin_magic_token():
-        return RedirectResponse("/login", status_code=303)
+    expected = _admin_magic_token()
+    if token != expected:
+        return HTMLResponse(f"Token non valido. Ricevuto: {token[:8]}... Atteso: {expected[:8]}...", status_code=403)
     user = get_user_by_email(ADMIN_EMAIL)
     if not user:
-        return RedirectResponse("/login", status_code=303)
+        return HTMLResponse(f"Admin non trovato nel DB (ADMIN_EMAIL={ADMIN_EMAIL})", status_code=500)
     session_token = make_token(user["id"])
     resp = RedirectResponse("/admin", status_code=303)
-    resp.set_cookie("session", session_token, httponly=True, samesite="lax")
+    resp.set_cookie("session", session_token, httponly=True, samesite="lax", path="/")
     return resp
+
+@app.get("/approva-utente", response_class=HTMLResponse)
+def approva_ultimo_utente(token: str = ""):
+    if token != _admin_magic_token():
+        return HTMLResponse("Token non valido", status_code=403)
+    pending = list_pending()
+    if not pending:
+        return HTMLResponse("Nessun utente in attesa di approvazione.")
+    last = pending[-1]
+    approve_user(last["id"])
+    send_approval_email(last["email"], last["nome"])
+    return HTMLResponse(f"Utente approvato: {last['nome']} ({last['email']})")
 
 @app.get("/registrati", response_class=HTMLResponse)
 def register_get(request: Request):

@@ -137,6 +137,30 @@
   }
   #send-btn:hover { opacity: 0.85; transform: scale(0.95); }
 
+  #mic-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--label);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  #mic-btn:hover { background: var(--elevated); color: var(--text); }
+  #mic-btn.recording {
+    color: #ff453a;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
   #input-hint {
     font-size: 11px;
     color: var(--label);
@@ -178,6 +202,14 @@
       <input type="file" id="file-input" style="display:none"
         accept=".pdf,.txt,.md,.jpg,.jpeg,.png,.webp,.gif">
       <textarea id="chat-input" placeholder="Scrivi un messaggio…" rows="1"></textarea>
+      <button id="mic-btn" onclick="toggleMic()" title="Parla">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
       <button id="send-btn" onclick="sendMessage()" title="Invia">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -391,6 +423,78 @@ async function toggleModel() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: currentModel })
   });
+}
+
+// ── VOICE INPUT ──────────────────────────────────────────────────────────────
+let recognition = null;
+let isRecording = false;
+
+function toggleMic() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert('Il tuo browser non supporta il riconoscimento vocale. Usa Chrome o Safari.');
+    return;
+  }
+
+  if (isRecording) {
+    recognition.stop();
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = 'it-IT';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  const micBtn = document.getElementById('mic-btn');
+  let finalTranscript = '';
+  const existingText = inputEl.value;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    micBtn.classList.add('recording');
+    inputEl.placeholder = 'Sto ascoltando…';
+  };
+
+  recognition.onresult = (e) => {
+    let interim = '';
+    finalTranscript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        finalTranscript += e.results[i][0].transcript;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    // Mostra testo in tempo reale nell'input
+    inputEl.value = (existingText ? existingText + ' ' : '') + finalTranscript + interim;
+    inputEl.style.height = 'auto';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
+  };
+
+  recognition.onend = () => {
+    isRecording = false;
+    micBtn.classList.remove('recording');
+    inputEl.placeholder = 'Scrivi un messaggio…';
+    // Lascia il testo nell'input — l'utente decide quando inviare
+    if (finalTranscript) {
+      inputEl.value = (existingText ? existingText + ' ' : '') + finalTranscript.trim();
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
+      inputEl.focus();
+    }
+  };
+
+  recognition.onerror = (e) => {
+    isRecording = false;
+    micBtn.classList.remove('recording');
+    inputEl.placeholder = 'Scrivi un messaggio…';
+    if (e.error !== 'aborted') {
+      console.warn('Errore riconoscimento vocale:', e.error);
+    }
+  };
+
+  recognition.start();
 }
 
 window.addEventListener('beforeunload', () => {

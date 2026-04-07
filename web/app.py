@@ -20,6 +20,7 @@ from web.db import (
     get_project_file, delete_project_file,
     link_session_to_project, unlink_session_from_project, list_project_sessions,
     set_preferred_model, get_preferred_model,
+    get_project_by_name, get_last_project_session_messages,
 )
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
@@ -364,6 +365,36 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
         if isinstance(content, list):
             return " ".join(p.get("text", "") for p in content if p.get("type") == "text")
         return ""
+
+    # ── Rilevamento nome progetto (solo al primo messaggio) ──────────────────
+    if len(conversation) == 1 and conversation[0]["role"] == "user":
+        first_msg = _extract_text(conversation[0]["content"]).strip()
+        # Solo se il messaggio è breve (probabile nome progetto, non domanda)
+        if len(first_msg.split()) <= 6:
+            matched = get_project_by_name(user["id"], first_msg)
+            if matched:
+                history_msgs = get_last_project_session_messages(matched["id"], max_messages=40)
+                if history_msgs:
+                    import json as _j
+                    history = []
+                    for m in history_msgs:
+                        content = m["content"]
+                        try:
+                            content = _j.loads(content) if content.startswith("[") else content
+                        except Exception:
+                            pass
+                        history.append({"role": m["role"], "content": content})
+                    # Inietta storia + messaggio di ripresa
+                    resume_note = {
+                        "role": "user",
+                        "content": (
+                            f"[L'utente vuole riprendere il lavoro sul progetto '{matched['name']}'. "
+                            f"La cronologia sopra è la sessione precedente. "
+                            f"Riprendi da dove eravamo, senza riepilogare tutto — "
+                            f"fai una sola domanda concreta sul passo successivo.]"
+                        )
+                    }
+                    conversation = history + [resume_note]
 
     last_user = next((_extract_text(m["content"]) for m in reversed(conversation) if m["role"] == "user"), "")
     rag_ctx = retrieve(last_user, bm25, corpus_chunks, corpus_sources, embed_index=embed_index)

@@ -505,6 +505,37 @@ def get_preferred_model(user_id: int) -> str:
             return row["preferred_model"]
         return "sonnet"
 
+def get_project_by_name(user_id: int, name: str) -> dict | None:
+    """Trova un progetto per nome (case-insensitive, match parziale)."""
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM projects WHERE user_id = ? ORDER BY updated_at DESC",
+            (user_id,)
+        ).fetchall()
+        name_lower = name.lower().strip()
+        for row in rows:
+            if row["name"].lower() == name_lower or name_lower in row["name"].lower():
+                return dict(row)
+        return None
+
+def get_last_project_session_messages(project_id: int, max_messages: int = 40) -> list[dict]:
+    """Ritorna i messaggi dell'ultima sessione collegata al progetto."""
+    with get_conn() as conn:
+        session_row = conn.execute("""
+            SELECT s.id FROM sessions s
+            JOIN project_sessions ps ON ps.session_id = s.id
+            WHERE ps.project_id = ? AND s.ended_at IS NOT NULL AND s.message_count > 0
+            ORDER BY s.started_at DESC LIMIT 1
+        """, (project_id,)).fetchone()
+        if not session_row:
+            return []
+        rows = conn.execute("""
+            SELECT role, content FROM messages
+            WHERE session_id = ?
+            ORDER BY created_at ASC LIMIT ?
+        """, (session_row["id"], max_messages)).fetchall()
+        return [dict(r) for r in rows]
+
 def get_session_messages(session_id: int) -> list[dict]:
     with get_conn() as conn:
         rows = conn.execute(

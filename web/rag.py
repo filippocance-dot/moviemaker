@@ -26,6 +26,7 @@ DOCS_DIR      = Path(__file__).parent.parent / "docs"
 CHUNK_SIZE    = 350
 CHUNK_OVERLAP = 60
 TOP_K         = 6
+TOP_K_FETCH   = 20   # fetch più candidati, poi rerank
 MIN_SCORE     = 0.1
 EMBED_CACHE   = Path(os.environ.get("DATABASE_URL", "moviemaker.db")).parent / "embeddings.pkl"
 MODEL_CACHE   = Path(os.environ.get("DATABASE_URL", "moviemaker.db")).parent / "hf_cache"
@@ -116,21 +117,65 @@ def build_embedding_index(chunks: list[str]) -> dict | None:
 
 def retrieve(query: str, index, chunks: list[str], sources: list[str],
              embed_index: dict | None = None) -> str:
-    """Retrieve relevant chunks. Uses semantic search if available, else BM25."""
+    """Retrieve relevant chunks. Uses hybrid reranking if both indexes available, else fallback."""
     if not chunks:
         return ""
+    if embed_index is not None and EMBEDDINGS_AVAILABLE and index is not None and BM25_AVAILABLE:
+        return _retrieve_hybrid(query, index, chunks, sources, embed_index)
     if embed_index is not None and EMBEDDINGS_AVAILABLE:
         return _retrieve_semantic(query, chunks, sources, embed_index)
     if index is None:
         return ""
     return _retrieve_bm25(query, index, chunks, sources)
 
+def _retrieve_hybrid(query: str, index, chunks: list[str], sources: list[str], embed_index: dict) -> str:
+    """Reranking ibrido: semantic score + BM25 score normalizzati e combinati."""
+    import numpy as np
+
+    os.environ["SENTENCE_TRANSFORMERS_HOME"] = str(MODEL_CACHE)
+    model = embed_index.get("model_obj") or SentenceTransformer(EMBED_MODEL)
+    query_vec = model.encode([query], normalize_embeddings=True)[0]
+    embeddings = embed_index["embeddings"]
+    sem_scores = embeddings @ query_vec
+
+    bm25_raw = index.get_scores(query.lower().split())
+
+    # Normalizza entrambi in [0, 1]
+    def _normalize(arr):
+        mn, mx = arr.min(), arr.max()
+        if mx - mn < 1e-9:
+            return arr * 0
+        return (arr - mn) / (mx - mn)
+
+    sem_norm = _normalize(sem_scores)
+    bm25_norm = _normalize(bm25_raw)
+
+    # Combina: 70% semantic + 30% BM25
+    hybrid = 0.7 * sem_norm + 0.3 * bm25_norm
+
+    ranked = sorted(enumerate(hybrid), key=lambda x: x[1], reverse=True)
+    selected = []
+    for idx, score in ranked:
+        if float(sem_scores[idx]) < MIN_SCORE or len(selected) >= TOP_K:
+            break
+        # Max 2 chunk per fonte
+        if sum(1 for _, s in selected if s == sources[idx]) >= 2:
+            continue
+        selected.append((chunks[idx], sources[idx]))
+
+    if not selected:
+        return ""
+    lines = ["[Contesto documentale rilevante]"]
+    for i, (chunk, src) in enumerate(selected, 1):
+        lines.append(f"[{i}] {src}:\n{chunk.strip()}")
+    return "\n\n".join(lines)
+
 def _retrieve_semantic(query: str, chunks: list[str], sources: list[str], embed_index: dict) -> str:
     os.environ["SENTENCE_TRANSFORMERS_HOME"] = str(MODEL_CACHE)
     model = embed_index.get("model_obj") or SentenceTransformer(EMBED_MODEL)
     query_vec = model.encode([query], normalize_embeddings=True)[0]
     embeddings = embed_index["embeddings"]
-    scores = embeddings @ query_vec  # cosine similarity (vettori normalizzati)
+    scores = embeddings @ query_vec
     ranked = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)
     selected = []
     for idx, score in ranked:

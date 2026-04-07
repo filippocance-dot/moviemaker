@@ -1,0 +1,124 @@
+# URLs corpus FilmMaker — trovate automaticamente
+# Formato: url categoria nome_file
+# Usare con: python3 corpus_builder.py --batch urls.txt
+# (il batch usa solo la prima colonna; categoria e nome vanno aggiunti a mano o ignorati)
+
+# ── BATCH 1 ──────────────────────────────────────────────────────────────────
+
+# 1. Haneke — Il settimo continente (Senses of Cinema + Film Comment)
+https://www.sensesofcinema.com/2005/cteq/seventh_continent/
+https://www.sensesofcinema.com/2003/great-directors/haneke-2/
+https://www.filmcomment.com/article/michael-haneke-interview/
+
+# 2. Akerman — Jeanne Dielman (Criterion)
+https://www.criterion.com/current/posts/1215-a-matter-of-time-jeanne-dielman-23-quai-du-commerce-1080-bruxelles
+https://www.sensesofcinema.com/2015/chantal-akerman/a-last-conversation-with-chantal-akerman/
+
+# 3. Marina de Van — Dans ma peau
+# Non trovata intervista diretta — aggiungere manualmente da Film Comment o Cahiers
+
+# 4. Bresson — Note sul cinematografo (Archive.org PDF)
+https://archive.org/details/notesoncinematog0000bres_b2v8
+
+# 5. Byung-Chul Han — La società della stanchezza (Archive.org)
+https://archive.org/details/byung-chul-han-the-burnout-society-2015-stanford-briefs-libgen.lc
+
+# 6. Tarkovsky — interviste e saggi (Senses of Cinema)
+https://www.sensesofcinema.com/2002/great-directors/tarkovsky/
+https://www.sensesofcinema.com/2009/feature-articles/tarkovsky-ortega-y-gasset/
+
+# 7. Sciamma — processo di scrittura (Film Comment + BAFTA YouTube)
+https://www.filmcomment.com/blog/interview-excerpt-celine-sciamma/
+https://nofilmschool.com/celine-sciamma-screenwriting-advice
+https://guru.bafta.org/céline-sciamma-screenwriters'-lecture-series
+
+# 8. Mackendrick — On Film-Making (Archive.org)
+https://archive.org/details/onfilmmakingintr0000mack_p0m8
+
+# 9. Murch — In the Blink of an Eye (Archive.org)
+https://archive.org/details/inblinkofeye00murc
+
+# 10. Kubrick — Ciment interviews (visual-memory.co.uk)
+http://www.visual-memory.co.uk/amk/doc/interview.html
+http://www.visual-memory.co.uk/amk/doc/interview.ts.html
+http://www.visual-memory.co.uk/amk/doc/interview.bl.html
+
+# ── BATCH 2 ──────────────────────────────────────────────────────────────────
+
+# 11. Lynch — Catching the Big Fish (Archive.org)
+https://archive.org/details/catchingbigfishm00lync
+
+# 12. Herzog — Minnesota Declaration (Walker Art Center)
+https://walkerart.org/magazine/minnesota-declaration-truth-documentary-cinema-1999/
+
+# 13. Apichatpong — Memoria (Film Comment + Criterion)
+https://www.filmcomment.com/blog/the-film-comment-podcast-apichatpong-weerasethakul-tilda-swinton-on-memoria-interview/
+https://www.criterion.com/current/posts/8091-apichatpong-weerasethakuls-cinema-of-now
+
+# 14. Kelly Reichardt — processo (Film Comment)
+https://www.filmcomment.com/blog/the-film-comment-podcast-kelly-reichardt-on-showing-up/
+
+# 15. Lisandro Alonso — processo (Senses of Cinema + Film Comment)
+https://www.sensesofcinema.com/2009/conversations-on-film/lisandro-alonso-interview/
+https://www.sensesofcinema.com/2005/conversations-with-filmmakers-36/lisandro_alonso/
+https://www.filmcomment.com/blog/interview-lisandro-alonso-jauja/
+
+# 16. Frank Daniel — Sequence Approach (Archive.org)
+https://archive.org/details/screenwritingthesequenceapproachpauljosephgulino
+
+# 17. Carrière — Secret Language of Film (Archive.org)
+https://archive.org/details/TheSecretLanguageOfFilm
+
+# 18. Béla Tarr — interviste (Senses of Cinema + BFI)
+https://www.sensesofcinema.com/2017/great-directors/bela-tarr/
+https://www.bfi.org.uk/interviews/bela-tarr-satantango-werckmeister-harmonies
+
+# 19. Bruno Dumont — attori non professionisti (Senses of Cinema + Film Comment)
+https://www.sensesofcinema.com/2017/movements-filmmaker-interviews/bruno-dumont-interview/
+https://www.filmcomment.com/blog/cannes-interview-bruno-dumont-ma-loute-slack-bay/
+
+# 20. Lucrecia Martel (Criterion — su Zama, non La Ciénaga specif.)
+https://www.criterion.com/current/posts/4876-venice-toronto-2017-lucrecia-martel-s-zama
+
+# ── BATCH 3 ──────────────────────────────────────────────────────────────────
+
+# 21. Laura Mulvey — Visual Pleasure (PDF Monoskop)
+https://monoskop.org/File:Mulvey_Laura_1975_Visual_Pleasure_and_Narrative_Cinema.pdf
+
+# 23. Susan Sontag — Against Interpretation (Archive.org)
+https://archive.org/details/againstinterpret00sont
+
+# 25. André Bazin — What Is Cinema (Archive.org)
+https://archive.org/details/Bazin_Andre_What_Is_Cinema_Volume_1
+https://archive.org/details/Bazin_Andre_What_Is_Cinema_Volume_2
+
+# 26. Wang Bing — interviste (Senses of Cinema + Film Comment)
+https://www.sensesofcinema.com/2024/feature-articles/from-witness-to-performer-the-evolving-interview-methods-in-wang-bings-documentaries/
+https://www.filmcomment.com/article/wang-bing-documentary-taang-crude-oil-tie-xi-qu/
+https://www.filmcomment.com/blog/interview-wang-bing/
+
+# 27. Wiseman — Paris Review intervista (testo completo)
+https://www.theparisreview.org/interviews/7210/the-art-of-documentary-no-1-frederick-wiseman
+
+# 29. Agnes Varda — La Pointe Courte (Criterion)
+https://www.criterion.com/current/posts/497-la-pointe-courte-how-agn-s-varda-invented-the-new-wave
+https://www.criterion.com/current/posts/1281-agnes-varda-in-the-believer
+
+# 31. Cassavetes — improvvisazione (Senses of Cinema)
+https://www.sensesofcinema.com/2000/feature-articles/cassavetes/
+https://www.sensesofcinema.com/2016/great-directors/john-cassavetes/
+
+# 35. Pedro Costa — processo (Film Comment)
+https://www.filmcomment.com/blog/interview-excerpt-pedro-costa/
+https://read.kinoscope.org/2020/02/23/the-camera-becomes-a-friend-an-interview-with-pedro-costa/
+
+# 38. Alice Rohrwacher — processo (Film Comment)
+https://www.filmcomment.com/blog/interview-alice-rohrwacher/
+https://www.filmcomment.com/blog/can-you-dig-it-alice-rohrwacher-la-chimera/
+
+# ── DA AGGIUNGERE MANUALMENTE (non trovate online libere) ──────────────────
+# 3.  Marina de Van — Dans ma peau (intervista)
+# 22. Trinh T. Minh-ha — Woman Native Other
+# 24. Kracauer — Theory of Film
+# 33. Godard — Introduction à une véritable histoire du cinéma
+# 45. Dardenne — Au dos de nos images (non su archive.org)

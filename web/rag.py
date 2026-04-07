@@ -80,40 +80,41 @@ def build_index(chunks: list[str]):
     return BM25Okapi([c.lower().split() for c in chunks])
 
 def build_embedding_index(chunks: list[str]) -> dict | None:
-    """Build or load semantic embedding index."""
+    """Build or load semantic embedding index. Returns None on any failure (fallback to BM25)."""
     if not EMBEDDINGS_AVAILABLE or not chunks:
         return None
-    os.makedirs(MODEL_CACHE, exist_ok=True)
-    os.environ["SENTENCE_TRANSFORMERS_HOME"] = str(MODEL_CACHE)
-
-    # Carica da cache se esiste e il numero di chunk corrisponde
-    if EMBED_CACHE.exists():
-        try:
-            with open(EMBED_CACHE, "rb") as f:
-                cached = pickle.load(f)
-            if cached.get("chunk_count") == len(chunks):
-                print(f"Embedding index caricato da cache ({len(chunks)} chunk)")
-                # model_obj non è serializzato nel pickle — ricaricalo
-                cached["model_obj"] = SentenceTransformer(EMBED_MODEL)
-                return cached
-        except Exception:
-            pass
-
-    print(f"Generazione embedding per {len(chunks)} chunk (prima volta, può richiedere qualche minuto)...")
-    model = SentenceTransformer(EMBED_MODEL)
-    embeddings = model.encode(chunks, show_progress_bar=True, batch_size=64, normalize_embeddings=True)
-
-    # Salva solo embeddings + metadata, NON il modello (troppo grande per pickle)
-    data_to_save = {"model": EMBED_MODEL, "embeddings": embeddings, "chunk_count": len(chunks)}
     try:
-        with open(EMBED_CACHE, "wb") as f:
-            pickle.dump(data_to_save, f)
-        print("Embedding index salvato in cache.")
-    except Exception as e:
-        print(f"Impossibile salvare embedding cache: {e}")
+        os.makedirs(MODEL_CACHE, exist_ok=True)
+        os.environ["SENTENCE_TRANSFORMERS_HOME"] = str(MODEL_CACHE)
 
-    # Restituisce dict con model_obj in memoria
-    return {"model": EMBED_MODEL, "model_obj": model, "embeddings": embeddings, "chunk_count": len(chunks)}
+        # Carica da cache se esiste e il numero di chunk corrisponde
+        if EMBED_CACHE.exists():
+            try:
+                with open(EMBED_CACHE, "rb") as f:
+                    cached = pickle.load(f)
+                if cached.get("chunk_count") == len(chunks):
+                    print(f"Embedding index caricato da cache ({len(chunks)} chunk)")
+                    cached["model_obj"] = SentenceTransformer(EMBED_MODEL)
+                    return cached
+            except Exception as e:
+                print(f"Cache embedding non valida, rigenero: {e}")
+
+        print(f"Generazione embedding per {len(chunks)} chunk...")
+        model = SentenceTransformer(EMBED_MODEL)
+        embeddings = model.encode(chunks, show_progress_bar=True, batch_size=64, normalize_embeddings=True)
+
+        data_to_save = {"model": EMBED_MODEL, "embeddings": embeddings, "chunk_count": len(chunks)}
+        try:
+            with open(EMBED_CACHE, "wb") as f:
+                pickle.dump(data_to_save, f)
+            print("Embedding index salvato in cache.")
+        except Exception as e:
+            print(f"Impossibile salvare embedding cache: {e}")
+
+        return {"model": EMBED_MODEL, "model_obj": model, "embeddings": embeddings, "chunk_count": len(chunks)}
+    except Exception as e:
+        print(f"RAG semantico non disponibile, uso BM25: {e}")
+        return None
 
 def retrieve(query: str, index, chunks: list[str], sources: list[str],
              embed_index: dict | None = None) -> str:

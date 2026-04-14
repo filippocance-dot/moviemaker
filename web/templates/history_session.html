@@ -39,6 +39,7 @@
     {{ sess.started_at[:10] }} — {{ sess.started_at[11:16] }}
   </div>
   <div style="font-size:12px;color:var(--label);margin-bottom:0.3rem;">{{ sess.message_count }} messaggi</div>
+  <button id="export-session-btn" style="margin-top:12px;background:none;border:1px solid var(--border2);color:var(--label);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font);transition:all 0.15s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--label)';this.style.borderColor='var(--border2)'" onclick="exportSession()">↓ Esporta .md</button>
   <div style="width:28px;height:1px;background:var(--border2);margin:1.5rem 0 2.5rem;"></div>
 
   {% for m in messages %}
@@ -60,5 +61,26 @@ document.querySelectorAll('.h-bubble.md').forEach(el => {
   const raw = el.getAttribute('data-content');
   if (raw) el.innerHTML = DOMPurify.sanitize(marked.parse(raw));
 });
+
+function exportSession() {
+  const date = '{{ sess.started_at[:10] }}';
+  const time = '{{ sess.started_at[11:16] }}'.replace(':','-');
+  let md = `# FilmMaker — Sessione ${date} ${time}\n\n`;
+  document.querySelectorAll('.h-msg').forEach(el => {
+    const bubble = el.querySelector('.h-bubble');
+    const content = bubble.getAttribute('data-content') || bubble.textContent;
+    if (el.classList.contains('user')) {
+      md += `**Tu:** ${content.trim()}\n\n`;
+    } else {
+      md += `**FilmMaker:** ${content.trim()}\n\n---\n\n`;
+    }
+  });
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `FilmMaker_${date}_${time}.md`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 </script>
 {% endblock %}

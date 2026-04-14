@@ -470,10 +470,14 @@ async def chat_upload(
 ):
     user = get_current_user(session)
     if not user:
+        print(f"[upload] 401 — sessione non valida o scaduta")
         return Response(status_code=401)
 
     content_type = file.content_type or ""
+    filename = file.filename or ""
     data = await file.read()
+    print(f"[upload] {filename!r} content_type={content_type!r} size={len(data)}")
+
     if len(data) > 10 * 1024 * 1024:  # 10 MB
         return Response(status_code=413, content="File troppo grande (max 10 MB)")
 
@@ -484,22 +488,39 @@ async def chat_upload(
         return {"type": "image_url", "url": f"data:{content_type};base64,{b64}"}
 
     # PDF → estrazione testo con pypdf
-    if content_type == "application/pdf" or (file.filename and file.filename.endswith(".pdf")):
+    if content_type == "application/pdf" or filename.endswith(".pdf"):
         import io
         from pypdf import PdfReader
         try:
             reader = PdfReader(io.BytesIO(data))
             text = "\n".join(page.extract_text() or "" for page in reader.pages)
+            print(f"[upload] PDF OK — {len(text)} caratteri estratti")
             return {"type": "text", "content": text[:20000]}
         except Exception as e:
-            print(f"Errore lettura PDF: {e}")
+            print(f"[upload] PDF errore: {e}")
             return Response(status_code=422, content="PDF non leggibile")
 
-    # Testo plain / markdown
+    # Word .docx → estrazione testo
+    if (content_type in ("application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                          "application/msword") or filename.endswith((".docx", ".doc"))):
+        try:
+            import io
+            from docx import Document
+            doc = Document(io.BytesIO(data))
+            text = "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+            print(f"[upload] DOCX OK — {len(text)} caratteri estratti")
+            return {"type": "text", "content": text[:20000]}
+        except Exception as e:
+            print(f"[upload] DOCX errore: {e} — fallback testo grezzo")
+            # fallthrough a testo grezzo se python-docx non disponibile
+
+    # Testo plain / markdown / fdx / altri
     try:
         text = data.decode("utf-8", errors="replace")
+        print(f"[upload] testo grezzo OK — {len(text)} caratteri")
         return {"type": "text", "content": text[:20000]}
-    except Exception:
+    except Exception as e:
+        print(f"[upload] decode fallito: {e}")
         return Response(status_code=422, content="Formato non supportato")
 
 @app.get("/chat/storia", response_class=HTMLResponse)
@@ -520,7 +541,6 @@ def chat_history_session(session_id: int, request: Request, session: Optional[st
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
-    # Verifica che la sessione appartenga all'utente
     sess = get_session(session_id)
     if not sess or sess["user_id"] != user["id"]:
         return RedirectResponse("/chat/storia", status_code=303)
@@ -530,6 +550,32 @@ def chat_history_session(session_id: int, request: Request, session: Optional[st
         "sess": sess,
         "messages": msgs,
     })
+
+@app.get("/chat/storia/{session_id}/export")
+def chat_export_session(session_id: int, session: Optional[str] = Cookie(default=None)):
+    user = get_current_user(session)
+    if not user:
+        return Response(status_code=401)
+    sess = get_session(session_id)
+    if not sess or sess["user_id"] != user["id"]:
+        return Response(status_code=403)
+    msgs = get_session_messages(session_id)
+    date = sess["started_at"][:10]
+    time = sess["started_at"][11:16].replace(":", "-")
+    lines = [f"# FilmMaker — Sessione {date} {sess['started_at'][11:16]}\n\n"]
+    for m in msgs:
+        content = m["content"] if isinstance(m.get("content"), str) else "[contenuto multimediale]"
+        if m["role"] == "user":
+            lines.append(f"**Tu:** {content}\n\n")
+        elif m["role"] == "assistant":
+            lines.append(f"**FilmMaker:** {content}\n\n---\n\n")
+    md = "".join(lines)
+    filename = f"FilmMaker_{date}_{time}.md"
+    return Response(
+        content=md.encode("utf-8"),
+        media_type="text/markdown; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 # --- Admin ---
 

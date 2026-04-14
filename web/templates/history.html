@@ -26,7 +26,11 @@
           {{ s.message_count }} messaggi
         </div>
       </div>
-      <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--label);">Leggi →</div>
+      <div style="display:flex;gap:1.2rem;align-items:center;">
+        <span class="export-link" data-id="{{ s.id }}" data-date="{{ s.started_at[:10] }}" data-time="{{ s.started_at[11:16] }}" style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--label);cursor:pointer;transition:color 0.15s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--label)'"
+        onclick="event.preventDefault();event.stopPropagation();exportSession(this.dataset.id, this.dataset.date, this.dataset.time)">↓ Esporta</span>
+        <span style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--label);">Leggi →</span>
+      </div>
     </div>
   </a>
   {% endfor %}
@@ -35,4 +39,16 @@
   {% endif %}
 
 </div>
+<script>
+async function exportSession(id, date, time) {
+  const res = await fetch(`/chat/storia/${id}/export`);
+  if (!res.ok) { alert('Errore nel download'); return; }
+  const blob = await res.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `FilmMaker_${date}_${time.replace(':','-')}.md`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
 {% endblock %}

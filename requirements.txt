@@ -10,3 +10,4 @@ rank-bm25>=0.2.2
 rich>=13.0.0
 uvicorn>=0.29.0
 sentence-transformers>=3.0.0
+# export feature deployed Tue Apr 14 17:50:54 CEST 2026

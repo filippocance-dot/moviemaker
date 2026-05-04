@@ -153,6 +153,26 @@
   }
   #send-btn:hover { opacity: 0.85; transform: scale(0.95); }
 
+  #script-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--label);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  #script-btn:hover { background: var(--elevated); color: var(--accent); }
+  #script-btn.generating {
+    color: var(--accent);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
   #mic-btn {
     background: none;
     border: none;
@@ -223,6 +243,14 @@
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+      <button id="script-btn" onclick="generaSceneggiatura()" title="Genera sceneggiatura" style="display:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
         </svg>
       </button>
       <button id="mic-btn" onclick="toggleMic()" title="Parla">
@@ -325,6 +353,7 @@ fileInput.addEventListener('change', async () => {
   attachment = json;
   attachPreview.textContent = '\u2713 ' + file.name + ' allegato';
   fileInput.value = '';
+  if (json.type === 'text') mostraBottoneSceneggiatura();
 });
 
 function addMessage(role, content) {
@@ -464,6 +493,62 @@ async function toggleModel() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: currentModel })
   });
+}
+
+// ── GENERA SCENEGGIATURA ─────────────────────────────────────────────────────
+let documentoCaricato = false;
+
+function mostraBottoneSceneggiatura() {
+  documentoCaricato = true;
+  document.getElementById('script-btn').style.display = 'flex';
+}
+
+async function generaSceneggiatura() {
+  if (isStreaming) return;
+  if (conversation.length < 2) {
+    alert('Prima carica una sceneggiatura e discuti le modifiche con l\'AI.');
+    return;
+  }
+
+  const btn = document.getElementById('script-btn');
+  btn.classList.add('generating');
+
+  const aiBubble = addMessage('ai', '');
+  aiBubble.textContent = 'Sto generando la sceneggiatura formattata...';
+  scrollToBottom(true);
+
+  try {
+    const res = await fetch('/chat/genera-sceneggiatura', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conversation })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      aiBubble.textContent = 'Errore: ' + (data.error || 'generazione fallita');
+      return;
+    }
+    // Crea file HTML scaricabile
+    const blob = new Blob([data.html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sceneggiatura.html';
+
+    aiBubble.innerHTML = '<p>Sceneggiatura generata.</p>' +
+      '<a href="' + url + '" download="sceneggiatura.html" ' +
+      'style="display:inline-block;margin-top:8px;padding:8px 16px;background:var(--accent);color:#0a0b0d;' +
+      'border-radius:20px;font-size:13px;font-weight:600;text-decoration:none;">' +
+      'Scarica sceneggiatura</a>' +
+      '<p style="margin-top:8px;font-size:11px;color:var(--label);">' +
+      'Apri il file nel browser e stampa come PDF, oppure copia in Pages/Word per modificarlo.</p>';
+
+    conversation.push({ role: 'assistant', content: '[Sceneggiatura generata e scaricata]' });
+  } catch (e) {
+    aiBubble.textContent = 'Errore di connessione. Riprova.';
+  } finally {
+    btn.classList.remove('generating');
+  }
 }
 
 // ── VOICE INPUT ──────────────────────────────────────────────────────────────

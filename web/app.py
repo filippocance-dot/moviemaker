@@ -464,7 +464,51 @@ async def genera_sceneggiatura(request: Request, session: Optional[str] = Cookie
     body = await request.json()
     conversation = body.get("conversation", [])
 
-    prompt_sceneggiatura = """Basandoti sull'INTERA conversazione precedente — il documento originale caricato dall'autore, le analisi fatte insieme, le modifiche discusse, gli appunti tecnici — genera una sceneggiatura completa e aggiornata.
+    mode = body.get("mode", "check")  # "check" = fai domande, "generate" = scrivi
+
+    if mode == "check":
+        prompt_check = """L'autore vuole che tu generi la sceneggiatura formattata basandoti sulla conversazione fatta finora.
+
+PRIMA DI SCRIVERE QUALSIASI COSA, analizza quello che sai e quello che NON sai. Poi rispondi con:
+
+1. Un brevissimo riepilogo di cosa hai capito del progetto (3-4 righe max)
+2. Una lista PRECISA di domande su tutto quello che ti manca per scrivere una sceneggiatura completa e dettagliata. Per ogni scena che conosci chiediti:
+   - I dialoghi sono completi o mancano battute?
+   - Le azioni sono descritte nel dettaglio o sono vaghe?
+   - Le indicazioni tecniche (camera, montaggio, suono) ci sono?
+   - L'ordine delle scene è definitivo?
+   - Mancano scene di transizione?
+   - I nomi dei personaggi sono definiti?
+   - Le location sono specifiche?
+
+3. Se invece hai GIÀ tutto quello che ti serve (perché la conversazione è stata molto dettagliata), dillo chiaramente e chiedi conferma per procedere.
+
+Sii diretto. Fai domande concrete, non generiche. Esempio buono: "Nella scena del supermercato, lei parla con qualcuno o è in silenzio?". Esempio cattivo: "Hai altre indicazioni?".
+
+NON generare la sceneggiatura adesso. Fai solo le domande."""
+
+        conversation_with_prompt = conversation + [{"role": "user", "content": prompt_check}]
+
+        async def stream_check():
+            try:
+                client = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
+                stream = await client.chat.completions.create(
+                    model=active_model,
+                    messages=[{"role": "system", "content": SYSTEM_PROMPT}, *conversation_with_prompt],
+                    max_tokens=4000, stream=True,
+                )
+                async for chunk in stream:
+                    delta = chunk.choices[0].delta.content
+                    if delta:
+                        yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+            except Exception as e:
+                yield f"data: Errore: {e}\n\n"
+            yield "data: [DONE]\n\n"
+
+        return StreamingResponse(stream_check(), media_type="text/event-stream")
+
+    # mode == "generate"
+    prompt_sceneggiatura = """Ora genera la sceneggiatura completa e aggiornata basandoti su TUTTO: il documento originale, le analisi, le modifiche discusse, le risposte alle domande che hai fatto.
 
 FORMATO OBBLIGATORIO — sceneggiatura professionale:
 - Usa SOLO questo formato HTML. Niente markdown, niente testo libero.
@@ -482,7 +526,7 @@ REGOLE:
 - Gli appunti tecnici di regia vanno prima della scena a cui si riferiscono
 - Dialoghi in formato sceneggiatura classica (centrati, con nome personaggio sopra)
 - Non aggiungere nulla che non sia stato discusso — sei un trascrittore preciso, non un co-autore
-- Restituisci SOLO il contenuto HTML delle scene, senza <html>, <head>, <body> — quelli li aggiungo io
+- Restituisci SOLO il contenuto HTML delle scene, senza <html>, <head>, <body>
 - Inizia direttamente con la prima <div class="sh">"""
 
     conversation_with_prompt = conversation + [{"role": "user", "content": prompt_sceneggiatura}]

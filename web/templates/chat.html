@@ -503,6 +503,8 @@ function mostraBottoneSceneggiatura() {
   document.getElementById('script-btn').style.display = 'flex';
 }
 
+let scriptPhase = 'idle'; // 'idle' → 'checking' → 'ready'
+
 async function generaSceneggiatura() {
   if (isStreaming) return;
   if (conversation.length < 2) {
@@ -511,43 +513,79 @@ async function generaSceneggiatura() {
   }
 
   const btn = document.getElementById('script-btn');
-  btn.classList.add('generating');
 
-  const aiBubble = addMessage('ai', '');
-  aiBubble.textContent = 'Sto generando la sceneggiatura formattata...';
-  scrollToBottom(true);
+  if (scriptPhase === 'idle' || scriptPhase === 'checking') {
+    // FASE 1: L'AI fa domande su quello che le manca
+    btn.classList.add('generating');
+    isStreaming = true;
+    document.getElementById('send-btn').style.opacity = '0.4';
 
-  try {
-    const res = await fetch('/chat/genera-sceneggiatura', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conversation })
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      aiBubble.textContent = 'Errore: ' + (data.error || 'generazione fallita');
-      return;
+    const aiBubble = addMessage('ai', '');
+    let full = '';
+
+    try {
+      const res = await fetch('/chat/genera-sceneggiatura', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversation, mode: 'check' })
+      });
+      await readStream(res, aiBubble, (text) => { full = text; });
+      if (full) {
+        renderMarkdown(aiBubble, full);
+        conversation.push({ role: 'assistant', content: full });
+      }
+      scriptPhase = 'ready';
+      btn.title = 'Genera sceneggiatura (pronto)';
+      btn.style.color = 'var(--accent)';
+    } catch (e) {
+      aiBubble.textContent = 'Errore di connessione. Riprova.';
+    } finally {
+      btn.classList.remove('generating');
+      isStreaming = false;
+      document.getElementById('send-btn').style.opacity = '';
     }
-    // Crea file HTML scaricabile
-    const blob = new Blob([data.html], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'sceneggiatura.html';
+    return;
+  }
 
-    aiBubble.innerHTML = '<p>Sceneggiatura generata.</p>' +
-      '<a href="' + url + '" download="sceneggiatura.html" ' +
-      'style="display:inline-block;margin-top:8px;padding:8px 16px;background:var(--accent);color:#0a0b0d;' +
-      'border-radius:20px;font-size:13px;font-weight:600;text-decoration:none;">' +
-      'Scarica sceneggiatura</a>' +
-      '<p style="margin-top:8px;font-size:11px;color:var(--label);">' +
-      'Apri il file nel browser e stampa come PDF, oppure copia in Pages/Word per modificarlo.</p>';
+  if (scriptPhase === 'ready') {
+    // FASE 2: Genera il documento
+    btn.classList.add('generating');
 
-    conversation.push({ role: 'assistant', content: '[Sceneggiatura generata e scaricata]' });
-  } catch (e) {
-    aiBubble.textContent = 'Errore di connessione. Riprova.';
-  } finally {
-    btn.classList.remove('generating');
+    const aiBubble = addMessage('ai', '');
+    aiBubble.textContent = 'Sto scrivendo la sceneggiatura completa...';
+    scrollToBottom(true);
+
+    try {
+      const res = await fetch('/chat/genera-sceneggiatura', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversation, mode: 'generate' })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        aiBubble.textContent = 'Errore: ' + (data.error || 'generazione fallita');
+        return;
+      }
+      const blob = new Blob([data.html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      aiBubble.innerHTML = '<p>Sceneggiatura generata.</p>' +
+        '<a href="' + url + '" download="sceneggiatura.html" ' +
+        'style="display:inline-block;margin-top:8px;padding:8px 16px;background:var(--accent);color:#0a0b0d;' +
+        'border-radius:20px;font-size:13px;font-weight:600;text-decoration:none;">' +
+        'Scarica sceneggiatura</a>' +
+        '<p style="margin-top:8px;font-size:11px;color:var(--label);">' +
+        'Apri nel browser e stampa come PDF, oppure copia in Pages/Word.</p>';
+
+      conversation.push({ role: 'assistant', content: '[Sceneggiatura generata e scaricata]' });
+      scriptPhase = 'idle';
+      btn.style.color = '';
+      btn.title = 'Genera sceneggiatura';
+    } catch (e) {
+      aiBubble.textContent = 'Errore di connessione. Riprova.';
+    } finally {
+      btn.classList.remove('generating');
+    }
   }
 }
 

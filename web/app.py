@@ -507,7 +507,7 @@ NON generare la sceneggiatura adesso. Fai solo le domande."""
 
         return StreamingResponse(stream_check(), media_type="text/event-stream")
 
-    # mode == "generate"
+    # mode == "generate" — streaming
     prompt_sceneggiatura = """Ora genera la sceneggiatura completa e aggiornata basandoti su TUTTO: il documento originale, le analisi, le modifiche discusse, le risposte alle domande che hai fatto.
 
 FORMATO OBBLIGATORIO — sceneggiatura professionale:
@@ -526,49 +526,29 @@ REGOLE:
 - Gli appunti tecnici di regia vanno prima della scena a cui si riferiscono
 - Dialoghi in formato sceneggiatura classica (centrati, con nome personaggio sopra)
 - Non aggiungere nulla che non sia stato discusso — sei un trascrittore preciso, non un co-autore
+- Scrivi la sceneggiatura COMPLETA dall'inizio alla fine, senza interruzioni
 - Restituisci SOLO il contenuto HTML delle scene, senza <html>, <head>, <body>
 - Inizia direttamente con la prima <div class="sh">"""
 
     conversation_with_prompt = conversation + [{"role": "user", "content": prompt_sceneggiatura}]
 
-    try:
-        client = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
-        resp = await client.chat.completions.create(
-            model=active_model,
-            messages=[{"role": "system", "content": SYSTEM_PROMPT}, *conversation_with_prompt],
-            max_tokens=16000,
-        )
-        scene_html = resp.choices[0].message.content.strip()
+    async def stream_generate():
+        try:
+            client = AsyncOpenAI(api_key=ANTHROPIC_API_KEY, base_url=ANTHROPIC_BASE_URL)
+            stream = await client.chat.completions.create(
+                model=active_model,
+                messages=[{"role": "system", "content": SYSTEM_PROMPT}, *conversation_with_prompt],
+                max_tokens=16000, stream=True,
+            )
+            async for chunk in stream:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+        except Exception as e:
+            yield f"data: \\n\\nErrore: {e}\n\n"
+        yield "data: [DONE]\n\n"
 
-        full_html = f"""<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<title>Sceneggiatura — FilmMaker</title>
-<style>
-@page {{ size: A4; margin: 2.5cm 2.5cm 2.5cm 3.8cm; }}
-* {{ margin: 0; padding: 0; box-sizing: border-box; }}
-body {{ font-family: 'Courier New', Courier, monospace; font-size: 12pt; line-height: 1.0; color: #000; background: #fff; max-width: 595px; margin: 0 auto; padding: 60px 40px; }}
-.sh {{ text-transform: uppercase; margin-top: 24px; margin-bottom: 12px; }}
-.ac {{ margin-bottom: 12px; }}
-.ch {{ margin-left: 165px; text-transform: uppercase; margin-top: 12px; margin-bottom: 0; }}
-.pa {{ margin-left: 130px; margin-right: 160px; margin-bottom: 0; }}
-.di {{ margin-left: 95px; margin-right: 120px; margin-bottom: 12px; }}
-.tn {{ margin: 12px 0; padding: 8px 12px; border-left: 2px solid #999; font-size: 10pt; color: #444; line-height: 1.3; font-style: italic; }}
-.tr {{ text-align: right; text-transform: uppercase; margin: 24px 0; }}
-</style>
-</head>
-<body>
-{scene_html}
-</body>
-</html>"""
-
-        from fastapi.responses import JSONResponse
-        return JSONResponse({"html": full_html})
-
-    except Exception as e:
-        print(f"Errore generazione sceneggiatura: {e}")
-        return JSONResponse({"error": str(e)}, status_code=500)
+    return StreamingResponse(stream_generate(), media_type="text/event-stream")
 
 
 @app.post("/chat/set-model")

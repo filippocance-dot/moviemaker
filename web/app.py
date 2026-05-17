@@ -324,6 +324,24 @@ Restituisci SOLO un oggetto JSON valido, senza testo prima o dopo, con questi ca
 
     return Response(status_code=200)
 
+def friendly_ai_error(e: Exception) -> str:
+    """Traduce un errore dell'API AI in un messaggio comprensibile per l'utente."""
+    raw = str(e)
+    low = raw.lower()
+    status = getattr(e, "status_code", None)
+    if "credit balance is too low" in low or "plans & billing" in low or "insufficient_quota" in low:
+        return ("⚠️ Credito API esaurito: l'account Anthropic non ha più fondi. "
+                "Vai su console.anthropic.com → Plans & Billing per ricaricare.")
+    if status == 401 or "invalid api key" in low or "invalid_api_key" in low or "authentication" in low:
+        return "⚠️ Chiave API non valida o mancante. Controlla ANTHROPIC_API_KEY nelle variabili d'ambiente."
+    if status == 429 or "rate limit" in low or "rate_limit" in low:
+        return "⚠️ Troppe richieste in poco tempo (rate limit). Attendi qualche secondo e riprova."
+    if status == 529 or "overloaded" in low:
+        return "⚠️ Il modello AI è temporaneamente sovraccarico. Riprova tra poco."
+    if "timeout" in low or "timed out" in low:
+        return "⚠️ L'AI ha impiegato troppo tempo a rispondere (timeout). Riprova."
+    return "⚠️ Si è verificato un errore con l'AI. Riprova tra poco."
+
 @app.post("/chat/stream")
 async def chat_stream(request: Request, session: Optional[str] = Cookie(default=None)):
     user = get_current_user(session)
@@ -355,7 +373,7 @@ Sii caldo ma diretto. Niente elenchi, niente bullet point. Tono da mentore, non 
             async for chunk in stream:
                 delta = chunk.choices[0].delta.content
                 if delta:
-                    yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+                    yield f"data: {delta.replace(chr(10), chr(92) + 'n')}\n\n"
             yield "data: [DONE]\n\n"
         return StreamingResponse(generate_welcome(), media_type="text/event-stream")
 
@@ -435,11 +453,11 @@ Ultima sessione: {profile.get('ultima_sessione', '')}"""
             async for chunk in stream:
                 delta = chunk.choices[0].delta.content
                 if delta:
-                    yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+                    yield f"data: {delta.replace(chr(10), chr(92) + 'n')}\n\n"
         except Exception as e:
             print(f"Errore stream AI: {e}")
-            error_msg = "Si è verificato un errore. Riprova."
-            yield f"data: {error_msg}\n\n"
+            error_msg = friendly_ai_error(e)
+            yield f"data: {error_msg.replace(chr(10), chr(92) + 'n')}\n\n"
         finally:
             if stream_session_id:
                 try:
@@ -500,9 +518,10 @@ NON generare la sceneggiatura adesso. Fai solo le domande."""
                 async for chunk in stream:
                     delta = chunk.choices[0].delta.content
                     if delta:
-                        yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+                        yield f"data: {delta.replace(chr(10), chr(92) + 'n')}\n\n"
             except Exception as e:
-                yield f"data: Errore: {e}\n\n"
+                print(f"Errore stream sceneggiatura (check): {e}")
+                yield f"data: {friendly_ai_error(e).replace(chr(10), chr(92) + 'n')}\n\n"
             yield "data: [DONE]\n\n"
 
         return StreamingResponse(stream_check(), media_type="text/event-stream")
@@ -543,9 +562,10 @@ REGOLE:
             async for chunk in stream:
                 delta = chunk.choices[0].delta.content
                 if delta:
-                    yield f"data: {delta.replace(chr(10), '\\n')}\n\n"
+                    yield f"data: {delta.replace(chr(10), chr(92) + 'n')}\n\n"
         except Exception as e:
-            yield f"data: \\n\\nErrore: {e}\n\n"
+            print(f"Errore stream sceneggiatura (generate): {e}")
+            yield f"data: {friendly_ai_error(e).replace(chr(10), chr(92) + 'n')}\n\n"
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(stream_generate(), media_type="text/event-stream")

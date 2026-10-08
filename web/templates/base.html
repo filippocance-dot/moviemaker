@@ -229,7 +229,7 @@
 </head>
 <body>
   <nav class="nav">
-    <div></div>
+    <div>{% if user and user.email == DEMO_EMAIL %}<span style="font-size:11px;letter-spacing:0.06em;color:var(--label);" title="Le conversazioni non vengono salvate; progetti e impostazioni sono in sola lettura.">MODALITÀ DEMO · sola lettura</span>{% endif %}</div>
     <a href="/" class="nav-brand">FilmMaker</a>
     <div class="nav-right">{% block nav_right %}{% endblock %}</div>
   </nav>

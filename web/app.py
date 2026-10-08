@@ -25,6 +25,7 @@ from web.db import (
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
+from web import demo
 
 import re, pathlib, hashlib, uuid, shutil
 from fastapi.responses import FileResponse
@@ -124,6 +125,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 templates = Jinja2Templates(directory=str(pathlib.Path(__file__).parent / "templates"))
+templates.env.globals["DEMO_EMAIL"] = demo.DEMO_EMAIL
 
 def get_current_user(session: Optional[str]) -> dict | None:
     if not session:
@@ -131,7 +133,29 @@ def get_current_user(session: Optional[str]) -> dict | None:
     user_id = decode_token(session)
     if user_id is None:
         return None
-    return get_user_by_id(user_id)
+    user = get_user_by_id(user_id)
+    # Demo disattivata: i cookie dell'account demo smettono di valere
+    if demo.is_demo_user(user) and not demo.demo_enabled():
+        return None
+    return user
+
+def _demo_forbidden() -> Response:
+    return HTMLResponse("Funzione non disponibile nella versione demo.", status_code=403)
+
+def _demo_ai_block(user: dict, conversation: list) -> StreamingResponse | None:
+    """Per l'account demo: blocca richieste troppo lunghe o oltre il limite giornaliero."""
+    if not demo.is_demo_user(user):
+        return None
+    if demo.conversation_too_long(conversation):
+        msg = "⚠️ Demo: la conversazione è troppo lunga. Ricarica la pagina per iniziarne una nuova."
+    elif not demo.take_ai_quota():
+        msg = "⚠️ Demo: raggiunto il limite giornaliero di richieste all'AI. Riprova domani."
+    else:
+        return None
+    async def gen():
+        yield f"data: {msg}\n\n"
+        yield "data: [DONE]\n\n"
+    return StreamingResponse(gen(), media_type="text/event-stream")
 
 # Token per accesso diretto admin (derivato da SECRET_KEY)
 def _admin_magic_token() -> str:
@@ -143,6 +167,15 @@ def _admin_magic_token() -> str:
 @app.get("/", response_class=RedirectResponse)
 def root():
     return RedirectResponse("/login", status_code=303)
+
+@app.get("/demo")
+def demo_login():
+    if not demo.demo_enabled():
+        return Response(status_code=404)
+    user = demo.ensure_demo_account()
+    resp = RedirectResponse("/progetti", status_code=303)
+    resp.set_cookie("session", make_token(user["id"]), httponly=True, samesite="lax")
+    return resp
 
 @app.get("/entra", response_class=HTMLResponse)
 def magic_login(token: str = ""):
@@ -175,7 +208,7 @@ def register_get(request: Request):
 
 @app.post("/registrati")
 def register_post(request: Request, nome: str = Form(...), email: str = Form(...), password: str = Form(...)):
-    if get_user_by_email(email):
+    if get_user_by_email(email) or email.strip().lower() == demo.DEMO_EMAIL:
         return templates.TemplateResponse(request, "register.html", {"error": "Email già registrata."})
     # L'admin viene approvato automaticamente alla registrazione
     create_user(nome, email, hash_password(password))
@@ -227,7 +260,8 @@ def chat_get(request: Request, session: Optional[str] = Cookie(default=None)):
         "user": user,
         "session_id": session_id,
         "profile": profile,
-        "is_first_session": profile is None,
+        # In demo niente messaggio di benvenuto generato dall'AI (consumerebbe quota a ogni visita)
+        "is_first_session": profile is None and not demo.is_demo_user(user),
         "preferred_model": get_preferred_model(user["id"]),
         "is_admin": user["email"] == ADMIN_EMAIL,
     })
@@ -239,6 +273,9 @@ async def chat_end_session(request: Request, session: Optional[str] = Cookie(def
         return Response(status_code=401)
 
     from openai import AsyncOpenAI
+
+    if demo.is_demo_user(user):
+        return Response(status_code=200)
 
     body = await request.json()
     session_id = body.get("session_id")
@@ -351,10 +388,13 @@ async def chat_stream(request: Request, session: Optional[str] = Cookie(default=
     from openai import AsyncOpenAI
 
     preferred = get_preferred_model(user["id"])
-    active_model = MODEL_OPUS if preferred == "opus" else MODEL_SONNET
+    active_model = MODEL_OPUS if preferred == "opus" and not demo.is_demo_user(user) else MODEL_SONNET
 
     body = await request.json()
     conversation = body.get("conversation", [])
+    blocked = _demo_ai_block(user, conversation)
+    if blocked:
+        return blocked
     welcome = body.get("welcome", False)
     stream_session_id = body.get("session_id", None)
 
@@ -477,10 +517,13 @@ async def genera_sceneggiatura(request: Request, session: Optional[str] = Cookie
     from openai import AsyncOpenAI
 
     preferred = get_preferred_model(user["id"])
-    active_model = MODEL_OPUS if preferred == "opus" else MODEL_SONNET
+    active_model = MODEL_OPUS if preferred == "opus" and not demo.is_demo_user(user) else MODEL_SONNET
 
     body = await request.json()
     conversation = body.get("conversation", [])
+    blocked = _demo_ai_block(user, conversation)
+    if blocked:
+        return blocked
 
     mode = body.get("mode", "check")  # "check" = fai domande, "generate" = scrivi
 
@@ -576,6 +619,8 @@ async def set_model(request: Request, session: Optional[str] = Cookie(default=No
     user = get_current_user(session)
     if not user:
         return Response(status_code=401)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     body = await request.json()
     model_choice = body.get("model", "sonnet")
     if model_choice not in ("sonnet", "opus"):
@@ -775,6 +820,8 @@ def projects_create(request: Request, name: str = Form(...),
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     project_id = create_project(user["id"], name.strip())
     return RedirectResponse(f"/progetti/{project_id}", status_code=303)
 
@@ -805,6 +852,8 @@ async def project_save_note(project_id: int, request: Request,
     user = get_current_user(session)
     if not user:
         return Response(status_code=401)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     project = get_project(project_id)
     if not project or project["user_id"] != user["id"]:
         return Response(status_code=403)
@@ -818,6 +867,8 @@ async def project_upload_file(project_id: int, file: UploadFile = File(...),
     user = get_current_user(session)
     if not user:
         return Response(status_code=401)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     project = get_project(project_id)
     if not project or project["user_id"] != user["id"]:
         return Response(status_code=403)
@@ -851,6 +902,8 @@ def project_delete_file(project_id: int, file_id: int,
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     pf = get_project_file(file_id)
     if not pf or pf["project_id"] != project_id or pf["user_id"] != user["id"]:
         return Response(status_code=404)
@@ -868,8 +921,13 @@ def project_link_session(project_id: int, session_id: int = Form(...),
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     project = get_project(project_id)
     if not project or project["user_id"] != user["id"]:
+        return Response(status_code=403)
+    sess = get_session(session_id)
+    if not sess or sess["user_id"] != user["id"]:
         return Response(status_code=403)
     link_session_to_project(project_id, session_id)
     return RedirectResponse(f"/progetti/{project_id}", status_code=303)
@@ -880,6 +938,8 @@ def project_unlink_session(project_id: int, session_id: int,
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     project = get_project(project_id)
     if not project or project["user_id"] != user["id"]:
         return Response(status_code=403)
@@ -891,6 +951,8 @@ def project_delete(project_id: int, session: Optional[str] = Cookie(default=None
     user = get_current_user(session)
     if not user:
         return RedirectResponse("/login", status_code=303)
+    if demo.is_demo_user(user):
+        return _demo_forbidden()
     project = get_project(project_id)
     if not project or project["user_id"] != user["id"]:
         return Response(status_code=403)

@@ -1,0 +1,8 @@
+# Esclusi dall'upload di 'railway up' (non servono in produzione: Railway installa le dipendenze da requirements.txt e usa /data)
+/venv/
+/hf_cache/
+/embeddings.pkl
+/uploads/
+/demo/
+/.superpowers/
+__pycache__/

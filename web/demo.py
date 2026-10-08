@@ -17,8 +17,8 @@ import threading
 
 from web.auth import hash_password
 from web.db import (approve_user, create_project, create_user, end_session, get_project_by_name,
-                    get_user_by_email, link_session_to_project, save_messages, start_session,
-                    update_project_note)
+                    get_user_by_email, link_session_to_project, list_project_sessions,
+                    save_messages, start_session, update_project_note)
 
 DEMO_EMAIL = "demo@filmmaker.demo"
 SEED_PATH = pathlib.Path(__file__).parent / "demo_seed.json"
@@ -42,6 +42,7 @@ def _daily_limit() -> int:
 
 # Contatore in memoria: si azzera a ogni cambio di giorno (e a ogni riavvio del server)
 _quota_lock = threading.Lock()
+_seed_lock = threading.Lock()
 _quota = {"day": None, "count": 0}
 
 
@@ -73,16 +74,16 @@ def ensure_demo_account() -> dict:
         user = get_user_by_email(DEMO_EMAIL)
 
     seed = json.loads(SEED_PATH.read_text(encoding="utf-8"))
-    project = get_project_by_name(user["id"], seed["project_name"])
-    if not project:
-        project_id = create_project(user["id"], seed["project_name"])
-        for conv in seed.get("sessions", []):
-            session_id = start_session(user["id"])
-            save_messages(user["id"], session_id, conv)
-            end_session(session_id, message_count=len(conv),
-                        token_estimate=sum(len(m["content"]) for m in conv) // 4)
-            link_session_to_project(project_id, session_id)
-    else:
-        project_id = project["id"]
-    update_project_note(project_id, seed["note"])
+    with _seed_lock:
+        project = get_project_by_name(user["id"], seed["project_name"])
+        project_id = project["id"] if project else create_project(user["id"], seed["project_name"])
+        # Le conversazioni d'esempio si aggiungono anche dopo (es. seed aggiornato a progetto già creato)
+        if seed.get("sessions") and not list_project_sessions(project_id):
+            for conv in seed["sessions"]:
+                session_id = start_session(user["id"])
+                save_messages(user["id"], session_id, conv)
+                end_session(session_id, message_count=len(conv),
+                            token_estimate=sum(len(m["content"]) for m in conv) // 4)
+                link_session_to_project(project_id, session_id)
+        update_project_note(project_id, seed["note"])
     return user

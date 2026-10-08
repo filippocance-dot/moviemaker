@@ -112,3 +112,18 @@ def test_cannot_link_other_users_session():
     pid = int(r.headers["location"].rsplit("/", 1)[1])
     r = c.post(f"/progetti/{pid}/sessione", data={"session_id": victim_session})
     assert r.status_code == 403
+
+
+def test_seed_sessions_added_once_even_to_existing_project(demo_on, monkeypatch, tmp_path):
+    import json
+    from web.db import list_project_sessions
+    demo_client()  # progetto già esistente, senza conversazioni
+    seed = json.loads(demo.SEED_PATH.read_text(encoding="utf-8"))
+    seed["sessions"] = [[{"role": "user", "content": "scena"}, {"role": "assistant", "content": "analisi"}]]
+    path = tmp_path / "seed.json"
+    path.write_text(json.dumps(seed), encoding="utf-8")
+    monkeypatch.setattr(demo, "SEED_PATH", path)
+    demo_client()
+    demo_client()
+    pid = list_projects(get_user_by_email(demo.DEMO_EMAIL)["id"])[0]["id"]
+    assert len(list_project_sessions(pid)) == 1

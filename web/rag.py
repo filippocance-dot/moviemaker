@@ -116,6 +116,12 @@ def build_embedding_index(chunks: list[str]) -> dict | None:
         print(f"RAG semantico non disponibile, uso BM25: {e}")
         return None
 
+# Etichette del contesto RAG: i passaggi vengono anteposti al messaggio dell'utente, quindi
+# vanno distinti esplicitamente dai file che l'utente carica davvero.
+RAG_HEADER = ("[Testi di riferimento della biblioteca di FilmMaker — NON materiali caricati dall'utente. "
+              "Usali come riferimento teorico, non attribuirli all'autore.]")
+RAG_FOOTER = "[Fine dei testi di riferimento della biblioteca. Segue il messaggio dell'utente.]"
+
 def retrieve(query: str, index, chunks: list[str], sources: list[str],
              embed_index: dict | None = None) -> str:
     """Retrieve relevant chunks. Uses hybrid reranking if both indexes available, else fallback."""
@@ -166,9 +172,10 @@ def _retrieve_hybrid(query: str, index, chunks: list[str], sources: list[str], e
 
     if not selected:
         return ""
-    lines = ["[Contesto documentale rilevante]"]
+    lines = [RAG_HEADER]
     for i, (chunk, src) in enumerate(selected, 1):
         lines.append(f"[{i}] {src}:\n{chunk.strip()}")
+    lines.append(RAG_FOOTER)
     return "\n\n".join(lines)
 
 def _retrieve_semantic(query: str, chunks: list[str], sources: list[str], embed_index: dict) -> str:
@@ -187,9 +194,10 @@ def _retrieve_semantic(query: str, chunks: list[str], sources: list[str], embed_
         selected.append((chunks[idx], sources[idx]))
     if not selected:
         return ""
-    lines = ["[Contesto documentale rilevante]"]
+    lines = [RAG_HEADER]
     for i, (chunk, src) in enumerate(selected, 1):
         lines.append(f"[{i}] {src}:\n{chunk.strip()}")
+    lines.append(RAG_FOOTER)
     return "\n\n".join(lines)
 
 def _retrieve_bm25(query: str, index, chunks: list[str], sources: list[str]) -> str:
@@ -204,7 +212,8 @@ def _retrieve_bm25(query: str, index, chunks: list[str], sources: list[str]) -> 
         selected.append((chunks[idx], sources[idx]))
     if not selected:
         return ""
-    lines = ["[Contesto documentale rilevante]"]
+    lines = [RAG_HEADER]
     for i, (chunk, src) in enumerate(selected, 1):
         lines.append(f"[{i}] {src}:\n{chunk.strip()}")
+    lines.append(RAG_FOOTER)
     return "\n\n".join(lines)

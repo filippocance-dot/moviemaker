@@ -53,7 +53,8 @@ def main():
         "Ti incollo una scena grezza del mio corto. Fammi un'analisi drammaturgica: "
         "cosa funziona, cosa non funziona, e qual è la decisione da prendere.\n\nSCENA 3"
         + scena,
-        "Va bene, accetto la tua proposta. Fissiamo la decisione e scrivimi la scena riscritta.",
+        "L'ha cucinata sapendo che tornava, ma non lo dice. Marta si ferma sulla soglia e non avanza. "
+        "Fissiamo la decisione e scrivimi la scena.",
     ]
     with TestClient(app) as client:  # avvia il lifespan: corpus e RAG caricati come in produzione
         create_user("Seed", "seed@local", hash_password("seed"))

@@ -15,6 +15,7 @@ import pathlib
 import secrets
 import threading
 
+from web import notify
 from web.auth import hash_password
 from web.db import (approve_user, create_project, create_user, end_session, get_project_by_name,
                     get_user_by_email, link_session_to_project, list_project_sessions,
@@ -43,7 +44,7 @@ def _daily_limit() -> int:
 # Contatore in memoria: si azzera a ogni cambio di giorno (e a ogni riavvio del server)
 _quota_lock = threading.Lock()
 _seed_lock = threading.Lock()
-_quota = {"day": None, "count": 0}
+_quota = {"day": None, "count": 0, "notified": set()}
 
 
 def take_ai_quota() -> bool:
@@ -51,10 +52,19 @@ def take_ai_quota() -> bool:
     today = datetime.date.today().isoformat()
     with _quota_lock:
         if _quota["day"] != today:
-            _quota["day"], _quota["count"] = today, 0
-        if _quota["count"] >= _daily_limit():
+            _quota["day"], _quota["count"], _quota["notified"] = today, 0, set()
+        limit = _daily_limit()
+        if _quota["count"] >= limit:
             return False
         _quota["count"] += 1
+        count = _quota["count"]
+        # Avvisi a 2/3 del limite (20/30) e al limite (30/30), una volta per soglia al giorno
+        for threshold in sorted({round(limit * 2 / 3), limit}):
+            if count == threshold and threshold not in _quota["notified"]:
+                _quota["notified"].add(threshold)
+                notify.send("FilmMaker demo: richieste AI",
+                            f"La demo ha usato {count}/{limit} richieste AI oggi.",
+                            priority="high" if count >= limit else "default")
         return True
 
 

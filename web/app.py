@@ -25,7 +25,7 @@ from web.db import (
 from web.auth import hash_password, verify_password, make_token, decode_token
 from web.email_utils import send_approval_email
 from web.rag import load_corpus, build_index, retrieve
-from web import demo
+from web import demo, notify
 
 import re, pathlib, hashlib, uuid, shutil
 from fastapi.responses import FileResponse
@@ -96,6 +96,10 @@ embed_index = None
 async def lifespan(app: FastAPI):
     global corpus_chunks, corpus_sources, bm25
     init_db()
+    if not demo.demo_enabled():
+        notify.send("FilmMaker: demo spenta",
+                    "L'app si e' avviata con DEMO_ENABLED diverso da 'true': /demo risponde 404.",
+                    priority="high")
     # Crea admin automaticamente ad ogni avvio se non esiste
     admin_password = os.environ.get("ADMIN_PASSWORD", "")
     if ADMIN_EMAIL and admin_password:
@@ -367,6 +371,7 @@ def friendly_ai_error(e: Exception) -> str:
     low = raw.lower()
     status = getattr(e, "status_code", None)
     if "credit balance is too low" in low or "plans & billing" in low or "insufficient_quota" in low:
+        notify.credit_exhausted()
         return ("⚠️ Credito API esaurito: l'account Anthropic non ha più fondi. "
                 "Vai su console.anthropic.com → Plans & Billing per ricaricare.")
     if status == 401 or "invalid api key" in low or "invalid_api_key" in low or "authentication" in low:
